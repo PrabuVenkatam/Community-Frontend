@@ -209,11 +209,11 @@ const DynamicTable = ({
 }) => {
   const hasActionBar = showSearch || filters.length > 0 || showAddButton;
 
-  // Internal Pagination Logic: Automatically slices to 10 rows per page
+  // Internal Pagination Logic: Automatically slices to 10 rows per page if showPagination is true
   const totalItems = dataSource.length;
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const paginatedData = dataSource.slice(startIndex, endIndex);
+  const displayData = showPagination ? dataSource.slice(startIndex, endIndex) : dataSource;
   const totalPages = Math.ceil(totalItems / pageSize);
 
   // Table Heading Style
@@ -305,8 +305,8 @@ const DynamicTable = ({
           <tbody className="divide-y divide-gray-100">
             {loading ? (
               <tr><td colSpan={columns.length} className="text-center py-20 text-gray-400">Loading...</td></tr>
-            ) : paginatedData.length > 0 ? (
-              paginatedData.map((record, index) => (
+            ) : displayData.length > 0 ? (
+              displayData.map((record, index) => (
                 <tr
                   key={record[rowKey] || index}
                   onClick={() => onRowClick?.(record)}
@@ -340,7 +340,7 @@ const DynamicTable = ({
       {showPagination && (
         <div className="p-6 flex items-center justify-between border-t border-gray-100 bg-white">
           <p className="text-[20px] text-gray-500 font-medium">
-            Showing <span className="text-gray-900 text-[22px] font-bold">{paginatedData.length} Out of {totalItems}</span>
+            Showing <span className="text-gray-900 text-[22px] font-bold">{displayData.length} Out of {totalItems}</span>
           </p>
           
           <div className="flex items-center gap-2">

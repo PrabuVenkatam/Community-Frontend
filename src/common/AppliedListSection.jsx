@@ -1,21 +1,26 @@
 import React, { useMemo, useState } from 'react';
 import DynamicTable from './DynamicTable';
 
-const AppliedListSection = ({ data = [] ,heading =[],showFilters}) => {
+const AppliedListSection = ({ data = [], heading = [], showFilters, onRowClick }) => {
     const [search, setSearch] = useState('');
     const [yearFilter, setYearFilter] = useState('');
-    const [departmentFilter, setDepartmentFilter] = useState('');
+    const [secondaryFilter, setSecondaryFilter] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
 
+    const isLocationFilter = useMemo(() => {
+        return data.some((item) => item.location);
+    }, [data]);
+
     const yearOptions = useMemo(() => {
-        const years = [...new Set(data.map((item) => item.year))];
+        const years = [...new Set(data.map((item) => item.year).filter(Boolean))];
         return years.map((year) => ({ label: year, value: year }));
     }, [data]);
 
-    const departmentOptions = useMemo(() => {
-        const department = [...new Set(data.map((item) => item.department))];
-        return department.map((department) => ({ label: department, value: department }));
-    }, [data]);
+    const secondaryOptions = useMemo(() => {
+        const filterKey = isLocationFilter ? 'location' : 'department';
+        const values = [...new Set(data.map((item) => item[filterKey]).filter(Boolean))];
+        return values.map((val) => ({ label: val, value: val }));
+    }, [data, isLocationFilter]);
 
     const filteredAppliedList = useMemo(() => {
         return data.filter((item) => {
@@ -28,14 +33,13 @@ const AppliedListSection = ({ data = [] ,heading =[],showFilters}) => {
                 (item?.mail || item?.mailId)?.toLowerCase().includes(query) ||
                 item?.location?.toLowerCase().includes(query);
 
-            const matchesYear = yearFilter ?String(item.year) === yearFilter : true;
-            const matchesLocation = departmentFilter ? item.department === departmentFilter : true;
+            const matchesYear = yearFilter ? String(item.year) === yearFilter : true;
+            const targetVal = isLocationFilter ? item.location : item.department;
+            const matchesSecondary = secondaryFilter ? targetVal === secondaryFilter : true;
 
-            return matchesSearch && matchesYear && matchesLocation;
+            return matchesSearch && matchesYear && matchesSecondary;
         });
-    }, [data, search, yearFilter, departmentFilter]);
-
-
+    }, [data, search, yearFilter, secondaryFilter, isLocationFilter]);
 
     return (
         <div className="bg-white rounded-[20px] border border-gray-100 ">
@@ -43,6 +47,7 @@ const AppliedListSection = ({ data = [] ,heading =[],showFilters}) => {
                 columns={heading}
                 dataSource={filteredAppliedList}
                 rowKey="sNo"
+                onRowClick={onRowClick}
                 showSearch={true}
                 searchPlaceholder="Search ..."
                 onSearch={(value) => {
@@ -61,12 +66,12 @@ const AppliedListSection = ({ data = [] ,heading =[],showFilters}) => {
                         },
                     },
                     {
-                        key: 'department',
-                        placeholder: 'All Department',
-                        value: departmentFilter,
-                        options: departmentOptions,
+                        key: isLocationFilter ? 'location' : 'department',
+                        placeholder: isLocationFilter ? 'All Location' : 'All Department',
+                        value: secondaryFilter,
+                        options: secondaryOptions,
                         onChange: (value) => {
-                            setDepartmentFilter(value);
+                            setSecondaryFilter(value);
                             setCurrentPage(1);
                         },
                     },

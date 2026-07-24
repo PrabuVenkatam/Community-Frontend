@@ -269,6 +269,16 @@ export const toggleInternshipStatus = async (id) => {
   return response.data;
 };
 
+export const getAppliedCandidateProfile = async (applicationId) => {
+  const response = await API.get(`/internship/candidate-profile/${applicationId}`);
+  return response.data;
+};
+
+export const updateCandidateApplicationStatus = async (applicationId, status) => {
+  const response = await API.patch(`/internship/application-status/${applicationId}`, { status });
+  return response.data;
+};
+
 
 
 

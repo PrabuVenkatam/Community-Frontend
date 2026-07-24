@@ -16,7 +16,7 @@ const Sidebar = () => {
     <aside className="w-[260px] h-screen sticky top-0 bg-white border-r-2 border-[#E5E7EB] flex flex-col py-6 overflow-y-auto">
       <div className="px-6 mb-10 flex justify-center">
         <img
-          src={assets.logo}
+          src={assets.gradEnvyLogo}
           alt="Nulinz Community"
           className="h-11 w-auto object-contain"
         />

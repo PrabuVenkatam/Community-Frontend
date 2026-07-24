@@ -1,5 +1,6 @@
 import login_bg from "./images/login_bg.png"
 import logo from "./images/logo.svg"
+import gradEnvyLogo from "./images/gradenvyLogo.png"
 import doc from "./images/doc.svg"
 import book_i from "./images/book_i.svg"
 import competition_i from "./images/competition_i.svg"
@@ -27,5 +28,6 @@ export const assets ={
    event_i,
    jobs_i,
    sem_i,
-   edit,up_i,down_i
+   edit, up_i, down_i,
+   gradEnvyLogo
 }

@@ -1,9 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { assets } from '../assets/assets';
 import AppliedListSection from './AppliedListSection';
+import AttendanceSection from './AttendanceSection';
+import CandidateProfileSection from './CandidateProfileSection';
+import PerformanceEvaluationSection from './PerformanceEvaluationSection';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getInternshipById, toggleInternshipStatus, updateJobStatus } from '../services/admin/adminServices';
+import { 
+  getInternshipById, 
+  toggleInternshipStatus, 
+  updateJobStatus, 
+  getAppliedCandidateProfile, 
+  updateCandidateApplicationStatus 
+} from '../services/admin/adminServices';
 import ConfirmActionButton from './ConfirmActionButton';
 import { useTitle } from '../context/AdminTitle';
 import StatusActionButtons from './AcceptRejectButtons';
@@ -11,32 +20,63 @@ import { useMain } from '../context/MainContext';
 
 const JobsProfile = ({ module = 'admin' }) => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [attendanceSubView, setAttendanceSubView] = useState('list'); // 'list' | 'view' | 'mark'
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedCandidateProfile, setSelectedCandidateProfile] = useState(null);
+  const [isEvaluatingPerformance, setIsEvaluatingPerformance] = useState(false);
+  const [candidateStatuses, setCandidateStatuses] = useState({});
+  const [attendanceHistory, setAttendanceHistory] = useState([
+    { id: 'att-1', sNo: '01', date: '23/07/2026', presentCount: 20, absentCount: 3 },
+    { id: 'att-2', sNo: '02', date: '22/07/2026', presentCount: 18, absentCount: 4 },
+    { id: 'att-3', sNo: '03', date: '21/07/2026', presentCount: 23, absentCount: null },
+    { id: 'att-4', sNo: '04', date: '20/07/2026', presentCount: 23, absentCount: null },
+  ]);
+
   const [internship, setInternship] = useState(null);
   const [applications, setApplications] = useState({ count: 0, list: [] });
   const [isLoading, setIsLoading] = useState(true);
-  const [statusLoading, setStatusLoading] = useState(false)
+  const [statusLoading, setStatusLoading] = useState(false);
   const [isTogglingStatus, setIsTogglingStatus] = useState(false);
+
   const { id } = useParams();
-  const { user, dynamicPath } = useMain()
+  const { user } = useMain();
   const navigate = useNavigate();
-  const { setTitle } = useTitle()
+  const { setTitle } = useTitle();
+
+  const isAttendanceView = activeTab === 'attendance' && attendanceSubView === 'view';
+  const isAddAttendance = activeTab === 'attendance' && attendanceSubView === 'mark';
+  const isAttendanceProfile = isAttendanceView || isAddAttendance;
+
   useEffect(() => {
-    setTitle("Internship Profile")
-  }, [])
+    if (selectedCandidateProfile) {
+      if (isEvaluatingPerformance) {
+        setTitle('Performance Evaluation');
+      } else if (activeTab === 'selected' || selectedCandidateProfile.status === 'selected') {
+        setTitle('Selected Candidate Profile');
+      } else {
+        setTitle('Candidate Profile');
+      }
+    } else if (isAttendanceProfile) {
+      if (attendanceSubView === 'mark') {
+        setTitle('Add Attendance');
+      } else {
+        setTitle('Attendance Profile');
+      }
+    } else {
+      setTitle('Internship Profile');
+    }
+  }, [selectedCandidateProfile, isEvaluatingPerformance, activeTab, isAttendanceProfile, attendanceSubView, setTitle]);
 
   const updateStatus = async (status, rejected_reason) => {
     try {
       setStatusLoading(true);
-      const response = await updateJobStatus(id, "internship", status, rejected_reason);
-      console.log(response)
+      const response = await updateJobStatus(id, 'internship', status, rejected_reason);
       if (response.success) {
-        setInternship(response.data)
+        setInternship(response.data);
         toast.success(response.message);
-      }
-      else {
+      } else {
         toast.error(response.message);
       }
-
     } catch (err) {
       toast.error(err.message);
       console.error(err);
@@ -55,12 +95,9 @@ const JobsProfile = ({ module = 'admin' }) => {
       try {
         setIsLoading(true);
         const response = await getInternshipById(id);
-        console.log(response)
         if (response.success) {
           setInternship(response.data.internship);
           setApplications(response.data.applications || { count: 0, list: [] });
-        } else {
-          setError("Internship not found");
         }
       } catch (error) {
         toast.error(error?.response?.data?.message || 'Failed to load internship profile');
@@ -80,6 +117,17 @@ const JobsProfile = ({ module = 'admin' }) => {
     return date.toLocaleDateString('en-GB');
   };
 
+  const displaySelectedDate = useMemo(() => {
+    if (!selectedDate) return '23/07/2026';
+    if (selectedDate.includes('/')) return selectedDate;
+    const dateObj = new Date(selectedDate);
+    if (isNaN(dateObj.getTime())) return selectedDate;
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
+  }, [selectedDate]);
+
   const statusLabel = internship?.isActive ? 'Active' : 'Inactive';
   const statusIsActive = internship?.isActive;
   const responsibilities = Array.isArray(internship?.responsibilities) ? internship.responsibilities : [];
@@ -94,16 +142,50 @@ const JobsProfile = ({ module = 'admin' }) => {
   const appliedListHeading = [
     { title: '#', dataIndex: 'sNo', key: 'sNo' },
     { title: 'Name', dataIndex: 'name', key: 'name' },
-    // { title: 'College', dataIndex: 'college', key: 'college' },
     { title: 'Degree', dataIndex: 'department', key: 'department' },
     { title: 'Year', dataIndex: 'year', key: 'year' },
     { title: 'Contact Number', dataIndex: 'contact', key: 'contact' },
     { title: 'Mail id', dataIndex: 'mail', key: 'mail' },
-    // { title: 'Location', dataIndex: 'location', key: 'location' },
   ];
 
-  const appliedListData = [];
-  console.log(applications?.list)
+  const selectedListHeading = [
+    { title: '#', dataIndex: 'sNo', key: 'sNo' },
+    { title: 'Name', dataIndex: 'name', key: 'name' },
+    { title: 'College', dataIndex: 'college', key: 'college' },
+    { title: 'Year', dataIndex: 'year', key: 'year' },
+    { title: 'Contact Number', dataIndex: 'contact', key: 'contact' },
+    { title: 'Mail id', dataIndex: 'mail', key: 'mail' },
+    { title: 'Location', dataIndex: 'location', key: 'location' },
+  ];
+
+  const mockAppliedCandidates = [
+    { sNo: '01', name: 'Sridhar', department: 'B.Sc Computer Science', year: '2026', contact: '8434298692', mail: 'sridhar@gmail.com', college: 'Quantum Innovators Institute' },
+    { sNo: '02', name: 'Nala', department: 'B.Tech IT', year: '2025', contact: '9876543210', mail: 'nala@example.com', college: 'Quantum Innovators Institute' },
+    { sNo: '03', name: 'Rishi', department: 'BE CSE', year: '2024', contact: '8765432109', mail: 'rishi@sample.com', college: 'Stellaris Academy' },
+    { sNo: '04', name: 'Priya', department: 'B.Sc AI & DS', year: '2026', contact: '7654321098', mail: 'priya@domain.com', college: 'Zenith Institute' },
+    { sNo: '05', name: 'Veer', department: 'B.Tech ECE', year: '2027', contact: '6543210987', mail: 'veer@institution.com', college: 'Nova College' },
+    { sNo: '06', name: 'Leela', department: 'MCA', year: '2025', contact: '5432109876', mail: 'leela@university.com', college: 'Apex University' },
+  ];
+
+  const mockSelectedCandidates = [
+    { sNo: '01', name: 'Nala', college: 'Quantum Innovators Institute', year: '2025', contact: '9876543210', mail: 'nala@example.com', location: 'Salem' },
+    { sNo: '02', name: 'Rishi', college: 'Stellaris Academy', year: '2024', contact: '8765432109', mail: 'rishi@sample.com', location: 'Salem' },
+    { sNo: '03', name: 'Priya', college: 'Zenith Institute', year: '2026', contact: '7654321098', mail: 'priya@domain.com', location: 'Salem' },
+    { sNo: '04', name: 'Veer', college: 'Nova College', year: '2027', contact: '6543210987', mail: 'veer@institution.com', location: 'Salem' },
+    { sNo: '05', name: 'Leela', college: 'Apex University', year: '2025', contact: '5432109876', mail: 'leela@university.com', location: 'Salem' },
+    { sNo: '06', name: 'Kiran', college: 'Pinnacle Institute', year: '2024', contact: '4321098765', mail: 'kiran@academy.com', location: 'Salem' },
+    { sNo: '07', name: 'Diya', college: 'Horizon College', year: '2026', contact: '3210987654', mail: 'diya@institute.com', location: 'Salem' },
+  ];
+
+  // Calculate Live Attendance Counts
+  const presentCount = useMemo(() => {
+    return Object.values(candidateStatuses).filter((s) => s === 'Present').length;
+  }, [candidateStatuses]);
+
+  const absentCount = useMemo(() => {
+    return Object.values(candidateStatuses).filter((s) => s === 'Absent').length;
+  }, [candidateStatuses]);
+
   const ListCard = ({ title, items }) => (
     <div className="bg-white rounded-[22px] border border-gray-200 shadow-sm p-5 md:p-6">
       <h3 className="text-[16px] md:text-[18px] font-bold text-primary mb-3">{title}</h3>
@@ -164,123 +246,246 @@ const JobsProfile = ({ module = 'admin' }) => {
     );
   }
 
+  const handleCandidateSelect = async (candidateRecord) => {
+    const appId = candidateRecord?.applicationId || candidateRecord?._id;
+    if (appId) {
+      try {
+        const response = await getAppliedCandidateProfile(appId);
+        if (response.success && response.data) {
+          setSelectedCandidateProfile(response.data);
+          return;
+        }
+      } catch (err) {
+        console.warn("Could not fetch profile from API, fallback to record:", err);
+      }
+    }
+    setSelectedCandidateProfile(candidateRecord);
+  };
+
+  if (selectedCandidateProfile) {
+    const isSelectedCandidate = activeTab === 'selected' || selectedCandidateProfile.status === 'selected';
+
+    if (isEvaluatingPerformance) {
+      return (
+        <div className="bg-[#f8f9fa] min-h-screen">
+          <PerformanceEvaluationSection
+            candidate={selectedCandidateProfile}
+            onBack={() => setIsEvaluatingPerformance(false)}
+            onSave={() => {
+              toast.success('Performance evaluation saved successfully!');
+              setIsEvaluatingPerformance(false);
+            }}
+          />
+        </div>
+      );
+    }
+
+    return (
+      <div className="bg-[#f8f9fa] min-h-screen">
+        <CandidateProfileSection
+          candidate={selectedCandidateProfile}
+          isSelected={isSelectedCandidate}
+          onBack={() => {
+            setSelectedCandidateProfile(null);
+            setIsEvaluatingPerformance(false);
+          }}
+          onAddPerformance={() => setIsEvaluatingPerformance(true)}
+          onStatusChange={async (newStatus) => {
+            const appId = selectedCandidateProfile?.applicationId;
+            if (appId) {
+              try {
+                await updateCandidateApplicationStatus(appId, newStatus);
+              } catch (err) {
+                toast.error(err?.message || "Failed to update candidate status");
+              }
+            }
+            setSelectedCandidateProfile((prev) => ({ ...prev, status: newStatus }));
+            toast.success(`Candidate marked as ${newStatus === 'selected' ? 'Selected' : 'Not Selected'}`);
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-[#f8f9fa] min-h-screen ">
+    <div className="bg-[#f8f9fa] min-h-screen">
       <section className="bg-white rounded-[16px] md:rounded-[24px] border border-gray-200 p-4 md:p-6 shadow-sm">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 pb-6 border-b border-gray-200">
-          <div className="flex gap-4 md:gap-6">
-            <div className="w-[86px] h-[86px] md:w-[118px] md:h-[118px] rounded-[12px] border border-gray-300 flex items-center justify-center bg-white">
-              <img src={assets.logo} alt="Company logo" className="w-[54px] md:w-[84px] h-auto object-contain" />
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex flex-wrap items-center gap-3">
-                <h1 className="font-semibold text-[18px] leading-none tracking-normal text-primary">
-                  {internship.jobTitle || '-'}
-                </h1>
-                <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[12px] font-semibold ${statusIsActive ? 'bg-[#E6F8EE] text-[#23A55A]' : 'bg-[#F1F5F9] text-[#64748B]'
-                  }`}>
-                  <span className={`w-2 h-2 rounded-full ${statusIsActive ? 'bg-[#23A55A]' : 'bg-[#64748B]'}`} />
-                  {statusLabel}
-                </span>
+        
+        {/* Dynamic Top Header Section (Displayed in Internship & Attendance View, Hidden ONLY in Add Attendance) */}
+        {!isAddAttendance && (
+          <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 pb-6 border-b border-gray-200">
+            <div className="flex gap-4 md:gap-6">
+              <div className="w-[86px] h-[86px] md:w-[118px] md:h-[118px] rounded-[12px] border border-gray-300 flex items-center justify-center bg-white p-2">
+                <img src={assets.logo} alt="Company logo" className="w-[54px] md:w-[84px] h-auto object-contain" />
               </div>
-              <p className="font-jakarta font-semibold text-[16px] text-secondary">{internship.companyName || '-'}</p>
-              <p className="font-jakarta font-medium text-[14px] text-[#344054]">{internship.mode || '-'}</p>
-              <p className="font-jakarta font-medium text-[14px] text-[#344054]">
-                {internship.totalOpenings ?? 0} Openings
-              </p>
-              <p className="font-jakarta font-medium text-[14px] text-[#344054]">Rs {internship.salary ?? 0}</p>
+
+              <div className="space-y-1">
+                <div className="flex flex-wrap items-center gap-3">
+                  <h1 className="font-semibold text-[18px] leading-none tracking-normal text-primary">
+                    {internship.jobTitle || '-'}
+                  </h1>
+                  {!isAttendanceView && (
+                    <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[12px] font-semibold ${statusIsActive ? 'bg-[#E6F8EE] text-[#23A55A]' : 'bg-[#F1F5F9] text-[#64748B]'}`}>
+                      <span className={`w-2 h-2 rounded-full ${statusIsActive ? 'bg-[#23A55A]' : 'bg-[#64748B]'}`} />
+                      {statusLabel}
+                    </span>
+                  )}
+                </div>
+                <p className="font-jakarta font-semibold text-[16px] text-secondary">{internship.companyName || '-'}</p>
+                <p className="font-jakarta font-medium text-[14px] text-[#344054]">{internship.mode || '-'}</p>
+                
+                {!isAttendanceView && (
+                  <>
+                    <p className="font-jakarta font-medium text-[14px] text-[#344054]">
+                      {internship.totalOpenings ?? 0} Openings
+                    </p>
+                    <p className="font-jakarta font-medium text-[14px] text-[#344054]">Rs {internship.salary ?? 0}</p>
+                  </>
+                )}
+              </div>
             </div>
+
+            {/* Top Right Summary Cards */}
+            {isAttendanceView ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full xl:w-auto">
+                {/* Card 1: DATE */}
+                <div className="rounded-[18px] bg-[linear-gradient(119.97deg,_#006098_0%,_#00C1FD_100%)] text-white p-4 md:p-5 flex flex-col justify-center sm:min-w-[160px] shadow-sm">
+                  <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-2 opacity-90">DATE</p>
+                  <p className="text-[20px] md:text-[26px] leading-none font-bold text-white">{displaySelectedDate}</p>
+                </div>
+
+                {/* Card 2: PRESENT */}
+                <div className="rounded-[18px] bg-white border border-gray-200 p-4 md:p-5 flex flex-col justify-center sm:min-w-[150px] shadow-xs">
+                  <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-2 text-[#7D89A0]">PRESENT</p>
+                  <p className="text-[26px] md:text-[36px] leading-none font-bold text-[#0091D5]">{presentCount}</p>
+                </div>
+
+                {/* Card 3: ABSENT */}
+                <div className="rounded-[18px] bg-white border border-gray-200 p-4 md:p-5 flex flex-col justify-center sm:min-w-[150px] shadow-xs">
+                  <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-2 text-[#7D89A0]">ABSENT</p>
+                  <p className="text-[26px] md:text-[36px] leading-none font-bold text-[#0091D5]">{absentCount}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full xl:w-auto">
+                <div className="rounded-[18px] bg-[linear-gradient(119.97deg,_#006098_0%,_#00C1FD_100%)] text-white p-4 md:p-5 min-h-[100px] md:min-h-[130px] flex flex-col justify-center sm:min-w-[150px]">
+                  <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-3">Total Openings</p>
+                  <p className="text-[28px] md:text-[40px] leading-none font-bold">{internship.totalOpenings ?? 0}</p>
+                </div>
+
+                <div className="rounded-[18px] bg-white border border-gray-200 text-[#0C5F94] p-4 md:p-5 min-h-[100px] md:min-h-[130px] flex flex-col justify-center sm:min-w-[150px]">
+                  <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-3 text-[#7D89A0]">Intern Start Date</p>
+                  <p className="text-[18px] md:text-[26px] leading-none font-bold">{formatDate(internship.internStartDate)}</p>
+                </div>
+
+                <div className="rounded-[18px] bg-white border border-gray-200 text-[#0C5F94] p-4 md:p-5 min-h-[100px] md:min-h-[130px] flex flex-col justify-center sm:min-w-[150px]">
+                  <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-3 text-[#7D89A0]">Application Deadline</p>
+                  <p className="text-[18px] md:text-[26px] leading-none font-bold">{formatDate(internship.applicationDeadline)}</p>
+                </div>
+              </div>
+            )}
           </div>
+        )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full xl:w-auto">
-            <div className="rounded-[18px] bg-[linear-gradient(119.97deg,_#006098_0%,_#00C1FD_100%)] text-white p-4 md:p-5 min-h-[100px] md:min-h-[130px] flex flex-col justify-center sm:min-w-[150px]">
-              <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-3">Total Openings</p>
-              <p className="text-[28px] md:text-[40px] leading-none font-bold">{internship.totalOpenings ?? 0}</p>
-            </div>
-
-            <div className="rounded-[18px] bg-white border border-gray-200 text-[#0C5F94] p-4 md:p-5 min-h-[100px] md:min-h-[130px] flex flex-col justify-center sm:min-w-[150px]">
-              <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-3 text-[#7D89A0]">Intern Start Date</p>
-              <p className="text-[18px] md:text-[26px] leading-none font-bold">{formatDate(internship.internStartDate)}</p>
-            </div>
-
-            <div className="rounded-[18px] bg-white border border-gray-200 text-[#0C5F94] p-4 md:p-5 min-h-[100px] md:min-h-[130px] flex flex-col justify-center sm:min-w-[150px]">
-              <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-3 text-[#7D89A0]">Application Deadline</p>
-              <p className="text-[18px] md:text-[26px] leading-none font-bold">{formatDate(internship.applicationDeadline)}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-4 pt-6 pb-4">
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={() => setActiveTab('overview')}
-              className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${activeTab === 'overview'
-                  ? 'bg-[#0989D4] text-white'
-                  : 'bg-white text-[#344054] border border-gray-300'
-                }`}
-            >
-              Overview
-            </button>
-            {(internship?.status === "approved") &&
-
+        {/* Tabs Row (Only visible when NOT in Attendance Profile mode) */}
+        {!isAttendanceProfile && (
+          <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-4 pt-6 pb-4">
+            <div className="flex flex-wrap gap-3">
               <button
-                onClick={() => setActiveTab('applied')}
-                className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${activeTab === 'applied'
-                    ? 'bg-[#0989D4] text-white'
-                    : 'bg-white text-[#344054] border border-gray-300'
-                  }`}
+                onClick={() => {
+                  setSelectedCandidateProfile(null);
+                  setActiveTab('overview');
+                  setAttendanceSubView('list');
+                }}
+                className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${
+                  activeTab === 'overview' && !selectedCandidateProfile ? 'bg-[#0989D4] text-white' : 'bg-white text-[#344054] border border-gray-300'
+                }`}
               >
-                Applied List
+                Overview
               </button>
-            }
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            {
-              internship.status === "approved" && <>
-
-                <ConfirmActionButton
-                  isActive={statusIsActive}
-                  isSubmitting={isTogglingStatus}
-                  onConfirm={handleToggleStatus}
-                  activateText="Activate"
-                  deactivateText="Deactivate"
-                  type='Internship'
-                  apply="apply"
-
-                />
+              {internship?.status === 'approved' && (
                 <button
-                  type="button"
-                  onClick={() => navigate(`/${module}/jobs/internship-form`, { state: { editData: internship } })}
-                  className="inline-flex items-center gap-2 bg-white border border-[#D0D5DD] text-[#344054] px-6 py-2.5 rounded-full text-[15px] font-medium hover:bg-gray-50 transition-colors"
+                  onClick={() => {
+                    setSelectedCandidateProfile(null);
+                    setActiveTab('applied');
+                    setAttendanceSubView('list');
+                  }}
+                  className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${
+                    activeTab === 'applied' || (selectedCandidateProfile && activeTab === 'applied') ? 'bg-[#0989D4] text-white' : 'bg-white text-[#344054] border border-gray-300'
+                  }`}
                 >
-                  <img src={assets.edit} alt="Edit" className="w-5 h-5 object-contain" />
-                  Edit Details
+                  Applied List
                 </button>
-              </>
+              )}
+              {internship?.status === 'approved' && (
+                <button
+                  onClick={() => {
+                    setSelectedCandidateProfile(null);
+                    setActiveTab('selected');
+                    setAttendanceSubView('list');
+                  }}
+                  className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${
+                    activeTab === 'selected' || (selectedCandidateProfile && activeTab === 'selected') ? 'bg-[#0989D4] text-white' : 'bg-white text-[#344054] border border-gray-300'
+                  }`}
+                >
+                  Selected Candidate
+                </button>
+              )}
+              {internship?.status === 'approved' && (
+                <button
+                  onClick={() => {
+                    setSelectedCandidateProfile(null);
+                    setActiveTab('attendance');
+                    setAttendanceSubView('list');
+                  }}
+                  className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${
+                    activeTab === 'attendance' ? 'bg-[#0989D4] text-white' : 'bg-white text-[#344054] border border-gray-300'
+                  }`}
+                >
+                  Attendance
+                </button>
+              )}
+            </div>
 
-            }
+            <div className="flex flex-wrap items-center gap-3">
+              {internship.status === 'approved' && (
+                <>
+                  <ConfirmActionButton
+                    isActive={statusIsActive}
+                    isSubmitting={isTogglingStatus}
+                    onConfirm={handleToggleStatus}
+                    activateText="Activate"
+                    deactivateText="Deactivate"
+                    type="Internship"
+                    apply="apply"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/${module}/jobs/internship-form`, { state: { editData: internship } })}
+                    className="inline-flex items-center gap-2 bg-white border border-[#D0D5DD] text-[#344054] px-6 py-2.5 rounded-full text-[15px] font-medium hover:bg-gray-50 transition-colors"
+                  >
+                    <img src={assets.edit} alt="Edit" className="w-5 h-5 object-contain" />
+                    Edit Details
+                  </button>
+                </>
+              )}
 
-            {
-              user.role === "admin" &&    internship.status === "pending"  && <StatusActionButtons type='Internship' isSubmitting={statusLoading} onConfirm={updateStatus} />
-            }
+              {user.role === 'admin' && internship.status === 'pending' && (
+                <StatusActionButtons type="Internship" isSubmitting={statusLoading} onConfirm={updateStatus} />
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
-        {
-                    internship.status === "rejected" && (
-                        <div className="space-y-6">
-                            <p className="text-red-600 font-semibold">
-                                {internship?.rejected_reason}
-                            </p>
-                        </div>
-                    )
-                }
+        {internship.status === 'rejected' && (
+          <div className="space-y-6 pt-4">
+            <p className="text-red-600 font-semibold">{internship?.rejected_reason}</p>
+          </div>
+        )}
 
-
+        {/* Tab Body View */}
         {activeTab === 'overview' ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pt-2">
             <ListCard title="Responsibilities" items={responsibilities.length ? responsibilities : fallbackList} />
             <ListCard title="Eligibility Criteria" items={eligibility.length ? eligibility : fallbackList} />
             <ListCard title="Required Skill Set" items={skillSet.length ? skillSet : fallbackList} />
@@ -291,23 +496,105 @@ const JobsProfile = ({ module = 'admin' }) => {
             <TextCard title="Description" text={internship.description || '-'} />
 
             <div className="xl:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TextCard
-                title="Learning Outcomes"
-                text={learningOutcomes.join(', ') || '-'}
-              />
-              <TextCard
-                title="Certificate Availability"
-                text={internship.certificateAvailability || '-'}
-              />
+              <TextCard title="Learning Outcomes" text={learningOutcomes.join(', ') || '-'} />
+              <TextCard title="Certificate Availability" text={internship.certificateAvailability || '-'} />
             </div>
           </div>
+        ) : activeTab === 'applied' ? (
+          <div className="pt-2">
+            <AppliedListSection
+              data={applications.list.map((app, idx) => ({
+                ...app,
+                sNo: app.sNo || String(idx + 1).padStart(2, '0'),
+                appliedAt: app.appliedAt ? new Date(app.appliedAt).toLocaleDateString('en-GB') : '-',
+              }))}
+              heading={appliedListHeading}
+              onRowClick={handleCandidateSelect}
+            />
+          </div>
+        ) : activeTab === 'selected' ? (
+          <div className="pt-2">
+            <AppliedListSection
+              data={
+                applications.list.filter((app) => app.status === 'selected').length > 0
+                  ? applications.list
+                      .filter((app) => app.status === 'selected')
+                      .map((app, idx) => ({
+                        ...app,
+                        sNo: String(idx + 1).padStart(2, '0'),
+                        college: app.college || app.collegeName || 'Quantum Innovators Institute',
+                        location: app.location || 'Salem',
+                      }))
+                  : mockSelectedCandidates
+              }
+              heading={selectedListHeading}
+              onRowClick={handleCandidateSelect}
+            />
+          </div>
         ) : (
-          <AppliedListSection
-            data={applications.list.map((app) => ({
-              ...app,
-              appliedAt: new Date(app.appliedAt).toLocaleDateString('en-GB'),
-            }))}
-            heading={appliedListHeading}
+          <AttendanceSection
+            mode={attendanceSubView}
+            selectedDate={selectedDate}
+            onDateChange={setSelectedDate}
+            onReturn={() => {
+              setAttendanceSubView('list');
+              setActiveTab('overview');
+            }}
+            onModeChange={(newMode) => {
+              if (newMode === 'mark') {
+                setSelectedDate(new Date().toISOString().split('T')[0]);
+                setCandidateStatuses({});
+              }
+              setAttendanceSubView(newMode);
+            }}
+            onRowClick={(record) => {
+              if (!record || !record.date) return;
+              setSelectedDate(record.date);
+
+              const initial = {};
+              const list = applications.list.filter((app) => app.status === 'selected');
+              const sampleIds = ['1', '2', '3', '4', '5', '6', '7', '8'];
+              const hasAbsents = record.absentCount && record.absentCount > 0;
+
+              if (list.length > 0) {
+                list.forEach((c, idx) => {
+                  initial[c._id || c.id || `cand-${idx}`] = (hasAbsents && (idx === 1 || idx === 3)) ? 'Absent' : 'Present';
+                });
+              } else {
+                sampleIds.forEach((id, idx) => {
+                  initial[id] = (hasAbsents && (idx === 1 || idx === 3)) ? 'Absent' : 'Present';
+                });
+              }
+
+              setCandidateStatuses(initial);
+              setAttendanceSubView('view');
+            }}
+            attendanceData={attendanceHistory}
+            selectedCandidates={applications.list.filter((app) => app.status === 'selected')}
+            candidateStatuses={candidateStatuses}
+            onStatusChange={(candId, status) => {
+              setCandidateStatuses((prev) => ({
+                ...prev,
+                [candId]: status,
+              }));
+            }}
+            onSaveAttendance={() => {
+              const dateObj = new Date(selectedDate);
+              const formattedDate = !isNaN(dateObj.getTime())
+                ? `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`
+                : selectedDate;
+
+              const newRecord = {
+                id: `att-${Date.now()}`,
+                date: formattedDate,
+                presentCount,
+                absentCount: absentCount > 0 ? absentCount : null,
+              };
+
+              setAttendanceHistory((prev) => [newRecord, ...prev.filter((r) => r.date !== formattedDate)]);
+              toast.success('Attendance saved successfully!');
+              setAttendanceSubView('list');
+            }}
           />
         )}
       </section>
