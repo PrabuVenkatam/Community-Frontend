@@ -358,3 +358,87 @@ export const updateJobStatus = async (job_id, jobType, status, rejected_reason =
     );
   }
 };
+
+export const getSelectedCandidates = async (jobId) => {
+  try {
+    const res = await API.get(`/internship/selected-candidates/${jobId}`);
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
+
+export const savePerformanceEvaluation = async (payload) => {
+  try {
+    const res = await API.post("/internship/performance-evaluation", payload);
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
+
+export const getPerformanceEvaluation = async (applicationId) => {
+  try {
+    const res = await API.get(`/internship/performance-evaluation/${applicationId}`);
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
+
+export const saveAttendance = async (jobId, payload) => {
+  try {
+    const res = await API.post(`/internship/attendance/${jobId}`, payload);
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
+
+export const getAttendanceHistory = async (jobId) => {
+  try {
+    const res = await API.get(`/internship/attendance-history/${jobId}`);
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
+
+export const getAttendanceDetails = async (jobId, date) => {
+  try {
+    const res = await API.get(`/internship/attendance-details/${jobId}?date=${encodeURIComponent(date)}`);
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};

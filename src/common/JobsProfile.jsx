@@ -11,7 +11,11 @@ import {
   toggleInternshipStatus, 
   updateJobStatus, 
   getAppliedCandidateProfile, 
-  updateCandidateApplicationStatus 
+  updateCandidateApplicationStatus,
+  getSelectedCandidates,
+  saveAttendance,
+  getAttendanceHistory,
+  getAttendanceDetails
 } from '../services/admin/adminServices';
 import ConfirmActionButton from './ConfirmActionButton';
 import { useTitle } from '../context/AdminTitle';
@@ -67,6 +71,18 @@ const JobsProfile = ({ module = 'admin' }) => {
     }
   }, [selectedCandidateProfile, isEvaluatingPerformance, activeTab, isAttendanceProfile, attendanceSubView, setTitle]);
 
+  // Reset scroll position to top when switching tabs or candidate subviews
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    const mainElement = document.querySelector("main");
+    if (mainElement) {
+      mainElement.scrollTop = 0;
+      if (typeof mainElement.scrollTo === "function") {
+        mainElement.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      }
+    }
+  }, [activeTab, selectedCandidateProfile, attendanceSubView, isEvaluatingPerformance]);
+
   const updateStatus = async (status, rejected_reason) => {
     try {
       setStatusLoading(true);
@@ -109,6 +125,46 @@ const JobsProfile = ({ module = 'admin' }) => {
 
     fetchInternship();
   }, [id]);
+
+  // Fetch Selected Candidates API
+  const [selectedCandidatesList, setSelectedCandidatesList] = useState([]);
+
+  useEffect(() => {
+    const fetchSelectedCandidates = async () => {
+      if (!id) return;
+      try {
+        const response = await getSelectedCandidates(id);
+        if (response.success && response.data) {
+          setSelectedCandidatesList(response.data);
+        }
+      } catch (err) {
+        console.warn("Could not fetch selected candidates from API:", err);
+      }
+    };
+
+    if (id) {
+      fetchSelectedCandidates();
+    }
+  }, [id, activeTab]);
+
+  // Fetch Attendance History List
+  const [attendanceHistoryList, setAttendanceHistoryList] = useState([]);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      if (!id || activeTab !== 'attendance') return;
+      try {
+        const res = await getAttendanceHistory(id);
+        if (res.success && res.data) {
+          setAttendanceHistoryList(res.data);
+        }
+      } catch (err) {
+        console.warn("Could not fetch attendance history:", err);
+      }
+    };
+
+    fetchHistory();
+  }, [id, activeTab, attendanceSubView]);
 
   const formatDate = (value) => {
     if (!value) return '-';
@@ -156,25 +212,6 @@ const JobsProfile = ({ module = 'admin' }) => {
     { title: 'Contact Number', dataIndex: 'contact', key: 'contact' },
     { title: 'Mail id', dataIndex: 'mail', key: 'mail' },
     { title: 'Location', dataIndex: 'location', key: 'location' },
-  ];
-
-  const mockAppliedCandidates = [
-    { sNo: '01', name: 'Sridhar', department: 'B.Sc Computer Science', year: '2026', contact: '8434298692', mail: 'sridhar@gmail.com', college: 'Quantum Innovators Institute' },
-    { sNo: '02', name: 'Nala', department: 'B.Tech IT', year: '2025', contact: '9876543210', mail: 'nala@example.com', college: 'Quantum Innovators Institute' },
-    { sNo: '03', name: 'Rishi', department: 'BE CSE', year: '2024', contact: '8765432109', mail: 'rishi@sample.com', college: 'Stellaris Academy' },
-    { sNo: '04', name: 'Priya', department: 'B.Sc AI & DS', year: '2026', contact: '7654321098', mail: 'priya@domain.com', college: 'Zenith Institute' },
-    { sNo: '05', name: 'Veer', department: 'B.Tech ECE', year: '2027', contact: '6543210987', mail: 'veer@institution.com', college: 'Nova College' },
-    { sNo: '06', name: 'Leela', department: 'MCA', year: '2025', contact: '5432109876', mail: 'leela@university.com', college: 'Apex University' },
-  ];
-
-  const mockSelectedCandidates = [
-    { sNo: '01', name: 'Nala', college: 'Quantum Innovators Institute', year: '2025', contact: '9876543210', mail: 'nala@example.com', location: 'Salem' },
-    { sNo: '02', name: 'Rishi', college: 'Stellaris Academy', year: '2024', contact: '8765432109', mail: 'rishi@sample.com', location: 'Salem' },
-    { sNo: '03', name: 'Priya', college: 'Zenith Institute', year: '2026', contact: '7654321098', mail: 'priya@domain.com', location: 'Salem' },
-    { sNo: '04', name: 'Veer', college: 'Nova College', year: '2027', contact: '6543210987', mail: 'veer@institution.com', location: 'Salem' },
-    { sNo: '05', name: 'Leela', college: 'Apex University', year: '2025', contact: '5432109876', mail: 'leela@university.com', location: 'Salem' },
-    { sNo: '06', name: 'Kiran', college: 'Pinnacle Institute', year: '2024', contact: '4321098765', mail: 'kiran@academy.com', location: 'Salem' },
-    { sNo: '07', name: 'Diya', college: 'Horizon College', year: '2026', contact: '3210987654', mail: 'diya@institute.com', location: 'Salem' },
   ];
 
   // Calculate Live Attendance Counts
@@ -516,16 +553,16 @@ const JobsProfile = ({ module = 'admin' }) => {
           <div className="pt-2">
             <AppliedListSection
               data={
-                applications.list.filter((app) => app.status === 'selected').length > 0
-                  ? applications.list
+                selectedCandidatesList.length > 0
+                  ? selectedCandidatesList
+                  : applications.list
                       .filter((app) => app.status === 'selected')
                       .map((app, idx) => ({
                         ...app,
                         sNo: String(idx + 1).padStart(2, '0'),
-                        college: app.college || app.collegeName || 'Quantum Innovators Institute',
-                        location: app.location || 'Salem',
+                        college: app.college || app.collegeName || '-',
+                        location: app.location || '-',
                       }))
-                  : mockSelectedCandidates
               }
               heading={selectedListHeading}
               onRowClick={handleCandidateSelect}
@@ -536,6 +573,7 @@ const JobsProfile = ({ module = 'admin' }) => {
             mode={attendanceSubView}
             selectedDate={selectedDate}
             onDateChange={setSelectedDate}
+            selectedCandidates={selectedCandidatesList}
             onReturn={() => {
               setAttendanceSubView('list');
               setActiveTab('overview');
@@ -547,30 +585,27 @@ const JobsProfile = ({ module = 'admin' }) => {
               }
               setAttendanceSubView(newMode);
             }}
-            onRowClick={(record) => {
-              if (!record || !record.date) return;
-              setSelectedDate(record.date);
+            onRowClick={async (record) => {
+              if (!record) return;
+              const dateVal = record.date || record.rawDate;
+              setSelectedDate(dateVal);
 
-              const initial = {};
-              const list = applications.list.filter((app) => app.status === 'selected');
-              const sampleIds = ['1', '2', '3', '4', '5', '6', '7', '8'];
-              const hasAbsents = record.absentCount && record.absentCount > 0;
-
-              if (list.length > 0) {
-                list.forEach((c, idx) => {
-                  initial[c._id || c.id || `cand-${idx}`] = (hasAbsents && (idx === 1 || idx === 3)) ? 'Absent' : 'Present';
-                });
-              } else {
-                sampleIds.forEach((id, idx) => {
-                  initial[id] = (hasAbsents && (idx === 1 || idx === 3)) ? 'Absent' : 'Present';
-                });
+              try {
+                const res = await getAttendanceDetails(id, record.rawDate || record.date);
+                if (res.success && res.data) {
+                  const initial = {};
+                  res.data.forEach((item) => {
+                    initial[item.id] = item.status === 'Absent' ? 'Absent' : 'Present';
+                  });
+                  setCandidateStatuses(initial);
+                }
+              } catch (err) {
+                console.warn("Could not fetch date attendance details:", err);
               }
-
-              setCandidateStatuses(initial);
               setAttendanceSubView('view');
             }}
-            attendanceData={attendanceHistory}
-            selectedCandidates={applications.list.filter((app) => app.status === 'selected')}
+            attendanceData={attendanceHistoryList}
+            selectedCandidates={selectedCandidatesList}
             candidateStatuses={candidateStatuses}
             onStatusChange={(candId, status) => {
               setCandidateStatuses((prev) => ({
@@ -578,22 +613,30 @@ const JobsProfile = ({ module = 'admin' }) => {
                 [candId]: status,
               }));
             }}
-            onSaveAttendance={() => {
-              const dateObj = new Date(selectedDate);
-              const formattedDate = !isNaN(dateObj.getTime())
-                ? `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`
-                : selectedDate;
+            onSaveAttendance={async () => {
+              if (!id) return;
+              const currentDateISO = new Date().toISOString().split('T')[0];
+              const records = selectedCandidatesList.map((cand) => {
+                const candId = cand.id || cand.userId || cand._id;
+                const st = candidateStatuses[candId] || 'Present';
+                return {
+                  userId: candId,
+                  status: st.toLowerCase(),
+                };
+              });
 
-              const newRecord = {
-                id: `att-${Date.now()}`,
-                date: formattedDate,
-                presentCount,
-                absentCount: absentCount > 0 ? absentCount : null,
-              };
-
-              setAttendanceHistory((prev) => [newRecord, ...prev.filter((r) => r.date !== formattedDate)]);
-              toast.success('Attendance saved successfully!');
-              setAttendanceSubView('list');
+              try {
+                const res = await saveAttendance(id, {
+                  date: currentDateISO,
+                  records,
+                });
+                if (res.success) {
+                  toast.success(res.message || "Attendance saved successfully!");
+                  setAttendanceSubView('list');
+                }
+              } catch (err) {
+                toast.error(err?.message || "Failed to save attendance");
+              }
             }}
           />
         )}

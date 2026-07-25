@@ -2,13 +2,6 @@ import React, { useState, useMemo } from 'react';
 import DynamicTable from './DynamicTable';
 import { Plus, Calendar } from 'lucide-react';
 
-const defaultAttendanceHistory = [
-  { id: 'att-1', sNo: '01', date: '23/07/2026', presentCount: 20, absentCount: 3 },
-  { id: 'att-2', sNo: '02', date: '22/07/2026', presentCount: 18, absentCount: 4 },
-  { id: 'att-3', sNo: '03', date: '21/07/2026', presentCount: 23, absentCount: null },
-  { id: 'att-4', sNo: '04', date: '20/07/2026', presentCount: 23, absentCount: null },
-];
-
 const AttendanceSection = ({
   mode = 'list', // 'list' | 'view' | 'mark'
   onModeChange,
@@ -33,35 +26,24 @@ const AttendanceSection = ({
     return `${dd}/${mm}/${yy}`;
   }, []);
 
-  // Fallback to mock data if no attendance records provided yet
+  // Attendance history records
   const effectiveAttendanceData = useMemo(() => {
-    return attendanceData && attendanceData.length > 0 ? attendanceData : defaultAttendanceHistory;
+    return attendanceData && Array.isArray(attendanceData) ? attendanceData : [];
   }, [attendanceData]);
 
-  // Candidate List (use actual selected candidates or fallback sample data matching design)
+  // Dynamic Candidate List mapped directly from selectedCandidates prop
   const candidateList = useMemo(() => {
     if (selectedCandidates && selectedCandidates.length > 0) {
       return selectedCandidates.map((cand, idx) => ({
         id: cand._id || cand.id || cand.userId || `cand-${idx}`,
         sNo: String(idx + 1).padStart(2, '0'),
-        name: cand.name || cand.fullName || cand.userName || cand.user?.fullName || 'Candidate',
-        college: cand.college || cand.collegeName || cand.user?.collegeName || 'College',
-        contact: cand.contact || cand.phoneNumber || cand.user?.phoneNumber || '-',
+        name: cand.name || cand.fullName || cand.userName || cand.user?.name || '-',
+        college: cand.college || cand.collegeName || cand.user?.collegeName || '-',
+        contact: cand.contact || cand.phoneNumber || cand.user?.phone || '-',
         mail: cand.mail || cand.mailId || cand.user?.email || '-',
       }));
     }
-    return [
-      { id: '1', sNo: '01', name: 'Nala', college: 'Quantum Innovators Institute', contact: '9876543210', mail: 'nala@example.com' },
-      { id: '2', sNo: '02', name: 'Rishi', college: 'Stellaris Academy', contact: '8765432109', mail: 'rishi@sample.com' },
-      { id: '3', sNo: '03', name: 'Priya', college: 'Zenith Institute', contact: '7654321098', mail: 'priya@domain.com' },
-      { id: '4', sNo: '04', name: 'Veer', college: 'Nova College', contact: '6543210987', mail: 'veer@institution.com' },
-      { id: '5', sNo: '05', name: 'Leela', college: 'Apex University', contact: '5432109876', mail: 'leela@university.com' },
-      { id: '6', sNo: '06', name: 'Kiran', college: 'Pinnacle Institute', contact: '4321098765', mail: 'kiran@academy.com' },
-      { id: '7', sNo: '07', name: 'Diya', college: 'Horizon College', contact: '3210987654', mail: 'diya@institute.com' },
-      { id: '8', sNo: '08', name: 'Aryan', college: 'Summit Academy', contact: '2109876543', mail: 'aryan@college.com' },
-      { id: '9', sNo: '09', name: 'Neha', college: 'Vanguard Institute', contact: '1098765432', mail: 'neha@summit.com' },
-      { id: '10', sNo: '10', name: 'Rohan', college: 'Everest College', contact: '0987654321', mail: 'rohan@vanguard.com' },
-    ];
+    return [];
   }, [selectedCandidates]);
 
   // List view columns
@@ -81,7 +63,7 @@ const AttendanceSection = ({
       title: 'Present',
       dataIndex: 'presentCount',
       key: 'presentCount',
-      render: (val) => val ?? '-',
+      render: (val) => (val && val > 0 ? val : '-'),
     },
     {
       title: 'Absent',

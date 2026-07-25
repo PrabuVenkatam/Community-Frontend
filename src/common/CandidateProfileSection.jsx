@@ -13,31 +13,78 @@ const CandidateProfileSection = ({
 }) => {
   const isSelectedView = isSelected || candidate.status === 'selected';
 
-  const profileData = {
-    name: candidate.name || candidate.fullName || 'Sridhar',
-    college: candidate.college || candidate.collegeName || 'Quantum Innovators Institute',
-    degree: candidate.department || candidate.degree || 'B.Sc Computer Science',
-    openings: candidate.openings || '10 Openings',
-    contact: candidate.contact || candidate.phoneNumber || '8434298692',
-    mail: candidate.mail || candidate.email || 'sridhar@gmail.com',
-    profilePic: candidate.profile_pic || candidate.profilePic || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop',
-    address: candidate.address || '1st Floor, NV Arcade Building, Near 5Roads, Next Reliance Mall, Salem – 636004',
-    highestQualification: candidate.education || candidate.highestQualification || 'UG',
-    ugCompletion: candidate.year || candidate.ugCompletion || '2026',
-    ugModeOfStudy: candidate.ugModeOfStudy || 'Regular',
-    academicAchievement: candidate.academicAchievement || '2026',
-    status: candidate.status || 'applied',
-    resumeUrl: candidate.resumeUrl || '#',
-    primarySkills: candidate.primarySkills?.length ? candidate.primarySkills : ['AI Engineering', 'Data Management', 'Machine Learning', 'Robotics', 'Cloud Computing'],
-    toolsAndTechnologies: candidate.toolsAndTechnologies?.length ? candidate.toolsAndTechnologies : ['AI Engineering', 'Data Management', 'Machine Learning', 'Robotics', 'Cloud Computing'],
-    languagesKnown: candidate.languagesKnown?.length ? candidate.languagesKnown : ['Tamil', 'English', 'Telugu'],
+  const BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
+
+  const getFullUrl = (rawUrl) => {
+    if (!rawUrl || rawUrl === '#') return '';
+    if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://')) {
+      return rawUrl;
+    }
+    const cleanPath = rawUrl.startsWith('/') ? rawUrl : `/${rawUrl}`;
+    return `${BASE_URL}${cleanPath}`;
   };
 
-  const handleDownloadResume = () => {
-    if (profileData.resumeUrl && profileData.resumeUrl !== '#') {
-      window.open(profileData.resumeUrl, '_blank');
-    } else {
-      toast.info(`Downloading ${profileData.name}'s Resume...`);
+  const rawPic = candidate.profile_pic || candidate.profilePic;
+
+  const profileData = {
+    name: candidate.name || candidate.fullName || '',
+    college: candidate.college || candidate.collegeName || '',
+    degree: candidate.department || candidate.degree || '',
+    openings: candidate.openings || '',
+    contact: candidate.contact || candidate.phoneNumber || '',
+    mail: candidate.mail || candidate.email || '',
+    profilePic: rawPic ? getFullUrl(rawPic) : '',
+    address: candidate.address || '',
+    highestQualification: candidate.education || candidate.highestQualification || '',
+    ugCompletion: candidate.year || candidate.ugCompletion || '',
+    ugModeOfStudy: candidate.ugModeOfStudy || '',
+    academicAchievement: candidate.academicAchievement || '',
+    status: candidate.status || 'applied',
+    resumeUrl: candidate.resumeUrl || '#',
+    primarySkills: candidate.primarySkills?.length ? candidate.primarySkills : [],
+    toolsAndTechnologies: candidate.toolsAndTechnologies?.length ? candidate.toolsAndTechnologies : [],
+    languagesKnown: candidate.languagesKnown?.length ? candidate.languagesKnown : [],
+  };
+
+  const handleOpenAndDownloadResume = async () => {
+    const rawUrl = profileData.resumeUrl;
+    const fullUrl = getFullUrl(rawUrl);
+    const cleanName = profileData.name ? profileData.name.trim().replace(/\s+/g, '_') : 'Candidate';
+    const fileName = `${cleanName}_resume.pdf`;
+
+    if (!fullUrl) {
+      toast.info(`Resume URL not available for ${profileData.name}`);
+      return;
+    }
+
+    // 1. Open URL in a new window/tab
+    window.open(fullUrl, '_blank', 'noopener,noreferrer');
+
+    // 2. Trigger download with custom filename personsName_resume.pdf
+    try {
+      const response = await fetch(fullUrl);
+      if (!response.ok) throw new Error("Failed to fetch resume file");
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+
+      toast.success(`Downloaded as ${fileName}`);
+    } catch (err) {
+      console.warn("Direct blob download fallback to link click:", err);
+      const link = document.createElement('a');
+      link.href = fullUrl;
+      link.setAttribute('download', fileName);
+      link.setAttribute('target', '_blank');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 
@@ -118,18 +165,24 @@ const CandidateProfileSection = ({
           )}
 
           {/* Download Resume Box */}
-          <div className="w-full sm:w-auto min-w-[280px] bg-white border border-gray-200 rounded-[16px] p-4 flex items-center justify-between gap-4 shadow-xs">
+          <div 
+            onClick={handleOpenAndDownloadResume}
+            className="w-full sm:w-auto min-w-[280px] bg-white border border-gray-200 rounded-[16px] p-4 flex items-center justify-between gap-4 shadow-xs hover:border-[#2563EB]/40 transition-colors cursor-pointer group"
+          >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#2563EB] flex items-center justify-center text-white shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-[#2563EB] flex items-center justify-center text-white shrink-0 group-hover:scale-105 transition-transform">
                 <FileText size={20} />
               </div>
-              <span className="font-semibold text-[15px] text-[#1D2939]">Resume.Pdf</span>
+              <span className="font-semibold text-[15px] text-[#1D2939] group-hover:text-[#2563EB] transition-colors">Resume.Pdf</span>
             </div>
             <button
               type="button"
-              onClick={handleDownloadResume}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleOpenAndDownloadResume();
+              }}
               className="p-2 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
-              title="Download Resume"
+              title="Open and Download Resume"
             >
               <Download size={20} />
             </button>

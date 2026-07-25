@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { savePerformanceEvaluation, getPerformanceEvaluation } from '../services/admin/adminServices';
 
 const PerformanceEvaluationSection = ({
   candidate = {},
@@ -8,11 +9,27 @@ const PerformanceEvaluationSection = ({
   onSave,
   isSubmitting = false,
 }) => {
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
+
+  const getFullUrl = (rawUrl) => {
+    if (!rawUrl || rawUrl === '#') return '';
+    if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://')) {
+      return rawUrl;
+    }
+    const cleanPath = rawUrl.startsWith('/') ? rawUrl : `/${rawUrl}`;
+    return `${BASE_URL}${cleanPath}`;
+  };
+
+  const rawPic = candidate.profile_pic || candidate.profilePic;
+
   const profileData = {
-    name: candidate.name || candidate.fullName || 'Sridhar',
-    college: candidate.college || candidate.collegeName || 'Quantum Innovators Institute',
-    degree: candidate.department || candidate.degree || 'B.Sc Computer Science',
-    profilePic: candidate.profile_pic || candidate.profilePic || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop',
+    name: candidate.name || candidate.fullName || candidate.user?.name || '',
+    college: candidate.college || candidate.collegeName || candidate.user?.collegeName || '',
+    degree: candidate.department || candidate.degree || candidate.ugDegree || candidate.pgDegree || '',
+    profilePic: rawPic ? getFullUrl(rawPic) : '',
   };
 
   const initialMetrics = [
@@ -42,6 +59,33 @@ const PerformanceEvaluationSection = ({
     learningAbility: '',
   });
 
+  // Fetch existing performance evaluation on mount
+  useEffect(() => {
+    const fetchExistingEvaluation = async () => {
+      const appId = candidate.applicationId || candidate._id || candidate.id;
+      if (!appId) return;
+
+      try {
+        setLoading(true);
+        const res = await getPerformanceEvaluation(appId);
+        if (res.success && res.data) {
+          if (res.data.ratings) {
+            setRatings((prev) => ({ ...prev, ...res.data.ratings }));
+          }
+          if (res.data.remarks) {
+            setRemarks((prev) => ({ ...prev, ...res.data.remarks }));
+          }
+        }
+      } catch (err) {
+        console.warn('Could not fetch existing evaluation:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExistingEvaluation();
+  }, [candidate]);
+
   const handleStarClick = (metricKey, starValue) => {
     setRatings((prev) => ({
       ...prev,
@@ -56,17 +100,36 @@ const PerformanceEvaluationSection = ({
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const evaluationData = {
-      candidateId: candidate.applicationId || candidate._id || candidate.id,
+    const appId = candidate.applicationId || candidate._id || candidate.id;
+    const jobId = candidate.jobId;
+
+    const payload = {
+      applicationId: appId,
+      jobId,
       ratings,
       remarks,
     };
-    if (onSave) {
-      onSave(evaluationData);
-    } else {
-      toast.success('Performance evaluation saved successfully!');
+
+    try {
+      setSubmitting(true);
+      if (appId) {
+        const response = await savePerformanceEvaluation(payload);
+        if (response.success) {
+          toast.success(response.message || 'Performance evaluation saved successfully!');
+        }
+      } else {
+        toast.success('Performance evaluation saved successfully!');
+      }
+
+      if (onSave) {
+        onSave(payload);
+      }
+    } catch (err) {
+      toast.error(err?.message || 'Failed to save performance evaluation');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -74,15 +137,17 @@ const PerformanceEvaluationSection = ({
     <section className="bg-white rounded-[16px] md:rounded-[24px] border border-gray-200 p-6 md:p-8 shadow-sm space-y-6">
       {/* Top Candidate Header Card */}
       <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center pb-6 border-b border-gray-200">
-        <img
-          src={profileData.profilePic}
-          alt={profileData.name}
-          className="w-[110px] h-[110px] rounded-[18px] object-cover border border-gray-200 shadow-xs shrink-0"
-        />
+        {profileData.profilePic && (
+          <img
+            src={profileData.profilePic}
+            alt={profileData.name}
+            className="w-[110px] h-[110px] rounded-[18px] object-cover border border-gray-200 shadow-xs shrink-0"
+          />
+        )}
         <div className="space-y-1">
           <h2 className="text-[22px] font-bold text-[#1D2939] leading-tight">{profileData.name}</h2>
-          <p className="text-[15px] font-semibold text-[#344054]">{profileData.college}</p>
-          <p className="text-[14px] font-medium text-[#475467]">{profileData.degree}</p>
+          {profileData.college && <p className="text-[15px] font-semibold text-[#344054]">{profileData.college}</p>}
+          {profileData.degree && <p className="text-[14px] font-medium text-[#475467]">{profileData.degree}</p>}
         </div>
       </div>
 
@@ -135,21 +200,12 @@ const PerformanceEvaluationSection = ({
 
         {/* Action Buttons */}
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
-          {onBack && (
-            <button
-              type="button"
-              onClick={onBack}
-              className="px-6 py-2.5 rounded-full border border-gray-300 text-[#344054] font-semibold text-[14px] hover:bg-gray-50 transition-colors cursor-pointer"
-            >
-              Cancel
-            </button>
-          )}
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="px-8 py-2.5 bg-[#0091D5] hover:bg-[#007fb8] text-white rounded-full font-semibold text-[14px] transition-all shadow-md shadow-blue-100 cursor-pointer active:scale-95"
+            disabled={isSubmitting || submitting}
+            className="px-8 py-2.5 bg-[#0091D5] hover:bg-[#007fb8] text-white rounded-full font-semibold text-[14px] transition-all shadow-md shadow-blue-100 cursor-pointer active:scale-95 disabled:opacity-50"
           >
-            Save Evaluation
+            {submitting ? 'Saving...' : 'Save'}
           </button>
         </div>
       </form>

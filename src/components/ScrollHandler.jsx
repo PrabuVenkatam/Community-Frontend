@@ -2,22 +2,27 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 const ScrollHandler = () => {
-    const { pathname, search } = useLocation();
+  const { pathname, search } = useLocation();
 
-    useEffect(() => {
-        // For pages that use browser window scrolling
-        window.scrollTo(0, 0);
+  useEffect(() => {
+    // 1. Reset browser window scroll
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
 
-        // For layouts that scroll inside custom containers
-        const scrollTargets = document.querySelectorAll(".scroll-reset-target");
-        scrollTargets.forEach((target) => {
-            target.scrollTo({ top: 0, left: 0, behavior: "auto" });
-        });
-    }, [pathname, search]);
+    // 2. Reset scroll position on custom scrollable layout containers
+    const scrollTargets = document.querySelectorAll(
+      "main, .scroll-reset-target, [class*='overflow-y-auto'], [class*='overflow-auto']"
+    );
+    scrollTargets.forEach((target) => {
+      if (target) {
+        target.scrollTop = 0;
+        if (typeof target.scrollTo === "function") {
+          target.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        }
+      }
+    });
+  }, [pathname, search]);
 
-    return <Outlet />;
+  return <Outlet />;
 };
 
-
-
-export default ScrollHandler
+export default ScrollHandler;

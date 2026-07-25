@@ -262,9 +262,16 @@ const AppLayout = ({
   // Auto-derive title from last path segment — same logic as your AdminLayout
   const pageTitle = location.pathname.split("/").filter(Boolean).pop() || "Dashboard";
 
+  const mainRef = useRef(null);
+
   useEffect(() => {
     setSidebarOpen(false);
-  }, [location.pathname]);
+    window.scrollTo(0, 0);
+    if (mainRef.current) {
+      mainRef.current.scrollTop = 0;
+      mainRef.current.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  }, [location.pathname, location.search]);
 
   // Prevent body scroll when mobile drawer is open
   useEffect(() => {
@@ -472,7 +479,7 @@ const AppLayout = ({
         </header>
 
         {/* ── Page Content ── */}
-        <main className="flex-1 overflow-y-auto p-3">
+        <main ref={mainRef} className="scroll-reset-target flex-1 overflow-y-auto p-3">
           <Outlet />
         </main>
 
