@@ -415,6 +415,7 @@ export const saveAttendance = async (jobId, payload) => {
   }
 };
 
+// Attendance History
 export const getAttendanceHistory = async (jobId) => {
   try {
     const res = await API.get(`/internship/attendance-history/${jobId}`);
@@ -429,9 +430,25 @@ export const getAttendanceHistory = async (jobId) => {
   }
 };
 
+// Date wise attendance
 export const getAttendanceDetails = async (jobId, date) => {
   try {
     const res = await API.get(`/internship/attendance-details/${jobId}?date=${encodeURIComponent(date)}`);
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
+
+// Generate certificate
+export const generateCertificate = async (payload) => {
+  try {
+    const res = await API.post("/certificates/generate", payload);
     return res.data;
   } catch (error) {
     throw (

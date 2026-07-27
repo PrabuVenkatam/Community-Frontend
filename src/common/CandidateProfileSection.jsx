@@ -1,6 +1,9 @@
-import React from 'react';
-import { Download, FileText, ArrowLeft, Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
+import { Download, FileText, ArrowLeft, Plus, X, Award, CheckCircle, ExternalLink, Loader2, Calendar } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { generateCertificate } from '../services/admin/adminServices';
+import { getCurrentUser } from '../services/auth/authServices';
 
 const CandidateProfileSection = ({
   candidate = {},
@@ -15,9 +18,105 @@ const CandidateProfileSection = ({
 
   const BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
 
+  // Certificate Modal State
+  const [isCertModalOpen, setIsCertModalOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedCert, setGeneratedCert] = useState(null);
+  const [certForm, setCertForm] = useState({
+    name: '',
+    domain: '',
+    companyName: 'Nulinz Community',
+    issuedDate: new Date().toISOString().split('T')[0],
+  });
+
+  const handleOpenCertModal = async () => {
+    let initialCompany = candidate.companyName || candidate.company || candidate.company_name || 'Nulinz Community';
+
+    // Fetch user details from /api/users/me
+    try {
+      const res = await getCurrentUser();
+      if (res?.status && res?.data?.user?.name) {
+        initialCompany = res.data.user.name;
+      }
+    } catch (err) {
+      console.warn("Could not fetch current user from /api/users/me:", err);
+    }
+
+    const initialDomain =
+      candidate.internshipName ||
+      candidate.internship_name ||
+      candidate.internshipTitle ||
+      candidate.internship_title ||
+      candidate.jobTitle ||
+      candidate.title ||
+      candidate.openings ||
+      candidate.domain ||
+      candidate.role ||
+      candidate.department ||
+      candidate.degree ||
+      '';
+
+    setCertForm({
+      name: candidate.name || candidate.fullName || '',
+      domain: initialDomain,
+      companyName: initialCompany,
+      issuedDate: new Date().toISOString().split('T')[0],
+    });
+    setGeneratedCert(null);
+    setIsCertModalOpen(true);
+  };
+
+  const handleGenerateCertificate = async (e) => {
+    e.preventDefault();
+    if (!certForm.name.trim() || !certForm.domain.trim() || !certForm.issuedDate) {
+      toast.error('Please fill in all required fields (Name, Domain, and Date)');
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const candidateUserId =
+        candidate.userId?._id ||
+        candidate.userId ||
+        candidate.user_id ||
+        candidate.user?._id ||
+        candidate.user ||
+        candidate.id ||
+        candidate._id ||
+        candidate.applicantId ||
+        null;
+      const resData = await generateCertificate({
+        userId: candidateUserId,
+        name: certForm.name.trim(),
+        domain: certForm.domain.trim(),
+        companyName: certForm.companyName.trim(),
+        issuedDate: certForm.issuedDate,
+        recipientEmail: candidate.mail || candidate.email || '',
+      });
+
+      toast.success('Certificate generated successfully!');
+      setGeneratedCert(resData.data);
+      if (onCreateCertificate) {
+        onCreateCertificate(resData.data);
+      }
+    } catch (err) {
+      toast.error(err.message || 'Failed to generate certificate');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   const getFullUrl = (rawUrl) => {
     if (!rawUrl || rawUrl === '#') return '';
     if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://')) {
+      try {
+        const urlObj = new URL(rawUrl);
+        if (urlObj.hostname === 'localhost' || urlObj.hostname === '127.0.0.1') {
+          return `${BASE_URL}${urlObj.pathname}`;
+        }
+      } catch (e) {
+        // Fallback if URL parsing fails
+      }
       return rawUrl;
     }
     const cleanPath = rawUrl.startsWith('/') ? rawUrl : `/${rawUrl}`;
@@ -128,7 +227,7 @@ const CandidateProfileSection = ({
               </button>
               <button
                 type="button"
-                onClick={onCreateCertificate || (() => toast.info("Create Certificate feature triggered"))}
+                onClick={handleOpenCertModal}
                 className="flex-1 sm:flex-none px-5 py-2.5 rounded-[12px] font-semibold text-[14px] bg-[#0091D5] hover:bg-[#007fb8] text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-95"
               >
                 <Plus size={18} />
@@ -259,6 +358,167 @@ const CandidateProfileSection = ({
           </ul>
         </div>
       </div>
+
+      {/* Certificate Modal */}
+      {isCertModalOpen &&
+        ReactDOM.createPortal(
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-300">
+            <div className="bg-white rounded-[20px] max-w-lg w-full p-6 shadow-2xl border border-gray-100 relative space-y-5 animate-in fade-in zoom-in-95 duration-200">
+              {/* Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#0091D5]/10 flex items-center justify-center shrink-0">
+                    <Award className="w-5 h-5 text-[#0091D5]" />
+                  </div>
+                  <div>
+                    <h3 className="text-[18px] font-bold text-[#101828]">Create Certificate</h3>
+                    <p className="text-[13px] text-[#475467]">Generate an internship completion certificate</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsCertModalOpen(false)}
+                  className="p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Generated Success State */}
+              {generatedCert ? (
+                <div className="space-y-4">
+                  <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-[14px] text-emerald-800 space-y-2">
+                    <div className="flex items-center gap-2 font-bold text-[15px]">
+                      <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+                      <span>Certificate Generated Successfully!</span>
+                    </div>
+                    <p className="text-[13px] text-emerald-700">
+                      Certificate ID: <strong className="font-mono">{generatedCert.certificateId}</strong>
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 pt-2">
+                    <a
+                      href={getFullUrl(generatedCert.fileUrl)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-2.5 px-4 bg-[#0091D5] hover:bg-[#007fb8] text-white text-[14px] font-semibold rounded-[12px] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-xs"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>Download PDF</span>
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const targetUrl = getFullUrl(generatedCert.fileUrl);
+                        navigator.clipboard.writeText(targetUrl);
+                        toast.success("Certificate link copied to clipboard!");
+                      }}
+                      className="w-full py-2.5 px-4 border border-gray-300 hover:bg-gray-50 text-[#344054] text-[14px] font-semibold rounded-[12px] flex items-center justify-center gap-2 transition-all active:scale-95"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Copy Link</span>
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsCertModalOpen(false)}
+                    className="w-full py-2 text-[14px] font-medium text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+              ) : (
+                /* Input Form */
+                <form onSubmit={handleGenerateCertificate} className="space-y-4">
+                  <div>
+                    <label className="block text-[13px] font-bold text-[#344054] mb-1.5">
+                      Candidate Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={certForm.name}
+                      onChange={(e) => setCertForm((prev) => ({ ...prev, name: e.target.value }))}
+                      placeholder="Enter full name"
+                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#0091D5]/20 focus:border-[#0091D5] outline-none transition-all"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[13px] font-bold text-[#344054] mb-1.5">
+                      Domain / Role <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={certForm.domain}
+                      onChange={(e) => setCertForm((prev) => ({ ...prev, domain: e.target.value }))}
+                      placeholder="e.g. Full-Stack Web Development"
+                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#0091D5]/20 focus:border-[#0091D5] outline-none transition-all"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[13px] font-bold text-[#344054] mb-1.5">
+                      Company Name
+                    </label>
+                    <input
+                      type="text"
+                      value={certForm.companyName}
+                      onChange={(e) => setCertForm((prev) => ({ ...prev, companyName: e.target.value }))}
+                      placeholder="e.g. Nulinz Community"
+                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#0091D5]/20 focus:border-[#0091D5] outline-none transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[13px] font-bold text-[#344054] mb-1.5">
+                      Issue Date <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      value={certForm.issuedDate}
+                      onChange={(e) => setCertForm((prev) => ({ ...prev, issuedDate: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#0091D5]/20 focus:border-[#0091D5] outline-none transition-all"
+                      required
+                    />
+                  </div>
+
+                  {/* Form Buttons */}
+                  <div className="flex items-center justify-end gap-3 pt-3 border-t border-gray-100">
+                    <button
+                      type="button"
+                      onClick={() => setIsCertModalOpen(false)}
+                      className="px-4 py-2.5 text-[14px] font-semibold text-[#344054] hover:bg-gray-100 rounded-[12px] transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isGenerating}
+                      className="px-5 py-2.5 text-[14px] font-semibold text-white bg-[#0091D5] hover:bg-[#007fb8] rounded-[12px] flex items-center gap-2 transition-all shadow-xs disabled:opacity-50 active:scale-95 cursor-pointer"
+                    >
+                      {isGenerating ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Generating...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Award className="w-4 h-4" />
+                          <span>Generate Certificate</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>,
+          document.body
+        )}
     </section>
   );
 };

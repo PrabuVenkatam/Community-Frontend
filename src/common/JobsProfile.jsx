@@ -320,7 +320,10 @@ const JobsProfile = ({ module = 'admin' }) => {
     return (
       <div className="bg-[#f8f9fa] min-h-screen">
         <CandidateProfileSection
-          candidate={selectedCandidateProfile}
+          candidate={selectedCandidateProfile ? {
+            ...selectedCandidateProfile,
+            internshipName: selectedCandidateProfile.internshipName || internship?.internshipName || internship?.title || internship?.jobTitle || internship?.internship_title || internship?.profileRole || ''
+          } : {}}
           isSelected={isSelectedCandidate}
           onBack={() => {
             setSelectedCandidateProfile(null);

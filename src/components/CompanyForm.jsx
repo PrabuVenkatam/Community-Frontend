@@ -120,11 +120,15 @@ const companyFormConfig = [
     fields: [{ name: "learningOutcome", label: "Learning Outcome", type: "text", colSpan: "md:col-span-11" }],
   },
   {
-    title: "About Us & Certificate Availability",
+    title: "About Us & Certificate Settings",
     type: "static",
     fields: [
       { name: "aboutUs", label: "About Us", type: "textarea", span: 2 },
       { name: "certificateAvailability", label: "Certificate Availability", type: "textarea", span: 2 },
+      { name: "signatoryName", label: "Authorized Signatory Name", type: "text" },
+      { name: "signatoryDesignation", label: "Authorized Signatory Designation", type: "text" },
+      { name: "signatureUrl", label: "Authorized Signature Image", type: "file", span: 2 },
+      { name: "certificateContentBody", label: "Custom Certificate Body Text", type: "textarea", span: 2, placeholder: "e.g., has successfully completed the internship program in..." },
     ],
   },
 ];

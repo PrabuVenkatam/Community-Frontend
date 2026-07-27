@@ -68,8 +68,8 @@ const App = () => {
 
           {/* Root redirect */}
           <Route path="/" element={<Navigate to="/auth/login" replace />} />
-           <Route path="/job" element={<MobileJobRedirect />} />
-           <Route path="/event" element={<MobileEventRedirect />} />
+          <Route path="/job" element={<MobileJobRedirect />} />
+          <Route path="/event" element={<MobileEventRedirect />} />
           {/* Auth routes */}
           <Route element={<MainLayout />}>
             <Route path="/auth" element={<HomeLayout />}>
@@ -79,7 +79,7 @@ const App = () => {
               <Route path="change-password" element={<ChangePassword />} />
             </Route>
           </Route>
-             <Route element={<MainLayout />}>
+            <Route element={<MainLayout />}>
             <Route path="/admin" element={
      
                 <AdminLayout />
@@ -136,7 +136,7 @@ const App = () => {
               <Route path="seminar" element={<Seminar />} />
               <Route path="seminar-form" element={<SeminarForm />} />
               <Route path="seminar-profile/:id" element={<SeminarProfile />} />
-                 <Route path="profile" element={<CollegeProfile />} />
+              <Route path="profile" element={<CollegeProfile />} />
             </Route>
           </Route>
 
