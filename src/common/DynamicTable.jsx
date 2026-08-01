@@ -299,21 +299,21 @@ const DynamicTable = ({
       <div className="overflow-x-auto md:px-6 ">
         <table className="w-full text-left border-collapse">
           <thead>
-           <tr className="bg-white border-y border-gray-100">
-  {columns.map((col, index) => (
-    <th
-      key={col.key || col.dataIndex}
-      className={`
-        px-6 py-4 whitespace-nowrap bg-gray-50 text-primary border-y border-gray-200
-        ${index !== 0 ? "border-l" : ""}
-        ${index !== columns.length - 1 ? "border-r" : ""}
-      `}
-      style={headerStyle}
-    >
-      {col.title}
-    </th>
-  ))}
-</tr>
+          <tr className="bg-white border-y border-gray-100">
+            {columns.map((col, index) => (
+              <th
+                key={col.key || col.dataIndex}
+                className={`
+                  px-6 py-4 whitespace-nowrap bg-gray-50 text-primary border-y border-gray-200
+                  ${index !== 0 ? "border-l" : ""}
+                  ${index !== columns.length - 1 ? "border-r" : ""}
+                `}
+                style={headerStyle}
+              >
+                {col.title}
+              </th>
+            ))}
+          </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {loading ? (
@@ -325,7 +325,7 @@ const DynamicTable = ({
                   onClick={() => onRowClick?.(record)}
                   className={`transition-colors  ${onRowClick ? 'hover:bg-gray-50/50 cursor-pointer' : ''}`}
                 >
-                 {columns.map((col, colIndex) => (
+                {columns.map((col, colIndex) => (
   <td
     key={col.key || col.dataIndex}
     className={`
