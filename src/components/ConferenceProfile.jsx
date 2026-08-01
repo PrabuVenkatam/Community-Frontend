@@ -2,10 +2,12 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     MapPin, Briefcase, CalendarDays, Download, Plus, X, Upload, Loader2, SquarePen,
-    IndianRupee
+    IndianRupee, QrCode
 } from 'lucide-react';
 import { assets } from '../assets/assets';
 import AppliedListSection from '../common/AppliedListSection';
+import AttendanceTabSection from './AttendanceTabSection';
+import EventQRCodeModal from './EventQRCodeModal';
 import { getConferenceById, toggleConferenceStatus, addConferencePost, updateEventStatus } from '../services/admin/adminServices';
 import { toast } from 'react-toastify';
 import { useMain } from '../context/MainContext';
@@ -21,6 +23,7 @@ const ConferenceProfile = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('overview');
+    const [isQRModalOpen, setIsQRModalOpen] = useState(false);
     const [isAddPostModalOpen, setIsAddPostModalOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [conference, setConference] = useState(null);
@@ -246,18 +249,28 @@ const ConferenceProfile = () => {
                                 }`}
                         >
                             Overview
-                        </button>
-                        {(conference?.status === "approved") &&
-                            <button
-                                onClick={() => setActiveTab('applied')}
-                                className={`px-[16px] py-[10px] rounded-full font-source text-[16px] font-medium leading-none tracking-normal transition-colors ${activeTab === 'applied'
-                                    ? 'bg-[#0989D4] text-[#ffffff]'
-                                    : 'text-[#344054] border border-gray-400 bg-white'
-                                    }`}
-                            >
-                                Applied List
-                            </button>
-                        }
+                        </button>                        {(conference?.status === "approved") && (
+                            <>
+                                <button
+                                    onClick={() => setActiveTab('applied')}
+                                    className={`px-[16px] py-[10px] rounded-full font-source text-[16px] font-medium leading-none tracking-normal transition-colors ${activeTab === 'applied'
+                                        ? 'bg-[#0989D4] text-[#ffffff]'
+                                        : 'text-[#344054] border border-gray-400 bg-white'
+                                        }`}
+                                >
+                                    Applied List
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('attendance')}
+                                    className={`px-[16px] py-[10px] rounded-full font-source text-[16px] font-medium leading-none tracking-normal transition-colors ${activeTab === 'attendance'
+                                        ? 'bg-[#0989D4] text-[#ffffff]'
+                                        : 'text-[#344054] border border-gray-400 bg-white'
+                                        }`}
+                                >
+                                    Attendance
+                                </button>
+                            </>
+                        )}
                     </div>
                     <div className="flex flex-wrap xl:flex-nowrap gap-3 md:gap-4 items-center">
                         {
@@ -275,6 +288,12 @@ const ConferenceProfile = () => {
                                      type='Conference'
                  
                                 />
+                                <button
+                                    onClick={() => setIsQRModalOpen(true)}
+                                    className="flex gap-2 items-center bg-[#006098] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-[#004d7a] transition-all shadow-sm"
+                                >
+                                    <QrCode size={18} /> QR Code
+                                </button>
                                 <button
                                     onClick={() => { setIsAddPostModalOpen(true); setSelectedFiles([]); }}
                                     className="flex gap-2 items-center bg-white border border-[#D0D5DD] text-gray-700 px-6 py-2.5 rounded-full text-sm font-bold hover:bg-gray-50 transition-all shadow-sm"
@@ -459,7 +478,7 @@ const ConferenceProfile = () => {
                             </div>
                         </div>
                     </div>
-                ) : (
+                ) : activeTab === 'applied' ? (
                     <AppliedListSection
                         data={registrations.list.map((reg) => ({
                             ...reg,
@@ -467,8 +486,17 @@ const ConferenceProfile = () => {
                         }))}
                         heading={appliedListColumns}
                     />
-                )}
+                ) : activeTab === 'attendance' ? (
+                    <AttendanceTabSection eventId={conference._id || conference.id} eventType="Conference" eventTitle={conference.eventName || conference.title} organizerName={conference.organizer} />
+                ) : null}
             </section>
+
+            <EventQRCodeModal
+                isOpen={isQRModalOpen}
+                onClose={() => setIsQRModalOpen(false)}
+                eventData={conference}
+                eventType="Conference"
+            />
 
             {isAddPostModalOpen && (
                 <div className="fixed inset-0 z-50 bg-black/35 flex items-center justify-center p-3">

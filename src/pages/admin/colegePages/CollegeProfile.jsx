@@ -23,73 +23,73 @@ const CollegeProfile = () => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [password, setPassword] = useState('12345678');
   const [confirmPassword, setConfirmPassword] = useState('12345678');
-  const {user}=useMain()
+  const { user, dynamicPath } = useMain();
   const [college, setCollege] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
-const [events, setEvents] = useState({        // ✅ add
-  conferences: [],
-  events: [],
-  competitions: [],
-  seminars: [],
-  totalCount: 0,
-});
+  const [events, setEvents] = useState({        // ✅ add
+    conferences: [],
+    events: [],
+    competitions: [],
+    seminars: [],
+    totalCount: 0,
+  });
   const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-  const {setTitle}=useTitle()
-  useEffect(()=>{
-setTitle("College Profile")
-  },[])
+  const { setTitle } = useTitle()
+  useEffect(() => {
+    setTitle("College Profile")
+  }, [])
   useEffect(() => {
     fetchCollegeData();
   }, [id]);
 
-const fetchCollegeData = async () => {
-  try {
-    setIsLoading(true);
-    let response;
-    if(user?.role==="college"){
-      response=await getMyCollege()
+  const fetchCollegeData = async () => {
+    try {
+      setIsLoading(true);
+      let response;
+      if (user?.role === "college") {
+        response = await getMyCollege()
+      }
+      else {
+        response = await getCollegeById(id);
+      }
+      console.log(response.data)
+      if (response.success) {
+        setCollege(response.data.college);         // ✅ nested now
+        setEvents(response.data.events || {
+          conferences: [],
+          events: [],
+          competitions: [],
+          seminars: [],
+          totalCount: 0,
+        });
+      } else {
+        setError("College not found");
+      }
+    } catch (err) {
+      setError("Failed to fetch college details");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
-    else{
-       response = await getCollegeById(id);
-    }
-    console.log(response.data)
-    if (response.success) {
-      setCollege(response.data.college);         // ✅ nested now
-      setEvents(response.data.events || {
-        conferences: [],
-        events: [],
-        competitions: [],
-        seminars: [],
-        totalCount: 0,
-      });
-    } else {
-      setError("College not found");
-    }
-  } catch (err) {
-    setError("Failed to fetch college details");
-    console.error(err);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
-const handleToggleStatus = async () => {
-  try {
-    setIsSubmitting(true);
-    const response = await toggleCollegeStatus(college._id || college.id);
-    console.log("toggle response:", response);
-    if (response.success) {
-      toast.success(response.message);
-      setCollege((prev) => ({ ...prev, is_active: response.data.is_active }));
+  const handleToggleStatus = async () => {
+    try {
+      setIsSubmitting(true);
+      const response = await toggleCollegeStatus(college._id || college.id);
+      console.log("toggle response:", response);
+      if (response.success) {
+        toast.success(response.message);
+        setCollege((prev) => ({ ...prev, is_active: response.data.is_active }));
+      }
+    } catch (err) {
+      toast.error("Failed to update status");
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (err) {
-    toast.error("Failed to update status");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   const handleSetPassword = async () => {
     if (!password) {
@@ -103,10 +103,10 @@ const handleToggleStatus = async () => {
 
     try {
       setIsSubmitting(true);
-      const response = await setCollegePassword({ 
-        id: college._id || college.id, 
-        password, 
-        confirmPassword 
+      const response = await setCollegePassword({
+        id: college._id || college.id,
+        password,
+        confirmPassword
       });
       if (response.success) {
         toast.success(response.message || "Password updated successfully");
@@ -166,9 +166,8 @@ const handleToggleStatus = async () => {
     const isActive = value === true;
     return (
       <span
-        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[14px] font-semibold ${
-          isActive ? 'bg-[#E6F8EE] text-[#23A55A]' : 'bg-[#F1F5F9] text-[#64748B]'
-        }`}
+        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[14px] font-semibold ${isActive ? 'bg-[#E6F8EE] text-[#23A55A]' : 'bg-[#F1F5F9] text-[#64748B]'
+          }`}
       >
         <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-[#23A55A]' : 'bg-[#64748B]'}`} />
         {isActive ? 'Active' : 'Inactive'}
@@ -218,7 +217,7 @@ const handleToggleStatus = async () => {
     { title: 'Status', dataIndex: 'status', key: 'status', render: renderStatus },
   ];
 
-  
+
   return (
     <div className="animate-in fade-in duration-500">
       <div className=" mx-auto space-y-6">
@@ -257,51 +256,48 @@ const handleToggleStatus = async () => {
               </div>
             </div>
           </div>
-{
-  user.role ==="admin" &&
-          <div className="flex flex-col xl:flex-row justify-between xl:items-center gap-5 py-6">
-            <div className="flex flex-wrap gap-3">
-              {tabs.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-[21px] py-2.5 rounded-full text-[14px] font-medium transition-all duration-200 shadow-sm ${
-                    activeTab === tab
-                      ? 'bg-[#0989D4] text-white'
-                      : 'bg-white border border-[#D0D5DD] text-secondary hover:bg-[#F9FAFB] hover:border-[#98A2B3]'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
+          <div className={`flex flex-col xl:flex-row gap-5 py-6 ${user?.role === 'admin' ? 'justify-between xl:items-center' : 'justify-end items-center'}`}>
+            {user?.role === 'admin' && (
+              <div className="flex flex-wrap gap-3">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-[21px] py-2.5 rounded-full text-[14px] font-medium transition-all duration-200 shadow-sm ${activeTab === tab
+                        ? 'bg-[#0989D4] text-white'
+                        : 'bg-white border border-[#D0D5DD] text-secondary hover:bg-[#F9FAFB] hover:border-[#98A2B3]'
+                      }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+            )}
 
-            <div className="flex flex-wrap gap-3">
-              {user.role === 'admin' && (
-                  <>
-                  
-            <ConfirmActionButton
-              isActive={college?.is_active}
-              isSubmitting={isSubmitting}
-              onConfirm={handleToggleStatus}
-            />
+            <div className="flex flex-wrap gap-3 items-center">
+              {user?.role === 'admin' && (
+                <>
+                  <ConfirmActionButton
+                    isActive={college?.is_active}
+                    isSubmitting={isSubmitting}
+                    onConfirm={handleToggleStatus}
+                  />
+                  <button
+                    onClick={() => setIsPasswordModalOpen(true)}
+                    className="px-[16px] py-2.5 rounded-full bg-[#0086C9] text-white text-[15px] font-semibold shadow-sm hover:bg-[#026AA2] transition-colors"
+                  >
+                    Set Password
+                  </button>
+                </>
+              )}
               <button
-                onClick={() => setIsPasswordModalOpen(true)}
-                className="px-[16px] py-2.5 rounded-full bg-[#0086C9] text-white text-[15px] font-semibold shadow-sm hover:bg-[#026AA2] transition-colors"
-              >
-                Set Password
-              </button>
-                  </>
-                            )}              
-              <button 
-                onClick={() => navigate('/admin/college-form', { state: { editData: college } })}
+                onClick={() => navigate(dynamicPath('college-form'), { state: { editData: college } })}
                 className="inline-flex items-center gap-2 px-[16px] py-2.5 rounded-full border border-[#D0D5DD] text-[#344054] text-[15px] font-semibold bg-white shadow-sm hover:bg-[#F9FAFB] transition-colors"
               >
                 <SquarePen size={18} /> Edit Details
               </button>
             </div>
           </div>
-}
 
           {activeTab === 'Overview' && (
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -334,94 +330,94 @@ const handleToggleStatus = async () => {
             </div>
           )}
 
-         {activeTab === 'Competition' && (
-  <div className="animate-in fade-in duration-500">
-    <DynamicTable
-      columns={competitionColumns}
-      dataSource={events.competitions.map((item, i) => ({
-        id: String(i + 1).padStart(2, '0'),
-        name: item.eventName,
-        date: item.eventDate ? new Date(item.eventDate).toLocaleDateString('en-GB') : 'N/A',
-        mode: item.mode || 'N/A',
-        regType: item.registrationType || 'N/A',
-        fees: item.individualFees ? `₹${item.individualFees}` : '₹0',
-        applied: item?.appliedCount || '0',
-        status: item.isActive ?? true,
-      }))}
-      rowKey="id"
-      showPagination={true}
-      currentPage={competitionPage}
-      pageSize={10}
-      onPageChange={setCompetitionPage}
-    />
-  </div>
-)}
+          {activeTab === 'Competition' && (
+            <div className="animate-in fade-in duration-500">
+              <DynamicTable
+                columns={competitionColumns}
+                dataSource={events.competitions.map((item, i) => ({
+                  id: String(i + 1).padStart(2, '0'),
+                  name: item.eventName,
+                  date: item.eventDate ? new Date(item.eventDate).toLocaleDateString('en-GB') : 'N/A',
+                  mode: item.mode || 'N/A',
+                  regType: item.registrationType || 'N/A',
+                  fees: item.individualFees ? `₹${item.individualFees}` : '₹0',
+                  applied: item?.appliedCount || '0',
+                  status: item.isActive ?? true,
+                }))}
+                rowKey="id"
+                showPagination={true}
+                currentPage={competitionPage}
+                pageSize={10}
+                onPageChange={setCompetitionPage}
+              />
+            </div>
+          )}
 
           {activeTab === 'Conference' && (
-  <div className="animate-in fade-in duration-500">
-    <DynamicTable
-      columns={conferenceColumns}
-      dataSource={events.conferences.map((item, i) => ({
-        id: String(i + 1).padStart(2, '0'),
-        name: item.eventName,
-        date: item.eventDate ? new Date(item.eventDate).toLocaleDateString('en-GB') : 'N/A',
-        mode: item.mode || 'N/A',
-        regType: item.registrationType || 'N/A',
-        fees: item.individualFees ? `₹${item.individualFees}` : '₹0',
-          applied: item?.appliedCount || '0',
-        status: item.isActive ?? true,
-      }))}
-      rowKey="id"
-      showPagination={true}
-      currentPage={conferencePage}
-      pageSize={10}
-      onPageChange={setConferencePage}
-    />
-  </div>
-)}
+            <div className="animate-in fade-in duration-500">
+              <DynamicTable
+                columns={conferenceColumns}
+                dataSource={events.conferences.map((item, i) => ({
+                  id: String(i + 1).padStart(2, '0'),
+                  name: item.eventName,
+                  date: item.eventDate ? new Date(item.eventDate).toLocaleDateString('en-GB') : 'N/A',
+                  mode: item.mode || 'N/A',
+                  regType: item.registrationType || 'N/A',
+                  fees: item.individualFees ? `₹${item.individualFees}` : '₹0',
+                  applied: item?.appliedCount || '0',
+                  status: item.isActive ?? true,
+                }))}
+                rowKey="id"
+                showPagination={true}
+                currentPage={conferencePage}
+                pageSize={10}
+                onPageChange={setConferencePage}
+              />
+            </div>
+          )}
 
           {activeTab === 'Event' && (
-  <div className="animate-in fade-in duration-500">
-    <DynamicTable
-      columns={eventColumns}
-      dataSource={events.events.map((item, i) => ({
-        id: String(i + 1).padStart(2, '0'),
-        name: item.eventName,
-        date: item.eventDate ? new Date(item.eventDate).toLocaleDateString('en-GB') : 'N/A',
-        regType: item.registrationType || 'N/A',
-        fees: item.individualFees ? `₹${item.individualFees}` : '₹0',
-          applied: item?.appliedCount || '0',
-        status: item.isActive ?? true,
-      }))}
-      rowKey="id"
-      showPagination={true}
-      currentPage={eventPage}
-      pageSize={10}
-      onPageChange={setEventPage}
-    />
-  </div>
-)}
+            <div className="animate-in fade-in duration-500">
+              <DynamicTable
+                columns={eventColumns}
+                dataSource={events.events.map((item, i) => ({
+                  id: String(i + 1).padStart(2, '0'),
+                  name: item.eventName,
+                  date: item.eventDate ? new Date(item.eventDate).toLocaleDateString('en-GB') : 'N/A',
+                  regType: item.registrationType || 'N/A',
+                  fees: item.individualFees ? `₹${item.individualFees}` : '₹0',
+                  applied: item?.appliedCount || '0',
+                  status: item.isActive ?? true,
+                }))}
+                rowKey="id"
+                showPagination={true}
+                currentPage={eventPage}
+                pageSize={10}
+                onPageChange={setEventPage}
+              />
+            </div>
+          )}
           {activeTab === 'Seminar' && (
-  <div className="animate-in fade-in duration-500">
-    <DynamicTable
-      columns={seminarColumns}
-      dataSource={events.seminars.map((item, i) => ({
-        id: String(i + 1).padStart(2, '0'),
-        name: item.eventName,
-        date: item.eventDate ? new Date(item.eventDate).toLocaleDateString('en-GB') : 'N/A',
-        regType: item.registrationType || 'N/A',
-        fees: item.individualFees ? `₹${item.individualFees}` : '₹0',
-        applied: item?.appliedCount || '0',
-        status: item.isActive ?? true,
-      }))}
-      rowKey="id"
-      showPagination={true}
-      currentPage={seminarPage}
-      pageSize={10}
-      onPageChange={setSeminarPage}
-    />
-  </div>
-)}
+            <div className="animate-in fade-in duration-500">
+              <DynamicTable
+                columns={seminarColumns}
+                dataSource={events.seminars.map((item, i) => ({
+                  id: String(i + 1).padStart(2, '0'),
+                  name: item.eventName,
+                  date: item.eventDate ? new Date(item.eventDate).toLocaleDateString('en-GB') : 'N/A',
+                  regType: item.registrationType || 'N/A',
+                  fees: item.individualFees ? `₹${item.individualFees}` : '₹0',
+                  applied: item?.appliedCount || '0',
+                  status: item.isActive ?? true,
+                }))}
+                rowKey="id"
+                showPagination={true}
+                currentPage={seminarPage}
+                pageSize={10}
+                onPageChange={setSeminarPage}
+              />
+            </div>
+          )}
         </section>
       </div>
 

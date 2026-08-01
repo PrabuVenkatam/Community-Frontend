@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Plus } from 'lucide-react';
+import { toast } from 'react-toastify';
 import DynamicTable from '../../../common/DynamicTable';
 import { assets } from '../../../assets/assets';
 import { apiGetCollegeDashboard } from '../../../services/collegeServices';
@@ -11,11 +14,76 @@ const Skeleton = ({ className = '' }) => (
 
 // ─── Component ───────────────────────────────────────────────────────────────
 const CollegeDashboard = () => {
+  const navigate = useNavigate();
   const [stats, setStats]                   = useState(null);
   const [lastRegistrations, setLastRegistrations] = useState([]);
   const [loading, setLoading]               = useState(true);
   const [error, setError]                   = useState(null);
- const {setTitle}=useTitle()
+  const {setTitle}=useTitle()
+
+  const handleViewRegistrations = () => {
+    const tableElement = document.getElementById('latest-registrations-section');
+    if (tableElement) {
+      tableElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/college/events');
+    }
+  };
+
+  const handleExportReports = () => {
+    if (!lastRegistrations || lastRegistrations.length === 0) {
+      toast.info('No registration data available to export');
+      return;
+    }
+    try {
+      const headers = ['Student Name', 'Department', 'College', 'Year', 'Event Type', 'Registered Date'];
+      const rows = lastRegistrations.map((r) => [
+        `"${r.fullName || ''}"`,
+        `"${r.department || ''}"`,
+        `"${r.collegeName || ''}"`,
+        `"${r.year || ''}"`,
+        `"${r.eventType || ''}"`,
+        `"${r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-IN') : ''}"`,
+      ]);
+      const csvContent =
+        'data:text/csv;charset=utf-8,' +
+        [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute(
+        'download',
+        `Registrations_Report_${new Date().toISOString().slice(0, 10)}.csv`
+      );
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast.success('Report exported successfully');
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to export report');
+    }
+  };
+
+  const quickActions = [
+    {
+      label: 'Create Event',
+      onClick: () => navigate('/college/events-form'),
+      primary: true,
+    },
+    {
+      label: 'Edit Event',
+      onClick: () => navigate('/college/events'),
+    },
+    {
+      label: 'View Registrations',
+      onClick: handleViewRegistrations,
+    },
+    {
+      label: 'Export Reports',
+      onClick: handleExportReports,
+    },
+  ];
   useEffect(()=>{
 setTitle("Dashboard")
   },[])
@@ -44,6 +112,12 @@ setTitle("Dashboard")
     { key: 'competitions', title: 'Total Competitions' },
     { key: 'seminars',     title: 'Total Seminars' },
     { key: 'events',       title: 'Total Events' },
+    { key: 'today_events',   title: 'Today Events' },
+    { key: 'upcoming_events',title: 'Upcoming Events' },
+    { key: 'live_events',    title: 'Live Events' },
+    { key: 'total_registrations', title: 'Total Registrations' },
+    { key: 'total_attendance', title: 'Total Attendance' },
+    { key: 'certificates',  title: 'Certificates' },
   ];
 
   // ── Table columns ─────────────────────────────────────────────────────────
@@ -168,8 +242,46 @@ setTitle("Dashboard")
         })}
       </div>
 
-      {/* ── Latest Registrations Table ── */}
+      {/* ── Quick Actions Section ── */}
       <section className="rounded-[24px] border border-[#EAECF0] bg-white p-4">
+        <div className="flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
+          {/* Section Header */}
+          <h2 className="text-[20px] font-semibold text-primary whitespace-nowrap shrink-0">
+            Quick Actions
+          </h2>
+
+          {/* Action Buttons (Single Line Row) */}
+          <div className="flex items-center gap-2.5 shrink-0 overflow-x-auto no-scrollbar">
+            {quickActions.map((action, idx) => {
+              if (action.primary) {
+                return (
+                  <button
+                    key={idx}
+                    onClick={action.onClick}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-sm text-white bg-[#0989D4] hover:bg-[#0776B7] transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>{action.label}</span>
+                  </button>
+                );
+              }
+
+              return (
+                <button
+                  key={idx}
+                  onClick={action.onClick}
+                  className="inline-flex items-center px-4 py-2 rounded-xl font-medium text-sm text-[#344054] bg-white border border-[#D0D5DD] hover:bg-[#F9FAFB] transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                >
+                  <span>{action.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Latest Registrations Table ── */}
+      <section id="latest-registrations-section" className="rounded-[24px] border border-[#EAECF0] bg-white p-4">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-[20px] font-semibold text-primary">
             Latest Registrations

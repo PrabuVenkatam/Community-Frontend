@@ -128,14 +128,15 @@ const CandidateProfileSection = ({
   const profileData = {
     name: candidate.name || candidate.fullName || '',
     college: candidate.college || candidate.collegeName || '',
-    degree: candidate.department || candidate.degree || '',
+    degree: candidate.degree || '',
+    department: candidate.department || '',
     openings: candidate.openings || '',
     contact: candidate.contact || candidate.phoneNumber || '',
     mail: candidate.mail || candidate.email || '',
     profilePic: rawPic ? getFullUrl(rawPic) : '',
     address: candidate.address || '',
     highestQualification: candidate.education || candidate.highestQualification || '',
-    ugCompletion: candidate.year || candidate.ugCompletion || '',
+    ugCompletion: candidate.year || candidate.ugCompletion || candidate.ugYear || '',
     ugModeOfStudy: candidate.ugModeOfStudy || '',
     academicAchievement: candidate.academicAchievement || '',
     status: candidate.status || 'applied',
@@ -201,7 +202,9 @@ const CandidateProfileSection = ({
           <div className="space-y-1">
             <h2 className="text-[22px] font-bold text-[#1D2939] leading-tight">{profileData.name}</h2>
             <p className="text-[15px] font-semibold text-[#344054]">{profileData.college}</p>
-            <p className="text-[14px] font-medium text-[#475467]">{profileData.degree}</p>
+            <p className="text-[14px] font-medium text-[#475467]">
+              {[profileData.degree, profileData.department].filter(Boolean).join(' - ')}
+            </p>
             {isSelectedView ? (
               <p className="text-[14px] font-medium text-[#475467]">{profileData.openings}</p>
             ) : (
