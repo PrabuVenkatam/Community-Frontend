@@ -3,6 +3,7 @@ import { Users, CheckCircle2, XCircle, Loader2, Award } from 'lucide-react';
 import axios from 'axios';
 import AppliedListSection from '../common/AppliedListSection';
 import GenerateCertificateModal from './GenerateCertificateModal';
+import { downloadCSVFromAPI } from '../utils/exportUtils';
 
 const AttendanceTabSection = ({ eventId, eventType, eventTitle = "", organizerName = "" }) => {
   const [attendees, setAttendees] = useState([]);

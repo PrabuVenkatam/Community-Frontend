@@ -8,6 +8,7 @@ import { assets } from '../assets/assets';
 import AppliedListSection from '../common/AppliedListSection';
 import AttendanceTabSection from './AttendanceTabSection';
 import EventQRCodeModal from './EventQRCodeModal';
+import { downloadCSVFromAPI } from '../utils/exportUtils';
 import { getCompetitionById, toggleCompetitionStatus, addCompetitionPost, updateEventStatus } from '../services/admin/adminServices';
 import { toast } from 'react-toastify';
 import { useMain } from '../context/MainContext';
@@ -501,6 +502,13 @@ const CompetitionProfile = () => {
                             registeredAt: new Date(reg.registeredAt).toLocaleDateString('en-GB'),
                         }))}
                         heading={appliedListColumns}
+                        showExportButton={true}
+                        onExport={() =>
+                            downloadCSVFromAPI(
+                                `/users/export/event-registrations/${competition._id || competition.id}?eventType=Competition`,
+                                `${competition.eventName || "Competition"}_Registrations.csv`
+                            )
+                        }
                     />
                 ) : activeTab === 'attendance' ? (
                     <AttendanceTabSection eventId={competition._id || competition.id} eventType="Competition" eventTitle={competition.eventName || competition.title} organizerName={competition.organizer} />

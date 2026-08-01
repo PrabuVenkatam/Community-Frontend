@@ -7,6 +7,7 @@ import {
 import AppliedListSection from '../common/AppliedListSection';
 import AttendanceTabSection from './AttendanceTabSection';
 import EventQRCodeModal from './EventQRCodeModal';
+import { downloadCSVFromAPI } from '../utils/exportUtils';
 import { getSeminarById, toggleSeminarStatus, addSeminarPost, updateEventStatus } from '../services/admin/adminServices';
 import { toast } from 'react-toastify';
 import { useMain } from '../context/MainContext';
@@ -486,6 +487,13 @@ const SeminarProfile = () => {
                             registeredAt: new Date(reg.registeredAt).toLocaleDateString('en-GB'),
                         }))}
                         heading={appliedListColumns}
+                        showExportButton={true}
+                        onExport={() =>
+                            downloadCSVFromAPI(
+                                `/users/export/event-registrations/${seminar._id || seminar.id}?eventType=Seminar`,
+                                `${seminar.eventName || "Seminar"}_Registrations.csv`
+                            )
+                        }
                     />
                 ) : activeTab === 'attendance' ? (
                     <AttendanceTabSection eventId={seminar._id || seminar.id} eventType="Seminar" eventTitle={seminar.eventName || seminar.title} organizerName={seminar.organizer} />

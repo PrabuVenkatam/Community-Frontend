@@ -7,6 +7,7 @@ import {
 import AppliedListSection from '../common/AppliedListSection';
 import AttendanceTabSection from './AttendanceTabSection';
 import EventQRCodeModal from './EventQRCodeModal';
+import { downloadCSVFromAPI } from '../utils/exportUtils';
 import { getEventById, toggleEventStatus, addEventPost, updateEventStatus } from '../services/admin/adminServices';
 import { toast } from 'react-toastify';
 import { useMain } from '../context/MainContext';
@@ -473,14 +474,21 @@ onClick={() =>
                             </div>
                         </div>
                     </div>
-                 ) : activeTab === 'applied' ? (
-                   <AppliedListSection
-  data={registrations.list.map((reg) => ({
-    ...reg,
-    registeredAt: new Date(reg.registeredAt).toLocaleDateString('en-GB'),
-  }))}
-  heading={appliedListColumns}
-/>
+                    ) : activeTab === 'applied' ? (
+                    <AppliedListSection
+                    data={registrations.list.map((reg) => ({
+                        ...reg,
+                        registeredAt: new Date(reg.registeredAt).toLocaleDateString('en-GB'),
+                    }))}
+                    heading={appliedListColumns}
+                    showExportButton={true}
+                    onExport={() =>
+                        downloadCSVFromAPI(
+                        `/users/export/event-registrations/${event._id || event.id}?eventType=Event`,
+                        `${event.eventName || "Event"}_Registrations.csv`
+                        )
+                    }
+                    />
                 ) : activeTab === 'attendance' ? (
                     <AttendanceTabSection eventId={event._id || event.id} eventType="Event" eventTitle={event.eventName || event.title} organizerName={event.organizer} />
                 ) : null}

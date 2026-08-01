@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import DynamicTable from './DynamicTable';
 
-const AppliedListSection = ({ data = [], heading = [], showFilters, onRowClick }) => {
+const AppliedListSection = ({ data = [], heading = [], showFilters, onRowClick, showExportButton = false, onExport }) => {
     const [search, setSearch] = useState('');
     const [yearFilter, setYearFilter] = useState('');
     const [secondaryFilter, setSecondaryFilter] = useState('');
@@ -50,6 +50,8 @@ const AppliedListSection = ({ data = [], heading = [], showFilters, onRowClick }
                 onRowClick={onRowClick}
                 showSearch={true}
                 searchPlaceholder="Search ..."
+                showExportButton={showExportButton}
+                onExport={onExport}
                 onSearch={(value) => {
                     setSearch(value);
                     setCurrentPage(1);

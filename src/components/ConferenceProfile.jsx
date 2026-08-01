@@ -8,6 +8,7 @@ import { assets } from '../assets/assets';
 import AppliedListSection from '../common/AppliedListSection';
 import AttendanceTabSection from './AttendanceTabSection';
 import EventQRCodeModal from './EventQRCodeModal';
+import { downloadCSVFromAPI } from '../utils/exportUtils';
 import { getConferenceById, toggleConferenceStatus, addConferencePost, updateEventStatus } from '../services/admin/adminServices';
 import { toast } from 'react-toastify';
 import { useMain } from '../context/MainContext';
@@ -485,6 +486,13 @@ const ConferenceProfile = () => {
                             registeredAt: new Date(reg.registeredAt).toLocaleDateString('en-GB'),
                         }))}
                         heading={appliedListColumns}
+                        showExportButton={true}
+                        onExport={() =>
+                            downloadCSVFromAPI(
+                                `/users/export/event-registrations/${conference._id || conference.id}?eventType=Conference`,
+                                `${conference.eventName || "Conference"}_Registrations.csv`
+                            )
+                        }
                     />
                 ) : activeTab === 'attendance' ? (
                     <AttendanceTabSection eventId={conference._id || conference.id} eventType="Conference" eventTitle={conference.eventName || conference.title} organizerName={conference.organizer} />

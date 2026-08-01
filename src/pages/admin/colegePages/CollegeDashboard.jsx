@@ -6,6 +6,7 @@ import DynamicTable from '../../../common/DynamicTable';
 import { assets } from '../../../assets/assets';
 import { apiGetCollegeDashboard } from '../../../services/collegeServices';
 import { useTitle } from '../../../context/AdminTitle';
+import { downloadCSVFromAPI } from '../../../utils/exportUtils';
 
 // ─── Skeleton ────────────────────────────────────────────────────────────────
 const Skeleton = ({ className = '' }) => (
@@ -31,38 +32,7 @@ const CollegeDashboard = () => {
   };
 
   const handleExportReports = () => {
-    if (!lastRegistrations || lastRegistrations.length === 0) {
-      toast.info('No registration data available to export');
-      return;
-    }
-    try {
-      const headers = ['Student Name', 'Department', 'College', 'Year', 'Event Type', 'Registered Date'];
-      const rows = lastRegistrations.map((r) => [
-        `"${r.fullName || ''}"`,
-        `"${r.department || ''}"`,
-        `"${r.collegeName || ''}"`,
-        `"${r.year || ''}"`,
-        `"${r.eventType || ''}"`,
-        `"${r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-IN') : ''}"`,
-      ]);
-      const csvContent =
-        'data:text/csv;charset=utf-8,' +
-        [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute(
-        'download',
-        `Registrations_Report_${new Date().toISOString().slice(0, 10)}.csv`
-      );
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      toast.success('Report exported successfully');
-    } catch (err) {
-      console.error(err);
-      toast.error('Failed to export report');
-    }
+    downloadCSVFromAPI('/users/export/college-dashboard-registrations', 'College_Registrations_Report.csv');
   };
 
   const quickActions = [
@@ -75,14 +45,14 @@ const CollegeDashboard = () => {
       label: 'Edit Event',
       onClick: () => navigate('/college/events'),
     },
-    {
-      label: 'View Registrations',
-      onClick: handleViewRegistrations,
-    },
-    {
-      label: 'Export Reports',
-      onClick: handleExportReports,
-    },
+    // {
+    //   label: 'View Registrations',
+    //   onClick: handleViewRegistrations,
+    // },
+    // {
+    //   label: 'Export Reports',
+    //   onClick: handleExportReports,
+    // },
   ];
   useEffect(()=>{
 setTitle("Dashboard")
@@ -301,6 +271,8 @@ setTitle("Dashboard")
             dataSource={registrationRows}
             rowKey="id"
             showPagination={false}
+            showExportButton={true}
+            onExport={handleExportReports}
             plain={true}
           />
         )}

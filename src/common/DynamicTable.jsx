@@ -185,7 +185,7 @@
 
 
 import React from 'react';
-import { Search, Plus, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Plus, ChevronDown, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 
 const DynamicTable = ({
   columns = [],
@@ -200,6 +200,9 @@ const DynamicTable = ({
   addButtonLabel = "Add",
   addButtonIcon,
   onAdd,
+  showExportButton = false,
+  exportButtonLabel = "Export CSV",
+  onExport,
   loading = false,
   showPagination = false,
   currentPage = 1,
@@ -207,7 +210,7 @@ const DynamicTable = ({
   onPageChange,
   plain = false
 }) => {
-  const hasActionBar = showSearch || filters.length > 0 || showAddButton;
+  const hasActionBar = showSearch || filters.length > 0 || showAddButton || showExportButton;
 
   // Internal Pagination Logic: Automatically slices to 10 rows per page if showPagination is true
   const totalItems = dataSource.length;
@@ -276,6 +279,16 @@ const DynamicTable = ({
               >
                 {addButtonIcon || <Plus size={18} />}
                 {addButtonLabel}
+              </button>
+            )}
+
+            {showExportButton && (
+              <button
+                onClick={onExport}
+                className="flex items-center gap-2 bg-[#12B76A] hover:bg-[#0E9F5B] text-white px-4 py-2.5 rounded-xl font-semibold transition-all active:scale-95 text-sm shadow-sm"
+              >
+                <Download size={16} />
+                {exportButtonLabel}
               </button>
             )}
           </div>
