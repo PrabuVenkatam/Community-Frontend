@@ -158,7 +158,11 @@ const handleSubmit = async (formData) => {
     if (res?.success) {
       toast.success(res.message || "Company updated successfully");
 
-      navigate(-1);
+      if (window.history.length > 2 && document.referrer.includes(window.location.host)) {
+        navigate(-1);
+      } else {
+        navigate(module === "company" ? "/company/dashboard" : "/admin/company");
+      }
     } else {
       // API responded but failed
       toast.error(res?.message || "Something went wrong");

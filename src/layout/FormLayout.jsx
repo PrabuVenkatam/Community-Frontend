@@ -2217,6 +2217,14 @@ const FormLayout = ({
             toast.error(`${field.label} must be a valid email`);
             return false;
           }
+          if (field.sanitize === "noExtraNum" && hasMeaningfulValue(value) && (value.length < 5 || value.length > 6)) {
+            toast.error(`${field.label} must be between 5 and 6 digits`);
+            return false;
+          }
+          if (field.sanitize === "ifsc" && hasMeaningfulValue(value) && value.length !== 11) {
+            toast.error(`${field.label} must be exactly 11 characters`);
+            return false;
+          }
         }
       }
 
@@ -2238,6 +2246,14 @@ const FormLayout = ({
               }
               if (field.name === "mailId" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
                 toast.error(`${section.title} (Row ${i + 1}): Please enter a valid Email Id`);
+                return false;
+              }
+              if (field.sanitize === "noExtraNum" && (value.length < 5 || value.length > 6)) {
+                toast.error(`${section.title} (Row ${i + 1}): ${field.label} must be between 5 and 6 digits`);
+                return false;
+              }
+              if (field.sanitize === "ifsc" && value.length !== 11) {
+                toast.error(`${section.title} (Row ${i + 1}): ${field.label} must be exactly 11 characters`);
                 return false;
               }
             }
