@@ -11,38 +11,38 @@ import StatusActionButtons from '../common/AcceptRejectButtons';
 
 const FreelanceProfile = ({ module = 'admin' }) => {
   const [activeTab, setActiveTab] = useState('overview');
- const [freelance, setFreelance] = useState(null);
-const [applications, setApplications] = useState({ count: 0, list: [] });
+  const [freelance, setFreelance] = useState(null);
+  const [applications, setApplications] = useState({ count: 0, list: [] });
   const [isLoading, setIsLoading] = useState(true);
-   const [statusLoading, setStatusLoading] = useState(false)
+  const [statusLoading, setStatusLoading] = useState(false)
   const [isTogglingStatus, setIsTogglingStatus] = useState(false);
   const { id } = useParams();
-    const { user, dynamicPath } = useMain()
+  const { user, dynamicPath } = useMain()
   const navigate = useNavigate();
-  const {setTitle}=useTitle()
-  useEffect(()=>{
-setTitle("Freelance Profile")
-  },[])
-    const updateStatus = async (status, rejected_reason) => {
-          try {
-              setStatusLoading(true);
-              const response = await updateJobStatus(id, "freelance", status, rejected_reason);
-              console.log(response)
-              if (response.success) {
-                 setFreelance(response.data)
-                  toast.success(response.message);
-              }
-              else {
-                  toast.error(response.message);
-              }
-  
-          } catch (err) {
-              toast.error(err.message);
-              console.error(err);
-          } finally {
-              setStatusLoading(false);
-          }
-      };
+  const { setTitle } = useTitle()
+  useEffect(() => {
+    setTitle("Freelance Profile")
+  }, [])
+  const updateStatus = async (status, rejected_reason) => {
+    try {
+      setStatusLoading(true);
+      const response = await updateJobStatus(id, "freelance", status, rejected_reason);
+      console.log(response)
+      if (response.success) {
+        setFreelance(response.data)
+        toast.success(response.message);
+      }
+      else {
+        toast.error(response.message);
+      }
+
+    } catch (err) {
+      toast.error(err.message);
+      console.error(err);
+    } finally {
+      setStatusLoading(false);
+    }
+  };
   useEffect(() => {
     const fetchFreelance = async () => {
       if (!id) {
@@ -53,12 +53,12 @@ setTitle("Freelance Profile")
       try {
         setIsLoading(true);
         const response = await getFreelanceById(id);
-         if (response.success) {
-      setFreelance(response.data.freelance);
-      setApplications(response.data.applications || { count: 0, list: [] });
-    } else {
-      setError("Freelance not found");
-    }
+        if (response.success) {
+          setFreelance(response.data.freelance);
+          setApplications(response.data.applications || { count: 0, list: [] });
+        } else {
+          setError("Freelance not found");
+        }
       } catch (error) {
         toast.error(error?.response?.data?.message || 'Failed to load freelance profile');
         setFreelance(null);
@@ -154,7 +154,7 @@ setTitle("Freelance Profile")
           <button
             type="button"
             onClick={() => navigate(`/${module}/jobs/freelance`)}
-            className="bg-[#0095ff] text-white px-6 py-2 rounded font-bold"
+            className="bg-[#171717] text-white px-6 py-2 rounded font-bold"
           >
             Back to Freelance List
           </button>
@@ -177,9 +177,8 @@ setTitle("Freelance Profile")
                 <h1 className="font-semibold text-[18px] leading-none tracking-normal text-primary">
                   {freelance.jobTitle || '-'}
                 </h1>
-                <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[12px] font-semibold ${
-                  statusIsActive ? 'bg-[#E6F8EE] text-[#23A55A]' : 'bg-[#F1F5F9] text-[#64748B]'
-                }`}>
+                <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[12px] font-semibold ${statusIsActive ? 'bg-[#E6F8EE] text-[#23A55A]' : 'bg-[#F1F5F9] text-[#64748B]'
+                  }`}>
                   <span className={`w-2 h-2 rounded-full ${statusIsActive ? 'bg-[#23A55A]' : 'bg-[#64748B]'}`} />
                   {statusLabel}
                 </span>
@@ -194,7 +193,7 @@ setTitle("Freelance Profile")
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full xl:w-auto">
-            <div className="rounded-[18px] bg-[linear-gradient(119.97deg,_#006098_0%,_#00C1FD_100%)] text-white p-4 md:p-5 min-h-[100px] md:min-h-[130px] flex flex-col justify-center sm:min-w-[150px]">
+            <div className="rounded-[18px] bg-[linear-gradient(119.97deg,_#171717_0%,_#171717_100%)] text-white p-4 md:p-5 min-h-[100px] md:min-h-[130px] flex flex-col justify-center sm:min-w-[150px]">
               <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-3">Total Openings</p>
               <p className="text-[28px] md:text-[40px] leading-none font-bold">{freelance.totalOpenings ?? 0}</p>
             </div>
@@ -215,68 +214,66 @@ setTitle("Freelance Profile")
           <div className="flex flex-wrap gap-3">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${
-                activeTab === 'overview'
-                  ? 'bg-[#0989D4] text-white'
-                  : 'bg-white text-[#344054] border border-gray-300'
-              }`}
+              className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${activeTab === 'overview'
+                ? 'bg-[#171717] text-white'
+                : 'bg-white text-[#344054] border border-gray-300'
+                }`}
             >
               Overview
             </button>
 
-             {(freelance?.status === "approved") &&
-             
-            <button
-              onClick={() => setActiveTab('applied')}
-              className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${
-                activeTab === 'applied'
-                  ? 'bg-[#0989D4] text-white'
+            {(freelance?.status === "approved") &&
+
+              <button
+                onClick={() => setActiveTab('applied')}
+                className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${activeTab === 'applied'
+                  ? 'bg-[#171717] text-white'
                   : 'bg-white text-[#344054] border border-gray-300'
-              }`}
-            >
-              Applied List
-            </button>
-             }
+                  }`}
+              >
+                Applied List
+              </button>
+            }
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-                 {
-                            freelance.status === "approved" &&<>
-                           
-                           
-            <ConfirmActionButton
-              isActive={statusIsActive}
-              isSubmitting={isTogglingStatus}
-              onConfirm={handleToggleStatus}
-              activateText="Activate"
-              deactivateText="Deactivate"
-              type='Freelance'
-              apply="apply"
-            />
-            <button
-              type="button"
-              onClick={() => navigate(`/${module}/jobs/freelance-form`, { state: { editData: freelance } })}
-              className="inline-flex items-center gap-2 bg-white border border-[#D0D5DD] text-[#344054] px-6 py-2.5 rounded-full text-[15px] font-medium hover:bg-gray-50 transition-colors"
-            >
-              <img src={assets.edit} alt="Edit" className="w-5 h-5 object-contain" />
-              Edit Details
-            </button>
-                            </>}
+            {
+              freelance.status === "approved" && <>
 
-               {
-                             user.role === "admin" && freelance.status === "pending"&& <StatusActionButtons   type='Freelance' isSubmitting={statusLoading} onConfirm={updateStatus} />
-                           }             
+
+                <ConfirmActionButton
+                  isActive={statusIsActive}
+                  isSubmitting={isTogglingStatus}
+                  onConfirm={handleToggleStatus}
+                  activateText="Activate"
+                  deactivateText="Deactivate"
+                  type='Freelance'
+                  apply="apply"
+                />
+                <button
+                  type="button"
+                  onClick={() => navigate(`/${module}/jobs/freelance-form`, { state: { editData: freelance } })}
+                  className="inline-flex items-center gap-2 bg-white border border-[#D0D5DD] text-[#344054] px-6 py-2.5 rounded-full text-[15px] font-medium hover:bg-gray-50 transition-colors"
+                >
+                  <img src={assets.edit} alt="Edit" className="w-5 h-5 object-contain" />
+                  Edit Details
+                </button>
+              </>}
+
+            {
+              user.role === "admin" && freelance.status === "pending" && <StatusActionButtons type='Freelance' isSubmitting={statusLoading} onConfirm={updateStatus} />
+            }
           </div>
         </div>
-               {
-                    freelance.status === "rejected" && (
-                        <div className="space-y-6">
-                            <p className="text-red-600 font-semibold">
-                                {freelance?.rejected_reason}
-                            </p>
-                        </div>
-                    )
-                }
+        {
+          freelance.status === "rejected" && (
+            <div className="space-y-6">
+              <p className="text-red-600 font-semibold">
+                {freelance?.rejected_reason}
+              </p>
+            </div>
+          )
+        }
         {activeTab === 'overview' ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
             <ListCard title="Project Needs" items={projectNeeds.length ? projectNeeds : fallbackList} />
@@ -300,12 +297,12 @@ setTitle("Freelance Profile")
           </div>
         ) : (
           <AppliedListSection
-  data={applications.list.map((app) => ({
-    ...app,
-    appliedAt: new Date(app.appliedAt).toLocaleDateString('en-GB'),
-  }))}
-  heading={appliedListColumns}
-/>
+            data={applications.list.map((app) => ({
+              ...app,
+              appliedAt: new Date(app.appliedAt).toLocaleDateString('en-GB'),
+            }))}
+            heading={appliedListColumns}
+          />
         )}
       </section>
     </div>

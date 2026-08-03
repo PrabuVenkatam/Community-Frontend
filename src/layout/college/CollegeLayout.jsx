@@ -56,7 +56,7 @@ const CollegeLayout = () => {
     { name: 'Conference', path: '/college/conference', icon: assets.conf_i },
     { name: 'Events', path: '/college/events', icon: assets.event_i },
     { name: 'Seminar', path: '/college/seminar', icon: assets.sem_i },
-    { name: 'profile', path: '/college/profile', icon: assets.book_i },
+    { name: 'Profile', path: '/college/profile', icon: assets.book_i },
   ];
  
   return (

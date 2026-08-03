@@ -51,7 +51,7 @@
 
 //   return (
 //     <div className="w-full bg-white rounded-[20px] shadow-sm border border-gray-100 overflow-hidden">
-      
+
 //       {/* 1. Action Bar */}
 //       {hasActionBar && (
 //         <div className="p-6 flex flex-wrap items-center justify-between gap-4">
@@ -63,7 +63,7 @@
 //                   type="text"
 //                   placeholder={searchPlaceholder}
 //                   onChange={(e) => onSearch?.(e.target.value)}
-//                   className="min-w-[350px] pl-10 pr-4 py-2.5 bg-[#F9FAFB] border border-gray-200 rounded-xl focus:outline-none focus:border-[#0091D5] transition-all text-sm"
+//                   className="min-w-[350px] pl-10 pr-4 py-2.5 bg-[#F9FAFB] border border-gray-200 rounded-xl focus:outline-none focus:border-[#171717] transition-all text-sm"
 //                 />
 //               </div>
 //             )}
@@ -89,7 +89,7 @@
 //             {showAddButton && (
 //               <button
 //                 onClick={onAdd}
-//                 className="flex items-center gap-2 bg-[#0091D5] text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-[#007fb8] transition-all active:scale-95 text-sm"
+//                 className="flex items-center gap-2 bg-[#171717] text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-[#171717] transition-all active:scale-95 text-sm"
 //               >
 //                 {addButtonIcon || <Plus size={18} />}
 //                 {addButtonLabel}
@@ -141,7 +141,7 @@
 //           <p className="text-[14px] text-gray-500" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
 //             Showing <span className="text-gray-900 font-bold">{dataSource.length} Out of {totalItems}</span>
 //           </p>
-          
+
 //           <div className="flex items-center gap-2">
 //             <button 
 //               onClick={() => onPageChange?.(currentPage - 1)}
@@ -150,14 +150,14 @@
 //             >
 //               <ChevronLeft size={20} />
 //             </button>
-            
-//             <button className="w-9 h-9 rounded-lg bg-[#0091D5] text-white text-sm font-bold shadow-sm">
+
+//             <button className="w-9 h-9 rounded-lg bg-[#171717] text-white text-sm font-bold shadow-sm">
 //               1
 //             </button>
 //             <button className="w-9 h-9 rounded-lg border border-gray-200 text-[#52525B] text-sm font-bold hover:bg-gray-50">
 //               2
 //             </button>
-            
+
 //             <button 
 //               onClick={() => onPageChange?.(currentPage + 1)}
 //               disabled={currentPage * pageSize >= totalItems}
@@ -237,7 +237,7 @@ const DynamicTable = ({
 
   return (
     <div className={`w-full overflow-hidden ${plain ? '' : 'bg-white rounded-[10px] shadow-sm border border-gray-100'}`}>
-      
+
       {/* 1. Action Bar */}
       {hasActionBar && (
         <div className="p-4 sm:p-6 flex flex-wrap items-center justify-between gap-4">
@@ -249,7 +249,7 @@ const DynamicTable = ({
                   type="text"
                   placeholder={searchPlaceholder}
                   onChange={(e) => onSearch?.(e.target.value)}
-                  className="w-full sm:max-w-[200px] pl-10 pr-4 py-2.5 bg-[#F9FAFB] border border-gray-200 rounded-xl focus:outline-none focus:border-[#0091D5] transition-all text-sm"
+                  className="w-full sm:max-w-[200px] pl-10 pr-4 py-2.5 bg-[#F9FAFB] border border-gray-200 rounded-xl focus:outline-none focus:border-[#171717] transition-all text-sm"
                 />
               </div>
             )}
@@ -275,7 +275,7 @@ const DynamicTable = ({
             {showAddButton && (
               <button
                 onClick={onAdd}
-                className="flex items-center gap-2 bg-[#0091D5] text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-[#007fb8] transition-all active:scale-95 text-sm shadow-md shadow-blue-100"
+                className="flex items-center gap-2 bg-[#171717] text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-[#171717] transition-all active:scale-95 text-sm shadow-md shadow-blue-100"
               >
                 {addButtonIcon || <Plus size={18} />}
                 {addButtonLabel}
@@ -299,21 +299,21 @@ const DynamicTable = ({
       <div className="overflow-x-auto md:px-6 ">
         <table className="w-full text-left border-collapse">
           <thead>
-          <tr className="bg-white border-y border-gray-100">
-            {columns.map((col, index) => (
-              <th
-                key={col.key || col.dataIndex}
-                className={`
+            <tr className="bg-white border-y border-gray-100">
+              {columns.map((col, index) => (
+                <th
+                  key={col.key || col.dataIndex}
+                  className={`
                   px-6 py-4 whitespace-nowrap bg-gray-50 text-primary border-y border-gray-200
                   ${index !== 0 ? "border-l" : ""}
                   ${index !== columns.length - 1 ? "border-r" : ""}
                 `}
-                style={headerStyle}
-              >
-                {col.title}
-              </th>
-            ))}
-          </tr>
+                  style={headerStyle}
+                >
+                  {col.title}
+                </th>
+              ))}
+            </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {loading ? (
@@ -325,21 +325,21 @@ const DynamicTable = ({
                   onClick={() => onRowClick?.(record)}
                   className={`transition-colors  ${onRowClick ? 'hover:bg-gray-50/50 cursor-pointer' : ''}`}
                 >
-                {columns.map((col, colIndex) => (
-  <td
-    key={col.key || col.dataIndex}
-    className={`
+                  {columns.map((col, colIndex) => (
+                    <td
+                      key={col.key || col.dataIndex}
+                      className={`
       px-6 py-3 whitespace-nowrap text-secondary border-y border-gray-200
       ${colIndex !== 0 ? "border-l" : ""}
       ${colIndex !== columns.length - 1 ? "border-r" : ""}
     `}
-    style={rowTextStyle}
-  >
-    {col.render
-      ? col.render(record[col.dataIndex], record, index)
-      : record[col.dataIndex]}
-  </td>
-))}
+                      style={rowTextStyle}
+                    >
+                      {col.render
+                        ? col.render(record[col.dataIndex], record, index)
+                        : record[col.dataIndex]}
+                    </td>
+                  ))}
                 </tr>
               ))
             ) : (
@@ -355,31 +355,30 @@ const DynamicTable = ({
           <p className="text-[20px] text-gray-500 font-medium">
             Showing <span className="text-gray-900 text-[22px] font-bold">{displayData.length} Out of {totalItems}</span>
           </p>
-          
+
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={() => onPageChange?.(currentPage - 1)}
               disabled={currentPage === 1}
               className="p-2 rounded-lg border border-gray-200 text-gray-400 hover:bg-gray-50 disabled:opacity-30"
             >
               <ChevronLeft size={20} />
             </button>
-            
+
             {[...Array(totalPages)].map((_, i) => (
-              <button 
+              <button
                 key={i + 1}
                 onClick={() => onPageChange?.(i + 1)}
-                className={`w-9 h-9 rounded-lg text-sm font-bold transition-all ${
-                  currentPage === i + 1 
-                  ? 'bg-[#0091D5] text-white shadow-md' 
+                className={`w-9 h-9 rounded-lg text-sm font-bold transition-all ${currentPage === i + 1
+                  ? 'bg-[#171717] text-white shadow-md'
                   : 'border border-gray-200 text-secondary hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 {i + 1}
               </button>
             ))}
-            
-            <button 
+
+            <button
               onClick={() => onPageChange?.(currentPage + 1)}
               disabled={currentPage >= totalPages}
               className="p-2 rounded-lg border border-gray-200 text-gray-400 hover:bg-gray-50 disabled:opacity-30"

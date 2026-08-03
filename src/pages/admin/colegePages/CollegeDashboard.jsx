@@ -16,11 +16,11 @@ const Skeleton = ({ className = '' }) => (
 // ─── Component ───────────────────────────────────────────────────────────────
 const CollegeDashboard = () => {
   const navigate = useNavigate();
-  const [stats, setStats]                   = useState(null);
+  const [stats, setStats] = useState(null);
   const [lastRegistrations, setLastRegistrations] = useState([]);
-  const [loading, setLoading]               = useState(true);
-  const [error, setError]                   = useState(null);
-  const {setTitle}=useTitle()
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { setTitle } = useTitle()
 
   const handleViewRegistrations = () => {
     const tableElement = document.getElementById('latest-registrations-section');
@@ -54,9 +54,9 @@ const CollegeDashboard = () => {
     //   onClick: handleExportReports,
     // },
   ];
-  useEffect(()=>{
-setTitle("Dashboard")
-  },[])
+  useEffect(() => {
+    setTitle("Dashboard")
+  }, [])
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
@@ -78,21 +78,21 @@ setTitle("Dashboard")
 
   // ── Metric card config ────────────────────────────────────────────────────
   const metricCards = [
-    { key: 'conferences',  title: 'Total Conferences',  highlighted: true },
+    { key: 'conferences', title: 'Total Conferences', highlighted: true },
     { key: 'competitions', title: 'Total Competitions' },
-    { key: 'seminars',     title: 'Total Seminars' },
-    { key: 'events',       title: 'Total Events' },
-    { key: 'today_events',   title: 'Today Events' },
-    { key: 'upcoming_events',title: 'Upcoming Events' },
-    { key: 'live_events',    title: 'Live Events' },
+    { key: 'seminars', title: 'Total Seminars' },
+    { key: 'events', title: 'Total Events' },
+    { key: 'today_events', title: 'Today Events' },
+    { key: 'upcoming_events', title: 'Upcoming Events' },
+    { key: 'live_events', title: 'Live Events' },
     { key: 'total_registrations', title: 'Total Registrations' },
     { key: 'total_attendance', title: 'Total Attendance' },
-    { key: 'certificates',  title: 'Certificates' },
+    { key: 'certificates', title: 'Certificates' },
   ];
 
   // ── Table columns ─────────────────────────────────────────────────────────
   const registrationColumns = [
-    { title: '#',           dataIndex: 'index',       key: 'index' },
+    { title: '#', dataIndex: 'index', key: 'index' },
     {
       title: 'Student',
       dataIndex: 'fullName',
@@ -106,16 +106,17 @@ setTitle("Dashboard")
         </div>
       ),
     },
-    { title: 'Department',  dataIndex: 'department',  key: 'department' },
-    { title: 'College',     dataIndex: 'collegeName', key: 'collegeName' },
-    { title: 'Year',        dataIndex: 'year',        key: 'year' },
-    { title: 'Event Type',  dataIndex: 'eventType',   key: 'eventType',
+    { title: 'Department', dataIndex: 'department', key: 'department' },
+    { title: 'College', dataIndex: 'collegeName', key: 'collegeName' },
+    { title: 'Year', dataIndex: 'year', key: 'year' },
+    {
+      title: 'Event Type', dataIndex: 'eventType', key: 'eventType',
       render: (v) => (
         <span className={`px-2 py-1 rounded-full text-xs font-semibold
-          ${v === 'Conference'  ? 'bg-blue-100 text-blue-700'   :
+          ${v === 'Conference' ? 'bg-blue-100 text-blue-700' :
             v === 'Competition' ? 'bg-orange-100 text-orange-700' :
-            v === 'Seminar'     ? 'bg-green-100 text-green-700' :
-                                  'bg-purple-100 text-purple-700'}`}>
+              v === 'Seminar' ? 'bg-green-100 text-green-700' :
+                'bg-purple-100 text-purple-700'}`}>
           {v}
         </span>
       ),
@@ -127,8 +128,8 @@ setTitle("Dashboard")
       render: (v) =>
         v
           ? new Date(v).toLocaleDateString('en-IN', {
-              day: '2-digit', month: 'short', year: 'numeric',
-            })
+            day: '2-digit', month: 'short', year: 'numeric',
+          })
           : '—',
     },
   ];
@@ -161,22 +162,19 @@ setTitle("Dashboard")
           return (
             <div
               key={card.key}
-              className={`rounded-[24px] border p-5 flex flex-col justify-between ${
-                isHighlighted
-                  ? 'bg-[linear-gradient(180deg,_#0989D4_0%,_#0E8CD6_100%)] border-transparent text-white'
-                  : 'bg-white border-[#EAECF0] text-primary'
-              }`}
+              className={`rounded-[24px] border p-5 flex flex-col justify-between ${isHighlighted
+                ? 'bg-[linear-gradient(180deg,_#171717_0%,_#171717_100%)] border-transparent text-white'
+                : 'bg-white border-[#EAECF0] text-primary'
+                }`}
             >
               {/* Header */}
               <div className="flex items-center justify-between">
-                <h3 className={`text-[20px] font-semibold leading-[100%] ${
-                  isHighlighted ? 'text-white' : 'text-primary'
-                }`}>
+                <h3 className={`text-[20px] font-semibold leading-[100%] ${isHighlighted ? 'text-white' : 'text-primary'
+                  }`}>
                   {card.title}
                 </h3>
-                <span className={`w-9 h-9 rounded-[12px] inline-flex items-center justify-center ${
-                  isHighlighted ? 'bg-white/20' : 'bg-[#F2F4F7]'
-                }`}>
+                <span className={`w-9 h-9 rounded-[12px] inline-flex items-center justify-center ${isHighlighted ? 'bg-white/20' : 'bg-[#F2F4F7]'
+                  }`}>
                   <img src={isHighlighted ? assets.up_i : assets.down_i} alt="" />
                 </span>
               </div>
@@ -190,17 +188,15 @@ setTitle("Dashboard")
                   </>
                 ) : (
                   <>
-                    <p className={`text-[35px] font-bold leading-[1] ${
-                      isHighlighted ? 'text-white' : 'text-[#101828]'
-                    }`}>
+                    <p className={`text-[35px] font-bold leading-[1] ${isHighlighted ? 'text-white' : 'text-[#101828]'
+                      }`}>
                       {data.total}
                     </p>
                     <div className="mt-3 flex items-center gap-2">
-                      <span className={`px-3 py-1 rounded-full text-[14px] font-semibold leading-none ${
-                        isHighlighted
-                          ? 'bg-white/20 text-white'
-                          : 'bg-[#ECFDF3] text-[#027A48]'
-                      }`}>
+                      <span className={`px-3 py-1 rounded-full text-[14px] font-semibold leading-none ${isHighlighted
+                        ? 'bg-white/20 text-white'
+                        : 'bg-[#ECFDF3] text-[#027A48]'
+                        }`}>
                         {data.active} Active
                       </span>
                     </div>
@@ -228,7 +224,7 @@ setTitle("Dashboard")
                   <button
                     key={idx}
                     onClick={action.onClick}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-sm text-white bg-[#0989D4] hover:bg-[#0776B7] transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-sm text-white bg-[#171717] hover:bg-[#171717] transition-colors cursor-pointer whitespace-nowrap shrink-0"
                   >
                     <Plus className="w-4 h-4" />
                     <span>{action.label}</span>

@@ -47,8 +47,8 @@ const EventQRCodeModal = ({ isOpen, onClose, eventData, eventType = "Event" }) =
 
         // Header Gradient
         const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-        gradient.addColorStop(0, "#006098");
-        gradient.addColorStop(1, "#00C1FD");
+        gradient.addColorStop(0, "#171717");
+        gradient.addColorStop(1, "#171717");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, headerHeight);
 
@@ -105,7 +105,7 @@ const EventQRCodeModal = ({ isOpen, onClose, eventData, eventType = "Event" }) =
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-100 flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#006098] to-[#00C1FD] p-6 text-white relative">
+        <div className="bg-gradient-to-r from-[#171717] to-[#171717] p-6 text-white relative">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition"
@@ -136,17 +136,17 @@ const EventQRCodeModal = ({ isOpen, onClose, eventData, eventType = "Event" }) =
               />
             </div>
             <p className="text-xs text-gray-500 font-medium mt-3 flex items-center gap-1">
-              <QrCode size={14} className="text-[#006098]" /> Printable Check-in QR Code
+              <QrCode size={14} className="text-[#171717]" /> Printable Check-in QR Code
             </p>
           </div>
 
           <div className="w-full grid grid-cols-2 gap-3 text-xs text-gray-600 bg-gray-50 p-3 rounded-xl mb-6">
             <div className="flex items-center gap-1.5">
-              <CalendarDays size={14} className="text-[#006098]" />
+              <CalendarDays size={14} className="text-[#171717]" />
               <span className="truncate">{eventDate}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <MapPin size={14} className="text-[#006098]" />
+              <MapPin size={14} className="text-[#171717]" />
               <span className="truncate">{location}</span>
             </div>
           </div>
@@ -161,7 +161,7 @@ const EventQRCodeModal = ({ isOpen, onClose, eventData, eventType = "Event" }) =
             </button>
             <button
               onClick={handleDownload}
-              className="flex-1 py-3 bg-gradient-to-r from-[#006098] to-[#00C1FD] text-white rounded-xl font-semibold hover:opacity-95 shadow-md flex items-center justify-center gap-2 transition"
+              className="flex-1 py-3 bg-gradient-to-r from-[#171717] to-[#171717] text-white rounded-xl font-semibold hover:opacity-95 shadow-md flex items-center justify-center gap-2 transition"
             >
               <Download size={16} /> Download PNG
             </button>

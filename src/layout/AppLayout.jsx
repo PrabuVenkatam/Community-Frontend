@@ -80,8 +80,8 @@ const ProfileMenu = ({ user, onLogout, isMobile = false }) => {
 
   // ── NEW: password field config with per-field show/toggle ──
   const passwordFields = [
-    { label: "Old Password",     value: oldPassword,     setter: setOldPassword,     show: showOld,     toggle: () => setShowOld((p) => !p) },
-    { label: "New Password",     value: newPassword,     setter: setNewPassword,     show: showNew,     toggle: () => setShowNew((p) => !p) },
+    { label: "Old Password", value: oldPassword, setter: setOldPassword, show: showOld, toggle: () => setShowOld((p) => !p) },
+    { label: "New Password", value: newPassword, setter: setNewPassword, show: showNew, toggle: () => setShowNew((p) => !p) },
     { label: "Confirm Password", value: confirmPassword, setter: setConfirmPassword, show: showConfirm, toggle: () => setShowConfirm((p) => !p) },
   ];
 
@@ -158,7 +158,7 @@ const ProfileMenu = ({ user, onLogout, isMobile = false }) => {
                 <button
                   type="button"
                   onClick={() => setIsLogoutModalOpen(false)}
-                  className="flex-1 rounded-xl bg-[#0091D5] px-2 py-3 text-[15px] font-semibold text-white hover:bg-[#007fb8]"
+                  className="flex-1 rounded-xl bg-[#171717] px-2 py-3 text-[15px] font-semibold text-white hover:bg-[#171717]"
                 >
                   Stay Logged In
                 </button>
@@ -193,7 +193,7 @@ const ProfileMenu = ({ user, onLogout, isMobile = false }) => {
                       type={show ? "text" : "password"}
                       value={value}
                       onChange={(e) => setter(e.target.value)}
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2.5 pr-10 text-base outline-none focus:border-[#0091D5]"
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2.5 pr-10 text-base outline-none focus:border-[#171717]"
                     />
                     <button
                       type="button"
@@ -220,7 +220,7 @@ const ProfileMenu = ({ user, onLogout, isMobile = false }) => {
                   type="button"
                   onClick={handleChangePasswordSave}
                   disabled={loading}
-                  className="flex-1 rounded-xl bg-[#0091D5] px-4 py-2 text-base font-semibold text-white hover:bg-[#007fb8] disabled:opacity-60"
+                  className="flex-1 rounded-xl bg-[#171717] px-4 py-2 text-base font-semibold text-white hover:bg-[#171717] disabled:opacity-60"
                 >
                   {loading ? "Saving..." : "Save"}
                 </button>
@@ -258,7 +258,7 @@ const AppLayout = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const location = useLocation();
-  const {title}=useTitle()
+  const { title } = useTitle()
   // Auto-derive title from last path segment — same logic as your AdminLayout
   const pageTitle = location.pathname.split("/").filter(Boolean).pop() || "Dashboard";
 
@@ -320,7 +320,7 @@ const AppLayout = ({
                   type="button"
                   onClick={() => toggleMenu(item.name)}
                   className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-[15px] font-medium transition-all duration-200 relative
-                    ${isCategoryActive ? "bg-blue-50 text-[#0091D5]" : "text-gray-700 hover:bg-gray-50 hover:text-[#0091D5]"}`}
+                    ${isCategoryActive ? "bg-blue-50 text-[#171717]" : "text-gray-700 hover:bg-gray-50 hover:text-[#171717]"}`}
                 >
                   <div className="flex items-center gap-3">
                     {renderIcon(item.icon, item.name)}
@@ -333,7 +333,7 @@ const AppLayout = ({
                     />
                     {/* Blue right-side indicator when a child is active */}
                     {isCategoryActive && (
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-[#0091D5] rounded-l-full" />
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-[#171717] rounded-l-full" />
                     )}
                   </div>
                 </button>
@@ -348,13 +348,13 @@ const AppLayout = ({
                         onClick={onLinkClick}
                         className={({ isActive }) =>
                           `flex items-center px-6 py-2.5 text-[14px] font-medium transition-colors relative
-                          ${isActive ? "text-[#0091D5]" : "text-gray-600 hover:text-[#0091D5]"}`
+                          ${isActive ? "text-[#171717]" : "text-gray-600 hover:text-[#171717]"}`
                         }
                       >
                         {({ isActive }) => (
                           <>
                             {/* Curved connector line */}
-                            <div className={`absolute -left-[1px] top-0 bottom-0 w-[1px] ${isActive ? "bg-[#0091D5]" : "bg-transparent"}`}>
+                            <div className={`absolute -left-[1px] top-0 bottom-0 w-[1px] ${isActive ? "bg-[#171717]" : "bg-transparent"}`}>
                               <div className="absolute rounded top-1/2 left-0 w-3 h-[1px] bg-gray-200" />
                             </div>
                             <span>{sub.name}</span>
@@ -372,7 +372,7 @@ const AppLayout = ({
                 onClick={onLinkClick}
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-3 rounded-lg text-[15px] font-medium transition-all duration-200
-                  ${isActive ? "bg-blue-50 text-[#0091D5]" : "text-gray-700 hover:bg-gray-50 hover:text-[#0091D5]"}`
+                  ${isActive ? "bg-blue-50 text-[#171717]" : "text-gray-700 hover:bg-gray-50 hover:text-[#171717]"}`
                 }
               >
                 {({ isActive }) => (
@@ -411,9 +411,8 @@ const AppLayout = ({
 
       {/* ════════════ MOBILE DRAWER ════════════ */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-[260px] bg-white border-r-2 border-[#E5E7EB] flex flex-col py-6 overflow-y-auto transition-transform duration-300 ease-in-out md:hidden ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 z-50 h-full w-[260px] bg-white border-r-2 border-[#E5E7EB] flex flex-col py-6 overflow-y-auto transition-transform duration-300 ease-in-out md:hidden ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         {/* Drawer header */}
         <div className="px-6 mb-10 flex items-center justify-between">

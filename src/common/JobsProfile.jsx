@@ -6,11 +6,11 @@ import CandidateProfileSection from './CandidateProfileSection';
 import PerformanceEvaluationSection from './PerformanceEvaluationSection';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { 
-  getInternshipById, 
-  toggleInternshipStatus, 
-  updateJobStatus, 
-  getAppliedCandidateProfile, 
+import {
+  getInternshipById,
+  toggleInternshipStatus,
+  updateJobStatus,
+  getAppliedCandidateProfile,
   updateCandidateApplicationStatus,
   getSelectedCandidates,
   saveAttendance,
@@ -274,7 +274,7 @@ const JobsProfile = ({ module = 'admin' }) => {
           <button
             type="button"
             onClick={() => navigate(`/${module}/jobs/internship`)}
-            className="bg-[#0095ff] text-white px-6 py-2 rounded font-bold"
+            className="bg-[#171717] text-white px-6 py-2 rounded font-bold"
           >
             Back to Internship List
           </button>
@@ -350,7 +350,7 @@ const JobsProfile = ({ module = 'admin' }) => {
   return (
     <div className="bg-[#f8f9fa] min-h-screen">
       <section className="bg-white rounded-[16px] md:rounded-[24px] border border-gray-200 p-4 md:p-6 shadow-sm">
-        
+
         {/* Dynamic Top Header Section (Displayed in Internship & Attendance View, Hidden ONLY in Add Attendance) */}
         {!isAddAttendance && (
           <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 pb-6 border-b border-gray-200">
@@ -373,7 +373,7 @@ const JobsProfile = ({ module = 'admin' }) => {
                 </div>
                 <p className="font-jakarta font-semibold text-[16px] text-secondary">{internship.companyName || '-'}</p>
                 <p className="font-jakarta font-medium text-[14px] text-[#344054]">{internship.mode || '-'}</p>
-                
+
                 {!isAttendanceView && (
                   <>
                     <p className="font-jakarta font-medium text-[14px] text-[#344054]">
@@ -389,7 +389,7 @@ const JobsProfile = ({ module = 'admin' }) => {
             {isAttendanceView ? (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full xl:w-auto">
                 {/* Card 1: DATE */}
-                <div className="rounded-[18px] bg-[linear-gradient(119.97deg,_#006098_0%,_#00C1FD_100%)] text-white p-4 md:p-5 flex flex-col justify-center sm:min-w-[160px] shadow-sm">
+                <div className="rounded-[18px] bg-[linear-gradient(119.97deg,_#171717_0%,_#171717_100%)] text-white p-4 md:p-5 flex flex-col justify-center sm:min-w-[160px] shadow-sm">
                   <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-2 opacity-90">DATE</p>
                   <p className="text-[20px] md:text-[26px] leading-none font-bold text-white">{displaySelectedDate}</p>
                 </div>
@@ -397,18 +397,18 @@ const JobsProfile = ({ module = 'admin' }) => {
                 {/* Card 2: PRESENT */}
                 <div className="rounded-[18px] bg-white border border-gray-200 p-4 md:p-5 flex flex-col justify-center sm:min-w-[150px] shadow-xs">
                   <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-2 text-[#7D89A0]">PRESENT</p>
-                  <p className="text-[26px] md:text-[36px] leading-none font-bold text-[#0091D5]">{presentCount}</p>
+                  <p className="text-[26px] md:text-[36px] leading-none font-bold text-[#171717]">{presentCount}</p>
                 </div>
 
                 {/* Card 3: ABSENT */}
                 <div className="rounded-[18px] bg-white border border-gray-200 p-4 md:p-5 flex flex-col justify-center sm:min-w-[150px] shadow-xs">
                   <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-2 text-[#7D89A0]">ABSENT</p>
-                  <p className="text-[26px] md:text-[36px] leading-none font-bold text-[#0091D5]">{absentCount}</p>
+                  <p className="text-[26px] md:text-[36px] leading-none font-bold text-[#171717]">{absentCount}</p>
                 </div>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full xl:w-auto">
-                <div className="rounded-[18px] bg-[linear-gradient(119.97deg,_#006098_0%,_#00C1FD_100%)] text-white p-4 md:p-5 min-h-[100px] md:min-h-[130px] flex flex-col justify-center sm:min-w-[150px]">
+                <div className="rounded-[18px] bg-[linear-gradient(119.97deg,_#171717_0%,_#171717_100%)] text-white p-4 md:p-5 min-h-[100px] md:min-h-[130px] flex flex-col justify-center sm:min-w-[150px]">
                   <p className="uppercase tracking-[1px] text-[10px] md:text-[11px] font-bold mb-3">Total Openings</p>
                   <p className="text-[28px] md:text-[40px] leading-none font-bold">{internship.totalOpenings ?? 0}</p>
                 </div>
@@ -437,9 +437,8 @@ const JobsProfile = ({ module = 'admin' }) => {
                   setActiveTab('overview');
                   setAttendanceSubView('list');
                 }}
-                className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${
-                  activeTab === 'overview' && !selectedCandidateProfile ? 'bg-[#0989D4] text-white' : 'bg-white text-[#344054] border border-gray-300'
-                }`}
+                className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${activeTab === 'overview' && !selectedCandidateProfile ? 'bg-[#171717] text-white' : 'bg-white text-[#344054] border border-gray-300'
+                  }`}
               >
                 Overview
               </button>
@@ -450,9 +449,8 @@ const JobsProfile = ({ module = 'admin' }) => {
                     setActiveTab('applied');
                     setAttendanceSubView('list');
                   }}
-                  className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${
-                    activeTab === 'applied' || (selectedCandidateProfile && activeTab === 'applied') ? 'bg-[#0989D4] text-white' : 'bg-white text-[#344054] border border-gray-300'
-                  }`}
+                  className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${activeTab === 'applied' || (selectedCandidateProfile && activeTab === 'applied') ? 'bg-[#171717] text-white' : 'bg-white text-[#344054] border border-gray-300'
+                    }`}
                 >
                   Applied List
                 </button>
@@ -464,9 +462,8 @@ const JobsProfile = ({ module = 'admin' }) => {
                     setActiveTab('selected');
                     setAttendanceSubView('list');
                   }}
-                  className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${
-                    activeTab === 'selected' || (selectedCandidateProfile && activeTab === 'selected') ? 'bg-[#0989D4] text-white' : 'bg-white text-[#344054] border border-gray-300'
-                  }`}
+                  className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${activeTab === 'selected' || (selectedCandidateProfile && activeTab === 'selected') ? 'bg-[#171717] text-white' : 'bg-white text-[#344054] border border-gray-300'
+                    }`}
                 >
                   Selected Candidate
                 </button>
@@ -478,9 +475,8 @@ const JobsProfile = ({ module = 'admin' }) => {
                     setActiveTab('attendance');
                     setAttendanceSubView('list');
                   }}
-                  className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${
-                    activeTab === 'attendance' ? 'bg-[#0989D4] text-white' : 'bg-white text-[#344054] border border-gray-300'
-                  }`}
+                  className={`px-5 py-2.5 rounded-full text-[15px] font-medium transition-colors ${activeTab === 'attendance' ? 'bg-[#171717] text-white' : 'bg-white text-[#344054] border border-gray-300'
+                    }`}
                 >
                   Attendance
                 </button>
@@ -559,13 +555,13 @@ const JobsProfile = ({ module = 'admin' }) => {
                 selectedCandidatesList.length > 0
                   ? selectedCandidatesList
                   : applications.list
-                      .filter((app) => app.status === 'selected')
-                      .map((app, idx) => ({
-                        ...app,
-                        sNo: String(idx + 1).padStart(2, '0'),
-                        college: app.college || app.collegeName || '-',
-                        location: app.location || '-',
-                      }))
+                    .filter((app) => app.status === 'selected')
+                    .map((app, idx) => ({
+                      ...app,
+                      sNo: String(idx + 1).padStart(2, '0'),
+                      college: app.college || app.collegeName || '-',
+                      location: app.location || '-',
+                    }))
               }
               heading={selectedListHeading}
               onRowClick={handleCandidateSelect}

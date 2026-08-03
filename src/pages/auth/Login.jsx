@@ -21,7 +21,7 @@ const InputField = ({ label, id, type, placeholder, icon: Icon, ...props }) => (
         id={id}
         type={type}
         placeholder={placeholder}
-        
+
         className="w-full rounded-[14px] border border-white/20 bg-black/10 backdrop-blur-[68px] py-3 pl-12 pr-4 text-white placeholder-gray-500 transition focus:border-[#0091D5] focus:outline-none backdrop-blur-md"
         {...props}
       />
@@ -62,44 +62,44 @@ const PasswordField = ({ label, id, placeholder, ...props }) => {
 
 
 const Login = () => {
-  const { login,fetchCurrentUser} = useMain();
+  const { login, fetchCurrentUser } = useMain();
   const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [loading,setLoading]=useState(false)
-  
-  
+  const [loading, setLoading] = useState(false)
+
+
   const handleLogin = async (e) => {
     setLoading(true)
     e.preventDefault();
     try {
-     const res  = await login ({
+      const res = await login({
         phone: mobileNumber.trim(),
         password,
       });
       console.log(res)
-      if(res?.status){
+      if (res?.status) {
         let role = res?.data.user.role
-        if(role==="admin"|| role === "college" || role === "")
-        toast.success(res?.message||"Login successfully")
+        if (role === "admin" || role === "college" || role === "")
+          toast.success(res?.message || "Login successfully")
         await fetchCurrentUser()
       }
-      else{
-        toast.error(res.message||"Login Failed")
+      else {
+        toast.error(res.message || "Login Failed")
       }
 
     } catch (error) {
-      toast.error(error.message||"Login Failed")
+      toast.error(error.message || "Login Failed")
       console.error("Login failed", error);
     }
-    finally{
-    setLoading(false)
+    finally {
+      setLoading(false)
     }
   };
 
 
 
   return (
-<AuthBase maxWidth='max-w-[450px]'>
+    <AuthBase maxWidth='max-w-[450px]'>
 
       <form
         onSubmit={handleLogin}
@@ -108,7 +108,7 @@ const Login = () => {
         <div className="text-center">
           {/* Static Logo from public folder */}
           <img
-            src={assets.logo} 
+            src={assets.gradEnvyLogo}
             alt="Nulinz Logo"
             className="mx-auto h-14 w-auto mb-1"
           />
@@ -131,7 +131,7 @@ const Login = () => {
           <PasswordField
             label="Enter your Password"
             id="password"
-            
+
             placeholder="********"
             // icon={IoLockClosedOutline}
             value={password}
@@ -144,20 +144,20 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center rounded-[15px] bg-[#0091D5] py-3.5 text-base font-bold text-white shadow-lg transition-all hover:bg-[#007fb8] hover:shadow-[#0091D5]/20 active:scale-[0.99]"
+            className="w-full flex justify-center rounded-[15px] bg-[#171717] py-3.5 text-base font-bold text-white shadow-lg transition-all hover:bg-[#171717] hover:shadow-[#171717]/20 active:scale-[0.99]"
           >
             {loading ? <Loader2 className='animate-spin' /> : "Login"}
           </button>
           <div className="flex items-center justify-between text-[13px]">
             <span className="text-gray-400">Did you forget your password?</span>
-            <Link to="/auth/forgot-password" className="font-semibold text-white underline underline-offset-4 hover:text-[#0091D5] transition-colors">
+            <Link to="/auth/forgot-password" className="font-semibold text-white underline underline-offset-4 hover:text-[#171717] transition-colors">
               Forgot Password
             </Link>
           </div>
         </div>
       </form>
-</AuthBase>
-  
+    </AuthBase>
+
   );
 };
 

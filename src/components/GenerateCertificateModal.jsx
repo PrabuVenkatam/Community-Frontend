@@ -74,7 +74,7 @@ const GenerateCertificateModal = ({ isOpen, onClose, candidate, defaultDomain = 
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-gray-100 flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#006098] to-[#00C1FD] p-6 text-white relative">
+        <div className="bg-gradient-to-r from-[#171717] to-[#171717] p-6 text-white relative">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition"
@@ -120,7 +120,7 @@ const GenerateCertificateModal = ({ isOpen, onClose, candidate, defaultDomain = 
                   href={getFullFileUrl(generatedCert.fileUrl || generatedCert.filePath)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 py-3 bg-gradient-to-r from-[#006098] to-[#00C1FD] text-white rounded-xl font-semibold shadow-md flex items-center justify-center gap-2 hover:opacity-95 transition text-sm"
+                  className="flex-1 py-3 bg-gradient-to-r from-[#171717] to-[#171717] text-white rounded-xl font-semibold shadow-md flex items-center justify-center gap-2 hover:opacity-95 transition text-sm"
                 >
                   <Download size={16} /> Download PDF
                 </a>
@@ -135,7 +135,7 @@ const GenerateCertificateModal = ({ isOpen, onClose, candidate, defaultDomain = 
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#006098] focus:bg-white transition"
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#171717] focus:bg-white transition"
                 />
               </div>
 
@@ -146,7 +146,7 @@ const GenerateCertificateModal = ({ isOpen, onClose, candidate, defaultDomain = 
                   required
                   value={formData.domain}
                   onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#006098] focus:bg-white transition"
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#171717] focus:bg-white transition"
                 />
               </div>
 
@@ -157,7 +157,7 @@ const GenerateCertificateModal = ({ isOpen, onClose, candidate, defaultDomain = 
                   required
                   value={formData.companyName}
                   onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#006098] focus:bg-white transition"
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#171717] focus:bg-white transition"
                 />
               </div>
 
@@ -169,7 +169,7 @@ const GenerateCertificateModal = ({ isOpen, onClose, candidate, defaultDomain = 
                     required
                     value={formData.issuedDate}
                     onChange={(e) => setFormData({ ...formData, issuedDate: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#006098] focus:bg-white transition"
+                    className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#171717] focus:bg-white transition"
                   />
                 </div>
 
@@ -179,7 +179,7 @@ const GenerateCertificateModal = ({ isOpen, onClose, candidate, defaultDomain = 
                     type="email"
                     value={formData.recipientEmail}
                     onChange={(e) => setFormData({ ...formData, recipientEmail: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#006098] focus:bg-white transition"
+                    className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#171717] focus:bg-white transition"
                   />
                 </div>
               </div>
@@ -195,7 +195,7 @@ const GenerateCertificateModal = ({ isOpen, onClose, candidate, defaultDomain = 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-3 bg-gradient-to-r from-[#006098] to-[#00C1FD] text-white rounded-xl font-semibold shadow-md flex items-center justify-center gap-2 hover:opacity-95 transition disabled:opacity-50"
+                  className="flex-1 py-3 bg-gradient-to-r from-[#171717] to-[#171717] text-white rounded-xl font-semibold shadow-md flex items-center justify-center gap-2 hover:opacity-95 transition disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>

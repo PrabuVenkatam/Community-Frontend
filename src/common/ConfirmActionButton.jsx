@@ -23,11 +23,10 @@ const ConfirmActionButton = ({
       <button
         disabled={isSubmitting}
         onClick={() => setOpen(true)}
-        className={`px-[16px] py-2.5 rounded-full text-white text-[15px] font-semibold shadow-sm transition-all active:scale-95 disabled:opacity-50 ${
-          isActive
+        className={`px-[16px] py-2.5 rounded-full text-white text-[15px] font-semibold shadow-sm transition-all active:scale-95 disabled:opacity-50 ${isActive
             ? "bg-[#F04438] hover:bg-[#D92D20]"
             : "bg-[#12B76A] hover:bg-[#0E9355]"
-        }`}
+          }`}
       >
         {isSubmitting ? (
           <Loader2 size={16} className="animate-spin inline" />
@@ -79,7 +78,7 @@ const ConfirmActionButton = ({
               <button
                 disabled={isSubmitting}
                 onClick={handleConfirm}
-                className="px-4 py-2 rounded-xl flex-1 text-white font-medium transition bg-blue-500 hover:bg-blue-600 disabled:opacity-50"
+                className="px-4 py-2 rounded-xl flex-1 text-white font-medium transition bg-blue-500 hover:171717 disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <Loader2 size={16} className="animate-spin" />

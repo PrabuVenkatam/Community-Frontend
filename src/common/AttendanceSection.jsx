@@ -116,9 +116,8 @@ const AttendanceSection = ({
 
         if (mode === 'view') {
           return (
-            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
-              currentStatus === 'Absent' ? 'bg-[#FEE2E2] text-[#EF4444]' : 'bg-[#E6F8EE] text-[#23A55A]'
-            }`}>
+            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${currentStatus === 'Absent' ? 'bg-[#FEE2E2] text-[#EF4444]' : 'bg-[#E6F8EE] text-[#23A55A]'
+              }`}>
               {currentStatus || record.status || 'Present'}
             </span>
           );
@@ -129,22 +128,20 @@ const AttendanceSection = ({
             <button
               type="button"
               onClick={() => onStatusChange?.(record.id, 'Present')}
-              className={`px-4 py-1.5 text-xs font-semibold rounded-[8px] border transition-all cursor-pointer ${
-                currentStatus === 'Present'
-                  ? 'bg-[#23A55A] text-white border-[#23A55A] shadow-xs'
-                  : 'bg-white text-[#475467] border-gray-200 hover:bg-gray-50'
-              }`}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-[8px] border transition-all cursor-pointer ${currentStatus === 'Present'
+                ? 'bg-[#23A55A] text-white border-[#23A55A] shadow-xs'
+                : 'bg-white text-[#475467] border-gray-200 hover:bg-gray-50'
+                }`}
             >
               Present
             </button>
             <button
               type="button"
               onClick={() => onStatusChange?.(record.id, 'Absent')}
-              className={`px-4 py-1.5 text-xs font-semibold rounded-[8px] border transition-all cursor-pointer ${
-                currentStatus === 'Absent'
-                  ? 'bg-[#EF4444] text-white border-[#EF4444] shadow-xs'
-                  : 'bg-white text-[#475467] border-gray-200 hover:bg-gray-50'
-              }`}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-[8px] border transition-all cursor-pointer ${currentStatus === 'Absent'
+                ? 'bg-[#EF4444] text-white border-[#EF4444] shadow-xs'
+                : 'bg-white text-[#475467] border-gray-200 hover:bg-gray-50'
+                }`}
             >
               Absent
             </button>
@@ -229,7 +226,7 @@ const AttendanceSection = ({
           <button
             type="button"
             onClick={onSaveAttendance}
-            className="px-8 py-2.5 bg-[#0091D5] text-white rounded-full text-[15px] font-bold hover:bg-[#007fb8] transition-all shadow-md shadow-blue-100 active:scale-95 cursor-pointer"
+            className="px-8 py-2.5 bg-[#171717] text-white rounded-full text-[15px] font-bold hover:bg-[#171717] transition-all shadow-md shadow-blue-100 active:scale-95 cursor-pointer"
           >
             Save
           </button>

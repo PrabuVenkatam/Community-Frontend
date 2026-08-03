@@ -5,9 +5,9 @@ export const companyFormConfig = [
     type: 'static',
     fields: [
       { label: 'Company Name', type: 'text' },
-      { label: 'Company Type', type: 'select', options: ['Select Option', 'Startup', 'MNC', 'Agency', 'Product Company'] },
+      { label: 'Company Type', type: 'select', options: [ 'Startup', 'MNC', 'Agency', 'Product Company'] },
       { label: 'Company Tag Line', type: 'text' },
-      { label: 'Company Culture Tags (Multi Select)', type: 'select', options: ['Select Option', 'Remote Friendly', 'Fast Paced', 'Inclusive', 'Learning Focused'] },
+      { label: 'Company Culture Tags (Multi Select)', type: 'select', options: [ 'Remote Friendly', 'Fast Paced', 'Inclusive', 'Learning Focused'] },
       { label: 'Year Founded', type: 'date', required: false },
       { label: 'Website Link', type: 'text', required: false },
       { label: 'Company Logo', type: 'file' },

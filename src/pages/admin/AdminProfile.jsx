@@ -37,40 +37,41 @@ const CompanyProfile = ({ module }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [isAboutExpanded, setIsAboutExpanded] = useState(false);
   const fileInputRef = useRef(null);
-  const {user,setUser}=useMain()
+  const { user, setUser } = useMain()
   const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-    const {setTitle}=useTitle()
-    useEffect(()=>{
-  setTitle("Company Profile")
-    },[])
-useEffect(() => {
-  const fetchCompanyData = async () => {
-    try {
-      setIsLoading(true);
-      let response;
-      if (id) {
-        response = await getCompanyById(id);
-      } else if (module === 'company') {
-        response = await getMyCompany();
+  const { setTitle } = useTitle()
+  useEffect(() => {
+    setTitle("Company Profile")
+  }, [])
+  useEffect(() => {
+    const fetchCompanyData = async () => {
+      try {
+        setIsLoading(true);
+        let response;
+        if (id) {
+          response = await getCompanyById(id);
+        } else if (module === 'company') {
+          response = await getMyCompany();
+        }
+        console.log(response)
+        if (response?.success) {
+          setCompany(response.data.company);        // ✅ company is now nested
+          setJobs(response.data.jobs || { internships: [], freelances: [] });
+          setFollowers(response.data.followers || { count: 0, data: [] });
+        } else {
+          setError("Company not found");
+        }
+      } catch (err) {
+        setError("Failed to fetch company details");
+        console.error(err);
+      } finally {
+        setIsLoading(false);
       }
-     console.log(response)
-      if (response?.success) {
-        setCompany(response.data.company);        // ✅ company is now nested
-        setJobs(response.data.jobs || { internships: [], freelances: [] });
-        setFollowers(response.data.followers || { count: 0, data: [] });
-      } else {
-        setError("Company not found");
-      }
-    } catch (err) {
-      setError("Failed to fetch company details");
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  fetchCompanyData();
-}, [id, module]);
+    };
+    fetchCompanyData();
+  }, [id, module]);
 
   if (isLoading) {
     return (
@@ -111,7 +112,7 @@ useEffect(() => {
       <p className="text-[14px] font-medium text-secondary leading-normal">{value}</p>
     </div>
   );
-  const filteredPeople =followers?.data?.filter((item) =>
+  const filteredPeople = followers?.data?.filter((item) =>
     [item.name, item.status, item.education, item.degree, item.contact]
       .join(' ')
       .toLowerCase()
@@ -120,7 +121,7 @@ useEffect(() => {
 
   const addFilesToPosts = (files) => {
     const rawFiles = Array.from(files || []).filter((file) => file.type.startsWith('image/'));
-    
+
     const items = rawFiles.map((file, index) => ({
       id: `${Date.now()}-${index}-${file.name}`,
       src: URL.createObjectURL(file),
@@ -224,9 +225,9 @@ useEffect(() => {
           ? await getMyCompany()
           : await getCompanyById(companyId);
         if (refreshResponse.success) {
-      setCompany(refreshResponse.data.company);
-  setJobs(refreshResponse.data.jobs || { internships: [], freelances: [] });
-  setFollowers(refreshResponse.data.followers || { count: 0, data: [] });
+          setCompany(refreshResponse.data.company);
+          setJobs(refreshResponse.data.jobs || { internships: [], freelances: [] });
+          setFollowers(refreshResponse.data.followers || { count: 0, data: [] });
         }
       }
     } catch (err) {
@@ -245,7 +246,7 @@ useEffect(() => {
     </ul>
   );
 
-  const mergedJobs=[...jobs?.internships,...jobs?.freelances]
+  const mergedJobs = [...jobs?.internships, ...jobs?.freelances]
 
 
   return (
@@ -285,15 +286,32 @@ useEffect(() => {
                   <span className='text-[16px] font-semibold'>{company.companyTagLine} .</span> {company.city}, {company.state}
                 </p>
                 <p className="text-[14px] text-secondary font-medium">
-                  <span className='text-[16px] font-semibold'>Year Founded: {company.yearFounded ? new Date(company.yearFounded).getFullYear() : 'N/A'}</span> {company.websiteLink && <a href={""} target="_blank" rel="noopener noreferrer" className="text-blue-600 ml-2 hover:underline">{company.websiteLink}</a>}
+                  <span className='text-[16px] font-semibold'>Year Founded: {company.yearFounded ? new Date(company.yearFounded).getFullYear() : 'N/A'}</span> {company.websiteLink && <a href={company.websiteLink.startsWith('http') ? company.websiteLink : `https://${company.websiteLink}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 ml-2 hover:underline">{company.websiteLink}</a>}
                 </p>
                 <p className="text-[16px] text-secondary font-normal leading-[1.7] max-w-2xl mt-4">
-                  {company.aboutUs ? company.aboutUs.slice(0, 200) + (company.aboutUs.length > 200 ? '...' : '') : 'No description provided.'}
+                  {company.aboutUs ? (
+                    <>
+                      {isAboutExpanded || company.aboutUs.length <= 200
+                        ? company.aboutUs
+                        : `${company.aboutUs.slice(0, 200)}... `}
+                      {company.aboutUs.length > 200 && (
+                        <button
+                          type="button"
+                          onClick={() => setIsAboutExpanded(!isAboutExpanded)}
+                          className="text-blue-600 font-semibold ml-1.5 hover:underline focus:outline-none cursor-pointer"
+                        >
+                          {isAboutExpanded ? "Read Less" : "Read More"}
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    'No description provided.'
+                  )}
                 </p>
                 <p className="text-[14px] text-secondary font-medium mt-3">
                   <span className="text-[#110E7E] font-bold">
-  {followers?.count} {followers?.count === 1 ? "Follower" : "Followers"}
-</span>
+                    {followers?.count} {followers?.count === 1 ? "Follower" : "Followers"}
+                  </span>
                   <span className="mx-4 text-[#D0D5DD]">.</span>
                   <span>{company?.employees} employees</span>
                 </p>
@@ -302,25 +320,25 @@ useEffect(() => {
 
             <div className="lg:min-w-[440px] lg:pt-[40px] flex flex-col gap-4">
               <div className="flex flex-wrap gap-4">
-                <div className="min-w-[180px] md:min-w-[210px] rounded-[24px] p-6 bg-[linear-gradient(135deg,_#0989D4_0%,_#006098_100%)] text-white shadow-xl flex flex-col justify-center">
+                <div className="min-w-[180px] md:min-w-[210px] rounded-[24px] p-6 bg-[linear-gradient(135deg,_#171717_0%,_#171717_100%)] text-white shadow-xl flex flex-col justify-center">
                   <p className="text-[11px] font-bold uppercase tracking-[1.5px] mb-3 opacity-80">Total Jobs</p>
                   <p className="text-[34px] font-black leading-none">{mergedJobs?.length}</p>
                 </div>
                 <div className="min-w-[180px] md:min-w-[210px] rounded-[24px] p-6 border border-[#EAECF0] bg-[#F8FAFC] shadow-sm flex flex-col justify-center">
                   <p className="text-[11px] font-bold uppercase tracking-[1.5px] text-secondary mb-3">Established Year</p>
-                  <p className="text-[34px] font-black leading-none text-[#006098]">{company.yearFounded ? new Date(company.yearFounded).getFullYear() : '---'}</p>
+                  <p className="text-[34px] font-black leading-none text-[#171717]">{company.yearFounded ? new Date(company.yearFounded).getFullYear() : '---'}</p>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-3 mt-2">
                 {user.role === 'admin' && (
                   <>
-                   <ConfirmActionButton
-  isActive={company?.is_active}
-  isSubmitting={isSubmitting}
-  onConfirm={handleToggleStatus}
-/>
-                    
+                    <ConfirmActionButton
+                      isActive={company?.is_active}
+                      isSubmitting={isSubmitting}
+                      onConfirm={handleToggleStatus}
+                    />
+
                     <button
                       onClick={() => setIsPasswordModalOpen(true)}
                       className="px-[20px] py-3 rounded-full bg-[#0086C9] text-white text-[15px] font-bold shadow-md hover:bg-[#026AA2] transition-all active:scale-95"
@@ -329,16 +347,16 @@ useEffect(() => {
                     </button>
                   </>
                 )}
-{/* bg-[#110E7E] */}
-                <button 
+                {/* bg-[#110E7E] */}
+                <button
                   onClick={() => setIsAddPostModalOpen(true)}
                   className="flex items-center gap-2 px-[20px] py-3 rounded-full  text-[15px] font-bold shadow-md  transition-all active:scale-95"
                 >
                   <Plus size={18} />
                   Add Post
                 </button>
-{/* border border-[#EAECF0] bg-[#FFFFFF] */}
-                <button 
+                {/* border border-[#EAECF0] bg-[#FFFFFF] */}
+                <button
                   onClick={() => navigate(`/${module}/company-form`, { state: { editData: company } })}
                   className="flex border border-[#EAECF0] bg-[#FFFFFF] items-center gap-2 px-[20px] py-3 rounded-full   text-[15px] font-bold shadow-md  transition-all active:scale-95 "
                 >
@@ -357,9 +375,8 @@ useEffect(() => {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`relative px-6 py-4 text-[18px] font-medium transition-colors ${
-                activeTab === tab ? 'text-[#110E7E] font-semibold' : 'text-[#475467] hover:text-[#344054]'
-              }`}
+              className={`relative px-6 py-4 text-[18px] font-medium transition-colors ${activeTab === tab ? 'text-[#110E7E] font-semibold' : 'text-[#475467] hover:text-[#344054]'
+                }`}
             >
               {tab}
               {activeTab === tab && <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-[#110E7E] rounded-full" />}
@@ -449,10 +466,10 @@ useEffect(() => {
                 {company.posts && company.posts.length > 0 ? (
                   company.posts.map((path, index) => (
                     <div key={index} className="rounded-[16px] overflow-hidden border border-[#EAECF0] aspect-square shadow-sm bg-gray-50 group relative">
-                      <img 
-                        src={`${BASE_URL}${path}`} 
-                        alt={`Company Post ${index + 1}`} 
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                      <img
+                        src={`${BASE_URL}${path}`}
+                        alt={`Company Post ${index + 1}`}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
@@ -467,92 +484,92 @@ useEffect(() => {
           </div>
         )}
 
-    {activeTab === 'Jobs' && (
-  <div className="pt-6 space-y-6">
-    
-    {/* Internships */}
-    {(mergedJobs.length > 0 ||mergedJobs.length > 0) && (
+        {activeTab === 'Jobs' && (
+          <div className="pt-6 space-y-6">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {mergedJobs.map((job) => (
-            <div key={job._id} className="rounded-[14px] border border-[#EAECF0] bg-white p-4 shadow-sm">
-              <div className="flex items-start gap-3">
-                <div className="w-14 h-14 rounded-[10px] border border-[#EAECF0] bg-[#F8FAFC] flex items-center justify-center overflow-hidden flex-shrink-0">
-                  <img src={setFileName(company?.companyLogo)} alt="Company" className=" object-contain" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-[18px] font-semibold leading-[1.2] text-primary truncate">{job.jobTitle}</h3>
-                  <p className="mt-1 text-[14px] font-medium text-[#667085]">{job.companyName}</p>
-                </div>
+            {/* Internships */}
+            {(mergedJobs.length > 0 || mergedJobs.length > 0) && (
+
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {mergedJobs.map((job) => (
+                  <div key={job._id} className="rounded-[14px] border border-[#EAECF0] bg-white p-4 shadow-sm">
+                    <div className="flex items-start gap-3">
+                      <div className="w-14 h-14 rounded-[10px] border border-[#EAECF0] bg-[#F8FAFC] flex items-center justify-center overflow-hidden flex-shrink-0">
+                        <img src={setFileName(company?.companyLogo)} alt="Company" className=" object-contain" />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="text-[18px] font-semibold leading-[1.2] text-primary truncate">{job.jobTitle}</h3>
+                        <p className="mt-1 text-[14px] font-medium text-[#667085]">{job.companyName}</p>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-[#475467] font-medium">
+                      <span className="inline-flex items-center gap-1.5">
+                        <MapPin size={16} className="text-[#667085]" />
+                        {job?.location || "---"}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <Clock3 size={16} className="text-[#667085]" />
+                        {job?.duration || "---"}
+                      </span>
+
+                      <span className="inline-flex items-center gap-1.5">
+                        <BriefcaseBusiness size={16} className="text-[#667085]" />
+                        {job?.salary || "---"}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-[16px] text-[#475467] font-medium truncate">
+                      {job?.eligibility?.join(", ")}
+                    </p>
+                    <p className="mt-3 text-[12px] text-[#667085] font-medium">
+                      {dayjs(job?.createdAt).fromNow()}
+                    </p>
+                  </div>
+
+
+
+                ))}
+
               </div>
-              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-[#475467] font-medium">
-                  <span className="inline-flex items-center gap-1.5">
-                      <MapPin size={16} className="text-[#667085]" />
-                      {job?.location|| "---"}
-                    </span>
-               <span className="inline-flex items-center gap-1.5">
-                      <Clock3 size={16} className="text-[#667085]" />
-                      {job?.duration|| "---"}
-                    </span>
 
-                <span className="inline-flex items-center gap-1.5">
-                      <BriefcaseBusiness size={16} className="text-[#667085]" />
-                      {job?.salary|| "---"}
-                    </span>
+            )}
+            {/* Empty state */}
+            {jobs.internships.length === 0 && jobs.freelances.length === 0 && (
+              <div className="py-12 text-center bg-gray-50 rounded-[16px] border border-dashed border-gray-300">
+                <p className="text-secondary font-medium italic">No jobs posted yet.</p>
               </div>
-              <p className="mt-2 text-[16px] text-[#475467] font-medium truncate">
-  {job?.eligibility?.join(", ")}
-</p>
-             <p className="mt-3 text-[12px] text-[#667085] font-medium">
-  {dayjs(job?.createdAt).fromNow()}
-</p>
-            </div>
+            )}
+          </div>
+        )}
 
-
-
-          ))}
-     
-        </div>
-
-    )}
-    {/* Empty state */}
-    {jobs.internships.length === 0 && jobs.freelances.length === 0 && (
-      <div className="py-12 text-center bg-gray-50 rounded-[16px] border border-dashed border-gray-300">
-        <p className="text-secondary font-medium italic">No jobs posted yet.</p>
-      </div>
-    )}
-  </div>
-)}
-
-      {activeTab === 'People' && (
-  <div className="pt-6">
-    <DynamicTable
-      columns={[
-        { title: '#', dataIndex: 'index', key: 'index' },
-        { title: 'Name', dataIndex: 'name', key: 'name' },
-        { title: 'Status', dataIndex: 'status', key: 'status' },
-        { title: 'Education', dataIndex: 'education', key: 'education' },
-        { title: 'Degree', dataIndex: 'degree', key: 'degree' },
-        { title: 'Job Title', dataIndex: 'jobTitle', key: 'jobTitle' },
-        { title: 'Contact', dataIndex: 'contact', key: 'contact' },
-        { title: 'Followed On', dataIndex: 'followedAt', key: 'followedAt' },
-      ]}
-      dataSource={filteredPeople?.map((person, i) => ({
-        ...person,
-        index: String(i + 1).padStart(2, '0'),
-        followedAt: new Date(person.followedAt).toLocaleDateString(),
-      }))}
-      rowKey="userId"
-      showSearch={true}
-      searchPlaceholder="Search people..."
-      onSearch={(value) => setPeopleSearch(value)}
-      showPagination={true}
-      currentPage={peoplePage}
-      pageSize={10}
-      onPageChange={setPeoplePage}
-    />
-  </div>
-)}
+        {activeTab === 'People' && (
+          <div className="pt-6">
+            <DynamicTable
+              columns={[
+                { title: '#', dataIndex: 'index', key: 'index' },
+                { title: 'Name', dataIndex: 'name', key: 'name' },
+                { title: 'Status', dataIndex: 'status', key: 'status' },
+                { title: 'Education', dataIndex: 'education', key: 'education' },
+                { title: 'Degree', dataIndex: 'degree', key: 'degree' },
+                { title: 'Job Title', dataIndex: 'jobTitle', key: 'jobTitle' },
+                { title: 'Contact', dataIndex: 'contact', key: 'contact' },
+                { title: 'Followed On', dataIndex: 'followedAt', key: 'followedAt' },
+              ]}
+              dataSource={filteredPeople?.map((person, i) => ({
+                ...person,
+                index: String(i + 1).padStart(2, '0'),
+                followedAt: new Date(person.followedAt).toLocaleDateString(),
+              }))}
+              rowKey="userId"
+              showSearch={true}
+              searchPlaceholder="Search people..."
+              onSearch={(value) => setPeopleSearch(value)}
+              showPagination={true}
+              currentPage={peoplePage}
+              pageSize={10}
+              onPageChange={setPeoplePage}
+            />
+          </div>
+        )}
       </section>
 
       {isPasswordModalOpen && (
@@ -607,7 +624,7 @@ useEffect(() => {
               <button
                 disabled={isSubmitting}
                 onClick={handleSetPassword}
-                className="h-12 rounded-[10px] bg-[#0989D4] text-white text-[16px] font-semibold disabled:bg-gray-400 flex items-center justify-center gap-2"
+                className="h-12 rounded-[10px] bg-[#171717] text-white text-[16px] font-semibold disabled:bg-gray-400 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : 'Save'}
               </button>
@@ -636,7 +653,7 @@ useEffect(() => {
                 <Upload size={20} className="text-[#667085]" />
               </div>
               <p className="text-[14px] text-[#667085]">
-                <button type="button" onClick={() => fileInputRef.current?.click()} className="text-[#0989D4] font-semibold">
+                <button type="button" onClick={() => fileInputRef.current?.click()} className="text-[#171717] font-semibold">
                   Click to upload
                 </button>{' '}
                 or drag and drop
@@ -668,7 +685,7 @@ useEffect(() => {
               <button
                 disabled={isSubmitting}
                 onClick={handleConfirmPosts}
-                className="h-11 rounded-[10px] bg-[#0989D4] text-white text-[15px] font-bold disabled:bg-gray-400 flex items-center justify-center gap-2"
+                className="h-11 rounded-[10px] bg-[#171717] text-white text-[15px] font-bold disabled:bg-gray-400 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : 'Confirm'}
               </button>

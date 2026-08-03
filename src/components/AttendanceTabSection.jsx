@@ -91,7 +91,7 @@ const AttendanceTabSection = ({ eventId, eventType, eventTitle = "", organizerNa
             e?.stopPropagation();
             handleOpenCertificateModal(record);
           }}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#006098] text-white hover:bg-[#004d7a] rounded-full text-xs font-semibold shadow-xs transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#171717] text-white hover:bg-[#171717] rounded-full text-xs font-semibold shadow-xs transition cursor-pointer"
         >
           <Award size={14} /> Certificate
         </button>
@@ -110,7 +110,7 @@ const AttendanceTabSection = ({ eventId, eventType, eventTitle = "", organizerNa
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[300px] gap-3 bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-        <Loader2 className="w-8 h-8 text-[#006098] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#171717] animate-spin" />
         <p className="text-gray-500 font-medium text-sm">Loading attendance records...</p>
       </div>
     );
@@ -121,7 +121,7 @@ const AttendanceTabSection = ({ eventId, eventType, eventTitle = "", organizerNa
       {/* Top Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#006098] flex items-center justify-center font-bold">
+          <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#171717] flex items-center justify-center font-bold">
             <Users size={22} />
           </div>
           <div>

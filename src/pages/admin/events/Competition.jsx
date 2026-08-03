@@ -9,17 +9,17 @@ import { useTitle } from '../../../context/AdminTitle';
 
 const TABS = [
   { label: "Community", value: "community" },
-  { label: "Pending",   value: "pending"   },
-  { label: "Approved",  value: "approved"  },
-  { label: "Rejected",  value: "rejected"  },
+  { label: "Pending", value: "pending" },
+  { label: "Approved", value: "approved" },
+  { label: "Rejected", value: "rejected" },
 ];
 
 const Competition = () => {
-  const [search, setSearch]           = useState('');
+  const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [competitions, setCompetitions] = useState([]);
-  const [isLoading, setIsLoading]     = useState(true);
-  const [activeTab, setActiveTab]     = useState("community");
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("community");
 
   const { user, dynamicPath } = useMain();
   const navigate = useNavigate();
@@ -55,31 +55,31 @@ const Competition = () => {
   };
 
   const columns = [
-    { 
-      title: '#', 
+    {
+      title: '#',
       render: (_, __, index) => (currentPage - 1) * 10 + index + 1,
-      key: 'index' 
+      key: 'index'
     },
-    { 
-      title: 'Competition Name', 
-      dataIndex: 'eventName', 
-      key: 'eventName', 
+    {
+      title: 'Competition Name',
+      dataIndex: 'eventName',
+      key: 'eventName',
       render: (text) => (
         <p className="max-w-[150px] truncate" title={text}>{text}</p>
       )
     },
-    { title: 'Organizer',   dataIndex: 'organizer',         key: 'organizer'         },
-    { 
-      title: 'Date', 
-      dataIndex: 'eventDate', 
+    { title: 'Organizer', dataIndex: 'organizer', key: 'organizer' },
+    {
+      title: 'Date',
+      dataIndex: 'eventDate',
       key: 'eventDate',
       render: (date) => date ? new Date(date).toLocaleDateString() : 'N/A'
     },
-    { title: 'Mode',     dataIndex: 'mode',             key: 'mode'             },
+    { title: 'Mode', dataIndex: 'mode', key: 'mode' },
     { title: 'Reg Type', dataIndex: 'registrationType', key: 'registrationType' },
-    { 
-      title: 'Fees', 
-      dataIndex: 'individualFees', 
+    {
+      title: 'Fees',
+      dataIndex: 'individualFees',
       key: 'individualFees',
       render: (fees) => `Rs ${fees || 0}`
     },
@@ -90,9 +90,8 @@ const Competition = () => {
       render: (value) => {
         const isActive = value === true;
         return (
-          <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[14px] font-semibold ${
-            isActive ? 'bg-[#E6F8EE] text-[#23A55A]' : 'bg-[#F1F5F9] text-[#64748B]'
-          }`}>
+          <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[14px] font-semibold ${isActive ? 'bg-[#E6F8EE] text-[#23A55A]' : 'bg-[#F1F5F9] text-[#64748B]'
+            }`}>
             <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-[#23A55A]' : 'bg-[#64748B]'}`} />
             {isActive ? 'Active' : 'Inactive'}
           </span>
@@ -125,22 +124,21 @@ const Competition = () => {
 
       {/* Tabs */}
       <div className="flex items-center gap-5 px-4 pt-4 pb-2">
-       {
-        user.role==="admin" &&
-        TABS.map((tab) => (
-          <button
-            key={tab.value}
-            onClick={() => handleTabChange(tab.value)}
-            className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-              activeTab === tab.value
-                ? 'bg-blue-600 text-white shadow'
-                : 'bg-white text-[#64748B] border border-[#E2E8F0] hover:bg-blue-50 hover:text-blue-600'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))
-       }
+        {
+          user.role === "admin" &&
+          TABS.map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => handleTabChange(tab.value)}
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${activeTab === tab.value
+                  ? 'bg-[#171717] text-white shadow'
+                  : 'bg-white text-[#64748B] border border-[#E2E8F0] hover:bg-blue-50 hover:text-[#171717]'
+                }`}
+            >
+              {tab.label}
+            </button>
+          ))
+        }
       </div>
 
       <DynamicTable

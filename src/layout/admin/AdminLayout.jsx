@@ -134,7 +134,7 @@ const AdminLayout = () => {
   return (
     <AppLayout
       menuItems={menuItems}
-      logo={assets.logo}
+      logo={assets.gradEnvyLogo}
       user={user}
       onLogout={logout}
       onChangePassword={changePassword}

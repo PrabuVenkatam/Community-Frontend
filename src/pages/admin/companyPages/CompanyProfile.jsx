@@ -37,6 +37,7 @@ const CompanyProfile = ({ module }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [isAboutExpanded, setIsAboutExpanded] = useState(false);
   const fileInputRef = useRef(null);
   const { user, setUser } = useMain()
   const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
@@ -285,10 +286,27 @@ const CompanyProfile = ({ module }) => {
                   <span className='text-[16px] font-semibold'>{company.companyTagLine} .</span> {company.city}, {company.state}
                 </p>
                 <p className="text-[14px] text-secondary font-medium">
-                  <span className='text-[16px] font-semibold'>Year Founded: {company.yearFounded ? new Date(company.yearFounded).getFullYear() : 'N/A'}</span> {company.websiteLink && <a href={""} target="_blank" rel="noopener noreferrer" className="text-blue-600 ml-2 hover:underline">{company.websiteLink}</a>}
+                  <span className='text-[16px] font-semibold'>Year Founded: {company.yearFounded ? new Date(company.yearFounded).getFullYear() : 'N/A'}</span> {company.websiteLink && <a href={company.websiteLink.startsWith('http') ? company.websiteLink : `https://${company.websiteLink}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 ml-2 hover:underline">{company.websiteLink}</a>}
                 </p>
                 <p className="text-[16px] text-secondary font-normal leading-[1.7] max-w-2xl mt-4">
-                  {company.aboutUs ? company.aboutUs.slice(0, 200) + (company.aboutUs.length > 200 ? '...' : '') : 'No description provided.'}
+                  {company.aboutUs ? (
+                    <>
+                      {isAboutExpanded || company.aboutUs.length <= 200
+                        ? company.aboutUs
+                        : `${company.aboutUs.slice(0, 200)}... `}
+                      {company.aboutUs.length > 200 && (
+                        <button
+                          type="button"
+                          onClick={() => setIsAboutExpanded(!isAboutExpanded)}
+                          className="text-blue-600 font-semibold ml-1.5 hover:underline focus:outline-none cursor-pointer"
+                        >
+                          {isAboutExpanded ? "Read Less" : "Read More"}
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    'No description provided.'
+                  )}
                 </p>
                 <p className="text-[14px] text-secondary font-medium mt-3">
                   <span className="text-[#110E7E] font-bold">
@@ -302,13 +320,13 @@ const CompanyProfile = ({ module }) => {
 
             <div className="lg:min-w-[440px] lg:pt-[40px] flex flex-col gap-4">
               <div className="flex flex-wrap gap-4">
-                <div className="min-w-[180px] md:min-w-[210px] rounded-[24px] p-6 bg-[linear-gradient(135deg,_#0989D4_0%,_#006098_100%)] text-white shadow-xl flex flex-col justify-center">
+                <div className="min-w-[180px] md:min-w-[210px] rounded-[24px] p-6 bg-[linear-gradient(135deg,_#171717_0%,_#171717_100%)] text-white shadow-xl flex flex-col justify-center">
                   <p className="text-[11px] font-bold uppercase tracking-[1.5px] mb-3 opacity-80">Total Jobs</p>
                   <p className="text-[34px] font-black leading-none">{mergedJobs?.length}</p>
                 </div>
                 <div className="min-w-[180px] md:min-w-[210px] rounded-[24px] p-6 border border-[#EAECF0] bg-[#F8FAFC] shadow-sm flex flex-col justify-center">
                   <p className="text-[11px] font-bold uppercase tracking-[1.5px] text-secondary mb-3">Established Year</p>
-                  <p className="text-[34px] font-black leading-none text-[#006098]">{company.yearFounded ? new Date(company.yearFounded).getFullYear() : '---'}</p>
+                  <p className="text-[34px] font-black leading-none text-[#171717]">{company.yearFounded ? new Date(company.yearFounded).getFullYear() : '---'}</p>
                 </div>
               </div>
 
@@ -532,11 +550,11 @@ const CompanyProfile = ({ module }) => {
               columns={[
                 { title: '#', dataIndex: 'index', key: 'index' },
                 { title: 'Name', dataIndex: 'name', key: 'name' },
-                { title: 'Status', dataIndex: 'status', key: 'status' },
+                { title: 'Status', dataIndex: 'currentStatus', key: 'currentStatus' },
                 { title: 'Education', dataIndex: 'education', key: 'education' },
-                { title: 'Degree', dataIndex: 'degree', key: 'degree' },
+                { title: 'Degree', dataIndex: 'ugDegree', key: 'ugDegree' },
                 // { title: 'Job Title', dataIndex: 'jobTitle', key: 'jobTitle' },
-                { title: 'Contact', dataIndex: 'contact', key: 'contact' },
+                { title: 'Contact', dataIndex: 'phone', key: 'phone' },
                 { title: 'email', dataIndex: 'email', key: 'email' },
                 // { title: 'Followed On', dataIndex: 'followedAt', key: 'followedAt' },
               ]}
@@ -610,7 +628,7 @@ const CompanyProfile = ({ module }) => {
               <button
                 disabled={isSubmitting}
                 onClick={handleSetPassword}
-                className="h-12 rounded-[10px] bg-[#0989D4] text-white text-[16px] font-semibold disabled:bg-gray-400 flex items-center justify-center gap-2"
+                className="h-12 rounded-[10px] bg-[#171717] text-white text-[16px] font-semibold disabled:bg-gray-400 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : 'Save'}
               </button>
@@ -639,7 +657,7 @@ const CompanyProfile = ({ module }) => {
                 <Upload size={20} className="text-[#667085]" />
               </div>
               <p className="text-[14px] text-[#667085]">
-                <button type="button" onClick={() => fileInputRef.current?.click()} className="text-[#0989D4] font-semibold">
+                <button type="button" onClick={() => fileInputRef.current?.click()} className="text-[#171717] font-semibold">
                   Click to upload
                 </button>{' '}
                 or drag and drop
@@ -671,7 +689,7 @@ const CompanyProfile = ({ module }) => {
               <button
                 disabled={isSubmitting}
                 onClick={handleConfirmPosts}
-                className="h-11 rounded-[10px] bg-[#0989D4] text-white text-[15px] font-bold disabled:bg-gray-400 flex items-center justify-center gap-2"
+                className="h-11 rounded-[10px] bg-[#171717] text-white text-[15px] font-bold disabled:bg-gray-400 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : 'Confirm'}
               </button>

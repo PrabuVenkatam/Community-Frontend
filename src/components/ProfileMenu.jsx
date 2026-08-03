@@ -131,7 +131,7 @@ const ProfileMenu = ({ user, onChangePassword, onLogout }) => {
                 <button
                   type="button"
                   onClick={() => setIsLogoutModalOpen(false)}
-                  className="flex-1 rounded-xl bg-[#0091D5] px-2 py-3 text-[16px] font-semibold text-white hover:bg-[#007fb8]"
+                  className="flex-1 rounded-xl bg-[#171717] px-2 py-3 text-[16px] font-semibold text-white hover:bg-[#171717]"
                 >
                   Stay Logged In
                 </button>
@@ -162,7 +162,7 @@ const ProfileMenu = ({ user, onChangePassword, onLogout }) => {
                   type="password"
                   value={oldPassword}
                   onChange={(e) => setOldPassword(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-base outline-none focus:border-[#0091D5]"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-base outline-none focus:border-[#171717]"
                 />
               </div>
               <div>
@@ -171,7 +171,7 @@ const ProfileMenu = ({ user, onChangePassword, onLogout }) => {
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-base outline-none focus:border-[#0091D5]"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-base outline-none focus:border-[#171717]"
                 />
               </div>
               <div>
@@ -180,7 +180,7 @@ const ProfileMenu = ({ user, onChangePassword, onLogout }) => {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-base outline-none focus:border-[#0091D5]"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-base outline-none focus:border-[#171717]"
                 />
               </div>
 
@@ -197,7 +197,7 @@ const ProfileMenu = ({ user, onChangePassword, onLogout }) => {
                 <button
                   type="button"
                   onClick={handleChangePasswordSave}
-                  className="flex-1 rounded-xl bg-[#0091D5] px-4 py-2 text-lg font-semibold text-white hover:bg-[#007fb8]"
+                  className="flex-1 rounded-xl bg-[#171717] px-4 py-2 text-lg font-semibold text-white hover:bg-[#171717]"
                 >
                   Save
                 </button>

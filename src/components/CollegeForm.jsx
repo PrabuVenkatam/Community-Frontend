@@ -17,7 +17,7 @@ const collegeFormConfig = [
         name: "collegeType",
         label: "College Type",
         type: "select",
-        options: ["Select Option", "Government", "Private", "Autonomous"],
+        options: [ "Government", "Private", "Autonomous"],
       },
       { name: "establishedYear", label: "Established Year", type: "date", required: false },
       { name: "affiliatedUniversity", label: "Affiliated University", type: "text", required: false },

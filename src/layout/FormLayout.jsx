@@ -94,7 +94,7 @@
 //                       : selectedValues.filter((i) => i !== opt)
 //                   )
 //                 }
-//                 className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-blue-600 checked:border-blue-600 transition-all"
+//                 className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:171717 checked:border-blue-600 transition-all"
 //               />
 //               <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
 //                 <polyline points="20 6 9 17 4 12" />
@@ -175,7 +175,7 @@
 //         role="switch"
 //         aria-checked={isFirstOptionActive}
 //         onClick={() => onChange(isFirstOptionActive ? options[1] : options[0])}
-//         className={`relative inline-flex h-10 min-w-[110px] items-center rounded-full px-1 transition-colors ${isFirstOptionActive ? "bg-blue-600" : "bg-gray-300"}`}
+//         className={`relative inline-flex h-10 min-w-[110px] items-center rounded-full px-1 transition-colors ${isFirstOptionActive ? "171717" : "bg-gray-300"}`}
 //       >
 //         <span className={`absolute top-1 h-8 w-8 rounded-full bg-white shadow-sm transition-transform ${isFirstOptionActive ? "translate-x-0" : "translate-x-[70px]"}`} />
 //         <span className="relative z-10 flex w-full justify-between px-3 text-xs font-semibold text-white">
@@ -198,7 +198,7 @@
 //                 value={opt}
 //                 checked={value === opt}
 //                 onChange={(e) => onChange(e.target.value)}
-//                 className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-blue-600 checked:border-blue-600 transition-all"
+//                 className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:171717 checked:border-blue-600 transition-all"
 //               />
 //               <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
 //                 <polyline points="20 6 9 17 4 12" />
@@ -233,9 +233,9 @@
 
 //     return (
 //       <div className="space-y-2">
-       
+
 //         <div className="flex relative border border-gray-200 rounded overflow-hidden h-10 w-full font-source transition focus-within:border-blue-400">
-//           <label className="bg-[#0095ff] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:bg-blue-600 transition">
+//           <label className="bg-[#171717] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:171717 transition">
 //             Choose File
 //             <input
 //               type="file"
@@ -545,7 +545,7 @@
 //                   {section.title}
 //                 </h2>
 //                 {section.type === "dynamic" && !["grid-6", "row-action"].includes(section.dynamicStyle) && (
-//                   <button type="button" onClick={() => addRow(section.key)} className="bg-[#001447] text-white px-5 py-1.5 rounded-md text-sm font-bold flex items-center gap-2">
+//                   <button type="button" onClick={() => addRow(section.key)} className="bg-[#171717] text-white px-5 py-1.5 rounded-md text-sm font-bold flex items-center gap-2">
 //                     Add
 //                   </button>
 //                 )}
@@ -603,7 +603,7 @@
 //                       })}
 //                       <div className="flex items-end justify-start lg:justify-center">
 //                         {chunkIndex === 0 ? (
-//                           <button type="button" onClick={() => addRow(section.key)} className="h-10 bg-[#001447] text-white px-5 rounded-md text-sm font-bold w-full md:w-auto">Add</button>
+//                           <button type="button" onClick={() => addRow(section.key)} className="h-10 bg-[#171717] text-white px-5 rounded-md text-sm font-bold w-full md:w-auto">Add</button>
 //                         ) : (
 //                           <button type="button" onClick={() => { const rows = dynamicData[section.key] || []; const lastRow = rows[rows.length - 1]; if (lastRow) removeRow(section.key, lastRow.id); }} className="h-10 w-10 inline-flex items-center justify-center text-red-500 hover:scale-110 transition">
 //                             <Trash2 />
@@ -633,7 +633,7 @@
 //                       ))}
 //                       <div className="flex items-end justify-start lg:justify-center">
 //                         {rowIndex === 0 ? (
-//                           <button type="button" onClick={() => addRow(section.key)} className="h-10 bg-[#001447] text-white px-5 rounded-md text-sm font-bold w-full md:w-auto">Add</button>
+//                           <button type="button" onClick={() => addRow(section.key)} className="h-10 bg-[#171717] text-white px-5 rounded-md text-sm font-bold w-full md:w-auto">Add</button>
 //                         ) : (
 //                           <button type="button" onClick={() => removeRow(section.key, rowData.id)} className="h-10 w-10 inline-flex items-center justify-center text-red-500 hover:scale-110 transition">
 //                             <Trash2 />
@@ -677,7 +677,7 @@
 //           <button type="button" onClick={() => navigate(-1)} className="w-full md:w-auto px-6 md:px-10 py-2 border border-gray-300 rounded text-gray-500 font-bold hover:bg-gray-50">
 //             Cancel
 //           </button>
-//           <button type="submit" disabled={isSubmitting} className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#0095ff] text-white rounded font-bold shadow-md hover:bg-blue-600 disabled:opacity-70">
+//           <button type="submit" disabled={isSubmitting} className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#171717] text-white rounded font-bold shadow-md hover:171717 disabled:opacity-70">
 //             {isSubmitting ? "Saving..." : submitLabel || (editData ? "Update" : "Save")}
 //           </button>
 //         </div>
@@ -838,7 +838,7 @@
 // //                       : selectedValues.filter((i) => i !== opt)
 // //                   )
 // //                 }
-// //                 className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-blue-600 checked:border-blue-600 transition-all"
+// //                 className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:171717 checked:border-blue-600 transition-all"
 // //               />
 // //               <svg
 // //                 className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
@@ -947,7 +947,7 @@
 // //         aria-checked={isFirstOptionActive}
 // //         onClick={() => onChange(isFirstOptionActive ? options[1] : options[0])}
 // //         className={`relative inline-flex h-10 min-w-[110px] items-center rounded-full px-1 transition-colors ${
-// //           isFirstOptionActive ? "bg-blue-600" : "bg-gray-300"
+// //           isFirstOptionActive ? "171717" : "bg-gray-300"
 // //         }`}
 // //       >
 // //         <span
@@ -978,7 +978,7 @@
 // //                 value={opt}
 // //                 checked={value === opt}
 // //                 onChange={(e) => onChange(e.target.value)}
-// //                 className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-blue-600 checked:border-blue-600 transition-all"
+// //                 className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:171717 checked:border-blue-600 transition-all"
 // //               />
 // //               <svg
 // //                 className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
@@ -1035,7 +1035,7 @@
 // //     return (
 // //       <div className="space-y-2">
 // //         <div className="flex relative border border-gray-200 rounded overflow-hidden h-10 w-full font-source transition focus-within:border-blue-400">
-// //           <label className="bg-[#0095ff] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:bg-blue-600 transition">
+// //           <label className="bg-[#171717] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:171717 transition">
 // //             Choose File
 // //             <input
 // //               type="file"
@@ -1434,7 +1434,7 @@
 // //                     <button
 // //                       type="button"
 // //                       onClick={() => addRow(section.key)}
-// //                       className="bg-[#001447] text-white px-5 py-1.5 rounded-md text-sm font-bold flex items-center gap-2"
+// //                       className="bg-[#171717] text-white px-5 py-1.5 rounded-md text-sm font-bold flex items-center gap-2"
 // //                     >
 // //                       Add
 // //                     </button>
@@ -1527,7 +1527,7 @@
 // //                             <button
 // //                               type="button"
 // //                               onClick={() => addRow(section.key)}
-// //                               className="h-10 w-24 bg-[#001447] text-white rounded-md text-sm font-bold"
+// //                               className="h-10 w-24 bg-[#171717] text-white rounded-md text-sm font-bold"
 // //                             >
 // //                               Add
 // //                             </button>
@@ -1590,7 +1590,7 @@
 // //                               <button
 // //                                 type="button"
 // //                                 onClick={() => addRow(section.key)}
-// //                                 className="h-10 bg-[#001447] text-white px-5 rounded-md text-sm font-bold w-full md:w-auto"
+// //                                 className="h-10 bg-[#171717] text-white px-5 rounded-md text-sm font-bold w-full md:w-auto"
 // //                               >
 // //                                 Add
 // //                               </button>
@@ -1669,7 +1669,7 @@
 // //           <button
 // //             type="submit"
 // //             disabled={isSubmitting}
-// //             className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#0095ff] text-white rounded font-bold shadow-md hover:bg-blue-600 disabled:opacity-70"
+// //             className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#171717] text-white rounded font-bold shadow-md hover:171717 disabled:opacity-70"
 // //           >
 // //             {isSubmitting
 // //               ? "Saving..."
@@ -1695,11 +1695,17 @@ import { useRef } from "react";
 const toCleanString = (value) => String(value || "").trim();
 
 const getInitialFieldValue = (field) => {
+  if (field.defaultValue !== undefined) return field.defaultValue;
   if (field.type === "checkbox" || field.type === "multiselect") return [];
   if (field.type === "toggle") {
     return Array.isArray(field.options) && field.options.length === 2
       ? field.options[1]
       : "No";
+  }
+  if (field.type === "radio") {
+    return Array.isArray(field.options) && field.options.length > 0
+      ? field.options[0]
+      : "";
   }
   return "";
 };
@@ -1784,7 +1790,7 @@ const FormInput = ({ field, value, onChange, inputName }) => {
                       : selectedValues.filter((i) => i !== opt)
                   )
                 }
-                className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-blue-600 checked:border-blue-600 transition-all"
+                className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-[#171717] checked:border-[#171717] transition-all"
               />
               <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
@@ -1802,7 +1808,7 @@ const FormInput = ({ field, value, onChange, inputName }) => {
     const selectedValues = Array.isArray(value) ? value : [];
     const [open, setOpen] = React.useState(false);
     const ref = React.useRef(null);
-const inputRef = useRef(null);
+    const inputRef = useRef(null);
     React.useEffect(() => {
       const handleClickOutside = (e) => {
         if (ref.current && !ref.current.contains(e.target)) setOpen(false);
@@ -1870,7 +1876,7 @@ const inputRef = useRef(null);
         role="switch"
         aria-checked={isFirstOptionActive}
         onClick={() => onChange(isFirstOptionActive ? options[1] : options[0])}
-        className={`relative inline-flex h-10 min-w-[110px] items-center rounded-full px-1 transition-colors ${isFirstOptionActive ? "bg-blue-600" : "bg-gray-300"}`}
+        className={`relative inline-flex h-10 min-w-[110px] items-center rounded-full px-1 transition-colors ${isFirstOptionActive ? "bg-[#171717]" : "bg-gray-300"}`}
       >
         <span className={`absolute top-1 h-8 w-8 rounded-full bg-white shadow-sm transition-transform ${isFirstOptionActive ? "translate-x-0" : "translate-x-[70px]"}`} />
         <span className="relative z-10 flex w-full justify-between px-3 text-xs font-semibold text-white">
@@ -1893,7 +1899,7 @@ const inputRef = useRef(null);
                 value={opt}
                 checked={value === opt}
                 onChange={(e) => onChange(e.target.value)}
-                className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-blue-600 checked:border-blue-600 transition-all"
+                className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-[#171717] checked:border-[#171717] transition-all"
               />
               <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
@@ -1915,14 +1921,14 @@ const inputRef = useRef(null);
           onChange={(e) => onChange(e.target.value)}
           className="w-full appearance-none p-2.5 pr-9 border border-gray-200 rounded bg-[#fcfcfc] text-sm h-10 outline-none cursor-pointer"
         >
-          <option value="">Select Option</option>
+          {/* <option value="">Select Option</option> */}
           {field.options.map((option) => (
             <option key={option} value={option}>{option}</option>
           ))}
         </select>
         {/* Custom chevron icon */}
         <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400">
-          <Icon src="/icons/arrow_drop_down.png" size={20}  strokeWidth={2} />
+          <Icon src="/icons/arrow_drop_down.png" size={20} strokeWidth={2} />
         </span>
       </div>
     );
@@ -1936,7 +1942,7 @@ const inputRef = useRef(null);
     return (
       <div className="space-y-2">
         <div className="flex relative border border-gray-200 rounded overflow-hidden h-10 w-full font-source transition focus-within:border-blue-400">
-          <label className="bg-[#0095ff] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:bg-blue-600 transition">
+          <label className="bg-[#171717] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:171717 transition">
             Choose File
             <input
               type="file"
@@ -1977,9 +1983,9 @@ const inputRef = useRef(null);
   if (field.type === "date") {
     const inputRef = useRef(null);
     return (
-      <div  onClick={() => inputRef.current?.showPicker?.()} className="relative w-full">
+      <div onClick={() => inputRef.current?.showPicker?.()} className="relative w-full">
         <input
-         ref={inputRef}
+          ref={inputRef}
           type="date"
           value={value}
           max={field.max}
@@ -2278,7 +2284,7 @@ const FormLayout = ({
                     {section.title}
                   </h2>
                   {section.type === "dynamic" && !["grid-6", "row-action"].includes(section.dynamicStyle) && (
-                    <button type="button" onClick={() => addRow(section.key)} className="bg-[#001447] text-white px-5 py-1.5 rounded-md text-sm font-bold flex items-center gap-2">
+                    <button type="button" onClick={() => addRow(section.key)} className="bg-[#171717] text-white px-5 py-1.5 rounded-md text-sm font-bold flex items-center gap-2">
                       Add
                     </button>
                   )}
@@ -2326,7 +2332,7 @@ const FormLayout = ({
                             const baseField = section.fields[0];
                             return (
                               <div key={rowData.id}>
-                                <Label text={`${section.title} (${itemIndex})`} required={itemIndex <= 3} />
+                                <Label text={`${section.title} (${itemIndex})`} required={baseField.required !== false} />
                                 <FormInput
                                   field={baseField}
                                   value={rowData.values[baseField.name]}
@@ -2342,7 +2348,7 @@ const FormLayout = ({
                               <button
                                 type="button"
                                 onClick={() => addRow(section.key)}
-                                className={`${ACTION_BTN_CLASS} bg-[#001447] text-white`}
+                                className={`${ACTION_BTN_CLASS} bg-[#171717] text-white`}
                               >
                                 Add
                               </button>
@@ -2392,7 +2398,7 @@ const FormLayout = ({
                               <button
                                 type="button"
                                 onClick={() => addRow(section.key)}
-                                className={`${ACTION_BTN_CLASS} bg-[#001447] text-white`}
+                                className={`${ACTION_BTN_CLASS} bg-[#171717] text-white`}
                               >
                                 Add
                               </button>
@@ -2456,7 +2462,7 @@ const FormLayout = ({
           <button type="button" onClick={() => navigate(-1)} className="w-full md:w-auto px-6 md:px-10 py-2 border border-gray-300 rounded text-gray-500 font-bold hover:bg-gray-50">
             Cancel
           </button>
-          <button type="submit" disabled={isSubmitting} className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#0095ff] text-white rounded font-bold shadow-md hover:bg-blue-600 disabled:opacity-70">
+          <button type="submit" disabled={isSubmitting} className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#171717] text-white rounded font-bold shadow-md hover:171717 disabled:opacity-70">
             {isSubmitting ? "Saving..." : submitLabel || (editData ? "Update" : "Save")}
           </button>
         </div>

@@ -231,7 +231,7 @@ const CandidateProfileSection = ({
               <button
                 type="button"
                 onClick={handleOpenCertModal}
-                className="flex-1 sm:flex-none px-5 py-2.5 rounded-[12px] font-semibold text-[14px] bg-[#0091D5] hover:bg-[#007fb8] text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                className="flex-1 sm:flex-none px-5 py-2.5 rounded-[12px] font-semibold text-[14px] bg-[#171717] hover:bg-[#171717] text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-95"
               >
                 <Plus size={18} />
                 <span>Create Certificate</span>
@@ -243,11 +243,10 @@ const CandidateProfileSection = ({
                 type="button"
                 disabled={isSubmitting}
                 onClick={() => onStatusChange?.('selected')}
-                className={`flex-1 sm:flex-none px-7 py-2.5 rounded-full font-semibold text-[15px] transition-all shadow-xs cursor-pointer ${
-                  profileData.status === 'selected'
-                    ? 'bg-[#10B981] text-white ring-2 ring-[#10B981]/30'
-                    : 'bg-[#10B981] hover:bg-[#059669] text-white active:scale-95'
-                }`}
+                className={`flex-1 sm:flex-none px-7 py-2.5 rounded-full font-semibold text-[15px] transition-all shadow-xs cursor-pointer ${profileData.status === 'selected'
+                  ? 'bg-[#10B981] text-white ring-2 ring-[#10B981]/30'
+                  : 'bg-[#10B981] hover:bg-[#059669] text-white active:scale-95'
+                  }`}
               >
                 Selected
               </button>
@@ -255,11 +254,10 @@ const CandidateProfileSection = ({
                 type="button"
                 disabled={isSubmitting}
                 onClick={() => onStatusChange?.('rejected')}
-                className={`flex-1 sm:flex-none px-7 py-2.5 rounded-full font-semibold text-[15px] transition-all shadow-xs cursor-pointer ${
-                  profileData.status === 'rejected'
-                    ? 'bg-[#EF4444] text-white ring-2 ring-[#EF4444]/30'
-                    : 'bg-[#EF4444] hover:bg-[#DC2626] text-white active:scale-95'
-                }`}
+                className={`flex-1 sm:flex-none px-7 py-2.5 rounded-full font-semibold text-[15px] transition-all shadow-xs cursor-pointer ${profileData.status === 'rejected'
+                  ? 'bg-[#EF4444] text-white ring-2 ring-[#EF4444]/30'
+                  : 'bg-[#EF4444] hover:bg-[#DC2626] text-white active:scale-95'
+                  }`}
               >
                 Not Selected
               </button>
@@ -267,15 +265,15 @@ const CandidateProfileSection = ({
           )}
 
           {/* Download Resume Box */}
-          <div 
+          <div
             onClick={handleOpenAndDownloadResume}
-            className="w-full sm:w-auto min-w-[280px] bg-white border border-gray-200 rounded-[16px] p-4 flex items-center justify-between gap-4 shadow-xs hover:border-[#2563EB]/40 transition-colors cursor-pointer group"
+            className="w-full sm:w-auto min-w-[280px] bg-white border border-gray-200 rounded-[16px] p-4 flex items-center justify-between gap-4 shadow-xs hover:border-[171717]/40 transition-colors cursor-pointer group"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#2563EB] flex items-center justify-center text-white shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-[171717] flex items-center justify-center text-white shrink-0 group-hover:scale-105 transition-transform">
                 <FileText size={20} />
               </div>
-              <span className="font-semibold text-[15px] text-[#1D2939] group-hover:text-[#2563EB] transition-colors">Resume.Pdf</span>
+              <span className="font-semibold text-[15px] text-[#1D2939] group-hover:text-[171717] transition-colors">Resume.Pdf</span>
             </div>
             <button
               type="button"
@@ -370,8 +368,8 @@ const CandidateProfileSection = ({
               {/* Header */}
               <div className="flex items-center justify-between pb-4 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#0091D5]/10 flex items-center justify-center shrink-0">
-                    <Award className="w-5 h-5 text-[#0091D5]" />
+                  <div className="w-10 h-10 rounded-full bg-[#171717]/10 flex items-center justify-center shrink-0">
+                    <Award className="w-5 h-5 text-[#171717]" />
                   </div>
                   <div>
                     <h3 className="text-[18px] font-bold text-[#101828]">Create Certificate</h3>
@@ -405,7 +403,7 @@ const CandidateProfileSection = ({
                       href={getFullUrl(generatedCert.fileUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full py-2.5 px-4 bg-[#0091D5] hover:bg-[#007fb8] text-white text-[14px] font-semibold rounded-[12px] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-xs"
+                      className="w-full py-2.5 px-4 bg-[#171717] hover:bg-[#171717] text-white text-[14px] font-semibold rounded-[12px] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-xs"
                     >
                       <Download className="w-4 h-4" />
                       <span>Download PDF</span>
@@ -444,7 +442,7 @@ const CandidateProfileSection = ({
                       value={certForm.name}
                       onChange={(e) => setCertForm((prev) => ({ ...prev, name: e.target.value }))}
                       placeholder="Enter full name"
-                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#0091D5]/20 focus:border-[#0091D5] outline-none transition-all"
+                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#171717]/20 focus:border-[#171717] outline-none transition-all"
                       required
                     />
                   </div>
@@ -458,7 +456,7 @@ const CandidateProfileSection = ({
                       value={certForm.domain}
                       onChange={(e) => setCertForm((prev) => ({ ...prev, domain: e.target.value }))}
                       placeholder="e.g. Full-Stack Web Development"
-                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#0091D5]/20 focus:border-[#0091D5] outline-none transition-all"
+                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#171717]/20 focus:border-[#171717] outline-none transition-all"
                       required
                     />
                   </div>
@@ -472,7 +470,7 @@ const CandidateProfileSection = ({
                       value={certForm.companyName}
                       onChange={(e) => setCertForm((prev) => ({ ...prev, companyName: e.target.value }))}
                       placeholder="e.g. Nulinz Community"
-                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#0091D5]/20 focus:border-[#0091D5] outline-none transition-all"
+                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#171717]/20 focus:border-[#171717] outline-none transition-all"
                     />
                   </div>
 
@@ -484,7 +482,7 @@ const CandidateProfileSection = ({
                       type="date"
                       value={certForm.issuedDate}
                       onChange={(e) => setCertForm((prev) => ({ ...prev, issuedDate: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#0091D5]/20 focus:border-[#0091D5] outline-none transition-all"
+                      className="w-full px-3.5 py-2.5 text-[14px] border border-gray-300 rounded-[12px] focus:ring-2 focus:ring-[#171717]/20 focus:border-[#171717] outline-none transition-all"
                       required
                     />
                   </div>
@@ -501,7 +499,7 @@ const CandidateProfileSection = ({
                     <button
                       type="submit"
                       disabled={isGenerating}
-                      className="px-5 py-2.5 text-[14px] font-semibold text-white bg-[#0091D5] hover:bg-[#007fb8] rounded-[12px] flex items-center gap-2 transition-all shadow-xs disabled:opacity-50 active:scale-95 cursor-pointer"
+                      className="px-5 py-2.5 text-[14px] font-semibold text-white bg-[#171717] hover:bg-[#171717] rounded-[12px] flex items-center gap-2 transition-all shadow-xs disabled:opacity-50 active:scale-95 cursor-pointer"
                     >
                       {isGenerating ? (
                         <>

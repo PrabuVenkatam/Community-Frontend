@@ -38,7 +38,7 @@
 //                         className={({ isActive }) => `
 //         flex items-center gap-3 px-4 py-3 rounded-lg text-[15px] font-medium transition-all duration-200
 //         ${isActive
-//                                 ? 'bg-blue-50 text-[#0091D5]'
+//                                 ? 'bg-blue-50 text-[#171717]'
 //                                 : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}
 //       `}
 //                     >
@@ -124,7 +124,7 @@ const Sidebar = () => {
             {/* Logo Section */}
             <div className="px-6 mb-10 flex justify-center">
                 <img
-                    src={assets.logo}
+                    src={assets.gradEnvyLogo}
                     alt="Nulinz Community"
                     className="h-11 w-auto object-contain"
                 />
@@ -158,7 +158,7 @@ const Sidebar = () => {
                                         />
                                         {/* Blue indicator bar on the right side */}
                                         {isCategoryActive && (
-                                            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-[#0091D5] rounded-l-full" />
+                                            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-[#171717] rounded-l-full" />
                                         )}
                                     </div>
                                 </button>
@@ -195,7 +195,7 @@ const Sidebar = () => {
                                             {({ isActive }) => (
                                                 <>
                                                     {/* The curved line connector */}
-                                                    <div className={`absolute -left-[1px] top-0 bottom-0 w-[1px] ${isActive ? 'bg-[#0091D5]' : 'bg-transparent'}`}>
+                                                    <div className={`absolute -left-[1px] top-0 bottom-0 w-[1px] ${isActive ? 'bg-[#171717]' : 'bg-transparent'}`}>
                                                         <div className="absolute top-1/2 -left-[12px] w-3 h-[1px] bg-gray-200" />
                                                     </div>
                                                     <span>{sub.name}</span>

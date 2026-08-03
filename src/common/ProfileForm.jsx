@@ -114,7 +114,7 @@ const FormInput = ({ field, value, onChange, inputName }) => {
                     onChange(selectedValues.filter((item) => item !== opt));
                   }
                 }}
-                className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-blue-600 checked:border-blue-600 transition-all"
+                className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-[#171717] checked:border-blue-600 transition-all"
               />
               <svg
                 className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
@@ -146,14 +146,12 @@ const FormInput = ({ field, value, onChange, inputName }) => {
         role="switch"
         aria-checked={isFirstOptionActive}
         onClick={() => onChange(isFirstOptionActive ? options[1] : options[0])}
-        className={`relative inline-flex h-10 min-w-[110px] items-center rounded-full px-1 transition-colors ${
-          isFirstOptionActive ? "bg-blue-600" : "bg-gray-300"
-        }`}
+        className={`relative inline-flex h-10 min-w-[110px] items-center rounded-full px-1 transition-colors ${isFirstOptionActive ? "bg-[#171717]" : "bg-gray-300"
+          }`}
       >
         <span
-          className={`absolute top-1 h-8 w-8 rounded-full bg-white shadow-sm transition-transform ${
-            isFirstOptionActive ? "translate-x-0" : "translate-x-[70px]"
-          }`}
+          className={`absolute top-1 h-8 w-8 rounded-full bg-white shadow-sm transition-transform ${isFirstOptionActive ? "translate-x-0" : "translate-x-[70px]"
+            }`}
         />
         <span className="relative z-10 flex w-full justify-between px-3 text-xs font-semibold text-white">
           <span>{options[0]}</span>
@@ -175,7 +173,7 @@ const FormInput = ({ field, value, onChange, inputName }) => {
                 value={opt}
                 checked={value === opt}
                 onChange={(e) => onChange(e.target.value)}
-                className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-blue-600 checked:border-blue-600 transition-all"
+                className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded-[6px] checked:bg-[#171717] checked:border-blue-600 transition-all"
               />
               <svg
                 className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
@@ -217,7 +215,7 @@ const FormInput = ({ field, value, onChange, inputName }) => {
   if (field.type === "file") {
     return (
       <div className="flex border border-gray-200 rounded overflow-hidden h-10 w-full font-source transition focus-within:border-blue-400">
-        <label className="bg-[#0095ff] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:bg-blue-600 transition">
+        <label className="bg-[#171717] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:171717 transition">
           Choose File
           <input
             type="file"
@@ -414,7 +412,7 @@ const ProfileForm = ({ formVariant: formVariantProp }) => {
                 <button
                   type="button"
                   onClick={() => addRow(section.key)}
-                  className="bg-[#001447] text-white px-5 py-1.5 rounded-md text-sm font-bold flex items-center gap-2"
+                  className="bg-[#171717] text-white px-5 py-1.5 rounded-md text-sm font-bold flex items-center gap-2"
                 >
                   Add
                 </button>
@@ -446,11 +444,10 @@ const ProfileForm = ({ formVariant: formVariantProp }) => {
                   (dynamicData[section.key] || []).map((rowData, rowIndex) => (
                     <div
                       key={rowData.id}
-                      className={`grid grid-cols-1 ${
-                        section.fields.length >= 4
-                          ? "md:grid-cols-2 lg:grid-cols-[repeat(4,minmax(0,1fr))_auto]"
-                          : "md:grid-cols-2 lg:grid-cols-[repeat(3,minmax(0,1fr))_auto]"
-                      } gap-4 items-end`}
+                      className={`grid grid-cols-1 ${section.fields.length >= 4
+                        ? "md:grid-cols-2 lg:grid-cols-[repeat(4,minmax(0,1fr))_auto]"
+                        : "md:grid-cols-2 lg:grid-cols-[repeat(3,minmax(0,1fr))_auto]"
+                        } gap-4 items-end`}
                     >
                       {section.fields.map((field, fieldIndex) => {
                         const rowFieldKey = getDynamicFieldKey(fieldIndex, field.label);
@@ -473,7 +470,7 @@ const ProfileForm = ({ formVariant: formVariantProp }) => {
                           <button
                             type="button"
                             onClick={() => addRow(section.key)}
-                            className="h-10 bg-[#001447] text-white px-5 rounded-md text-sm font-bold w-full md:w-auto"
+                            className="h-10 bg-[#171717] text-white px-5 rounded-md text-sm font-bold w-full md:w-auto"
                           >
                             Add
                           </button>
@@ -533,7 +530,7 @@ const ProfileForm = ({ formVariant: formVariantProp }) => {
                             <button
                               type="button"
                               onClick={() => addRow(section.key)}
-                              className="h-10 bg-[#001447] text-white px-5 rounded-md text-sm font-bold w-full md:w-auto"
+                              className="h-10 bg-[#171717] text-white px-5 rounded-md text-sm font-bold w-full md:w-auto"
                             >
                               Add
                             </button>
@@ -614,7 +611,7 @@ const ProfileForm = ({ formVariant: formVariantProp }) => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#0095ff] text-white rounded font-bold shadow-md hover:bg-blue-600 disabled:opacity-70"
+            className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#171717] text-white rounded font-bold shadow-md hover:171717 disabled:opacity-70"
           >
             {isSubmitting ? "Saving..." : "Save"}
           </button>

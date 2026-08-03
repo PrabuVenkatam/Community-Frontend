@@ -161,7 +161,7 @@ const PerformanceEvaluationSection = ({
             return (
               <div key={metric.key} className="space-y-2">
                 <h3 className="text-[15px] font-bold text-[#1D2939]">{metric.title}</h3>
-                
+
                 {/* 5-Star Rating */}
                 <div className="flex items-center gap-1.5 pt-1 pb-1">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -190,7 +190,7 @@ const PerformanceEvaluationSection = ({
                     type="text"
                     value={currentRemark}
                     onChange={(e) => handleRemarkChange(metric.key, e.target.value)}
-                    className="w-full h-11 px-4 bg-white border border-gray-200 rounded-[14px] text-sm text-[#344054] focus:outline-none focus:border-[#0091D5] transition-all"
+                    className="w-full h-11 px-4 bg-white border border-gray-200 rounded-[14px] text-sm text-[#344054] focus:outline-none focus:border-[#171717] transition-all"
                   />
                 </div>
               </div>
@@ -203,7 +203,7 @@ const PerformanceEvaluationSection = ({
           <button
             type="submit"
             disabled={isSubmitting || submitting}
-            className="px-8 py-2.5 bg-[#0091D5] hover:bg-[#007fb8] text-white rounded-full font-semibold text-[14px] transition-all shadow-md shadow-blue-100 cursor-pointer active:scale-95 disabled:opacity-50"
+            className="px-8 py-2.5 bg-[#171717] hover:bg-[#171717] text-white rounded-full font-semibold text-[14px] transition-all shadow-md shadow-blue-100 cursor-pointer active:scale-95 disabled:opacity-50"
           >
             {submitting ? 'Saving...' : 'Save'}
           </button>

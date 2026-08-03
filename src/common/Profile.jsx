@@ -55,7 +55,7 @@ const GlobalAISummit = () => {
         { title: 'Location', dataIndex: 'location', key: 'location' },
     ];
 
-    
+
     const postImages = [
         'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=600&q=80',
         'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&q=80',
@@ -116,7 +116,7 @@ const GlobalAISummit = () => {
 
                     {/* Right Side Stats Widgets */}
                     <div className="z-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:flex gap-3 md:gap-4 xl:gap-4 items-stretch xl:items-end w-full xl:w-auto">
-                        <div className="bg-[linear-gradient(119.97deg,_#006098_0%,_#00C1FD_100%)] p-3 sm:p-3.5 md:p-4 xl:p-6 rounded-[14px] sm:rounded-[16px] xl:rounded-[24px] min-w-0 xl:min-w-[180px] flex flex-col justify-center shadow-lg w-full xl:w-auto">
+                        <div className="bg-[linear-gradient(119.97deg,_#171717_0%,_#171717_100%)] p-3 sm:p-3.5 md:p-4 xl:p-6 rounded-[14px] sm:rounded-[16px] xl:rounded-[24px] min-w-0 xl:min-w-[180px] flex flex-col justify-center shadow-lg w-full xl:w-auto">
                             <p className="font-source text-[8px] sm:text-[9px] md:text-[10px] xl:text-[10px] font-semibold leading-[13px] sm:leading-[14px] tracking-[0.5px] align-middle uppercase text-[#FFFFFF] mb-1">Total Participants</p>
                             <div className='flex gap-1 items-end'>
                                 <p className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] xl:text-[30px] font-bold leading-[24px] sm:leading-[26px] md:leading-[28px] lg:leading-[30px] xl:leading-[36px] tracking-[0px] align-middle text-[#ffffff] text-source">450 </p>
@@ -126,11 +126,11 @@ const GlobalAISummit = () => {
                         </div>
                         <div className="bg-white p-3 sm:p-3.5 md:p-4 xl:p-6 rounded-[14px] sm:rounded-[16px] xl:rounded-[24px] min-w-0 xl:min-w-[180px] flex flex-col justify-center text-gray-900 shadow-xl w-full xl:w-auto">
                             <p className="font-source text-[8px] sm:text-[9px] md:text-[10px] xl:text-[10px] font-semibold leading-[13px] sm:leading-[14px] tracking-[0.5px] align-middle uppercase text-[#64748B] mb-1">Funds Raised</p>
-                            <p className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] xl:text-[30px] font-bold leading-[24px] sm:leading-[26px] md:leading-[28px] lg:leading-[30px] xl:leading-[36px] tracking-[0px] align-middle text-[#006098] text-source">₹25,500</p>
+                            <p className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] xl:text-[30px] font-bold leading-[24px] sm:leading-[26px] md:leading-[28px] lg:leading-[30px] xl:leading-[36px] tracking-[0px] align-middle text-[#171717] text-source">₹25,500</p>
                         </div>
                         <div className="bg-white p-3 sm:p-3.5 md:p-4 xl:p-6 rounded-[14px] sm:rounded-[16px] xl:rounded-[24px] min-w-0 xl:min-w-[180px] flex flex-col justify-center items-start shadow-xl w-full xl:w-auto">
                             <p className="font-source text-[8px] sm:text-[9px] md:text-[10px] xl:text-[10px] font-semibold leading-[13px] sm:leading-[14px] tracking-[0.5px] align-middle uppercase text-[#64748B] mb-1">Time Left</p>
-                            <p className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] xl:text-[30px] font-bold leading-[24px] sm:leading-[26px] md:leading-[28px] lg:leading-[30px] xl:leading-[36px] tracking-[0px] align-middle text-[#006098] text-source">12</p>
+                            <p className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] xl:text-[30px] font-bold leading-[24px] sm:leading-[26px] md:leading-[28px] lg:leading-[30px] xl:leading-[36px] tracking-[0px] align-middle text-[#171717] text-source">12</p>
                         </div>
                     </div>
                 </div>
@@ -142,7 +142,7 @@ const GlobalAISummit = () => {
                         <button
                             onClick={() => setActiveTab('overview')}
                             className={`px-[16px] py-[10px] rounded-full font-source text-[16px] font-medium leading-none tracking-normal transition-colors ${activeTab === 'overview'
-                                ? 'bg-[#0989D4] text-[#ffffff]'
+                                ? 'bg-[#171717] text-[#ffffff]'
                                 : 'text-[#344054] border border-gray-400 bg-white'
                                 }`}
                         >
@@ -151,7 +151,7 @@ const GlobalAISummit = () => {
                         <button
                             onClick={() => setActiveTab('applied')}
                             className={`px-[16px] py-[10px] rounded-full font-source text-[16px] font-medium leading-none tracking-normal transition-colors ${activeTab === 'applied'
-                                ? 'bg-[#0989D4] text-[#ffffff]'
+                                ? 'bg-[#171717] text-[#ffffff]'
                                 : 'text-[#344054] border border-gray-400 bg-white'
                                 }`}
                         >
@@ -339,25 +339,25 @@ const GlobalAISummit = () => {
 
 
 
-                        <div className="md:col-span-2 xl:col-span-3 bg-white p-5 sm:p-6 lg:p-7 rounded-[20px] md:rounded-[24px] shadow-sm border border-gray-100">
-                            <h3 className="text-[18px] sm:text-[20px] font-bold text-[#1a1a1a] mb-5 sm:mb-6">Post</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                                {postImages.map((image, index) => (
-                                    <div key={`${image}-${index}`} className="rounded-[18px] overflow-hidden border border-gray-200 bg-gray-50">
-                                        <img
-                                            src={image}
-                                            alt={`Post ${index + 1}`}
-                                            className="w-full aspect-[3/4] object-cover"
-                                            loading="lazy"
-                                        />
-                                    </div>
-                                ))}
+                            <div className="md:col-span-2 xl:col-span-3 bg-white p-5 sm:p-6 lg:p-7 rounded-[20px] md:rounded-[24px] shadow-sm border border-gray-100">
+                                <h3 className="text-[18px] sm:text-[20px] font-bold text-[#1a1a1a] mb-5 sm:mb-6">Post</h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                                    {postImages.map((image, index) => (
+                                        <div key={`${image}-${index}`} className="rounded-[18px] overflow-hidden border border-gray-200 bg-gray-50">
+                                            <img
+                                                src={image}
+                                                alt={`Post ${index + 1}`}
+                                                className="w-full aspect-[3/4] object-cover"
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
 
-                        <InfoCard title="Rule Book">
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border-2 border-gray-200 rounded-[14px]">
-                                <div className="flex items-center gap-4 sm:gap-6">
+                            <InfoCard title="Rule Book">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border-2 border-gray-200 rounded-[14px]">
+                                    <div className="flex items-center gap-4 sm:gap-6">
                                         <div className="w-7 h-7 flex items-center justify-center">
                                             <img src={assets.doc} alt="" />
                                         </div>
@@ -365,14 +365,14 @@ const GlobalAISummit = () => {
                                     </div>
                                     <button className="text-secondary hover:text-blue-500 transition-colors">
                                         <Download size={24} />
-                                </button>
-                            </div>
-                        </InfoCard>
-                    </div>
-                </>
-            ) : (
-                <AppliedListSection data={appliedListData} heading={appliedListColumns} />
-            )}
+                                    </button>
+                                </div>
+                            </InfoCard>
+                        </div>
+                    </>
+                ) : (
+                    <AppliedListSection data={appliedListData} heading={appliedListColumns} />
+                )}
             </section>
 
             {isAddPostModalOpen && (
@@ -401,7 +401,7 @@ const GlobalAISummit = () => {
                                 <button
                                     type="button"
                                     onClick={() => fileInputRef.current?.click()}
-                                    className="text-[#0989D4] font-semibold"
+                                    className="text-[#171717] font-semibold"
                                 >
                                     Click to upload
                                 </button>{' '}
@@ -440,7 +440,7 @@ const GlobalAISummit = () => {
                             </button>
                             <button
                                 onClick={() => setIsAddPostModalOpen(false)}
-                                className="h-11 rounded-[10px] bg-[#0989D4] text-white text-[15px] font-semibold"
+                                className="h-11 rounded-[10px] bg-[#171717] text-white text-[15px] font-semibold"
                             >
                                 Confirm
                             </button>

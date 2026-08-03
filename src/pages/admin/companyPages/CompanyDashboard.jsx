@@ -17,45 +17,45 @@ const CompanyDashboard = () => {
   const [latestApplied, setLatestApplied] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const {setTitle}=useTitle()
-  useEffect(()=>{
-setTitle("Dashboard")
-  },[])
+  const { setTitle } = useTitle()
+  useEffect(() => {
+    setTitle("Dashboard")
+  }, [])
 
 
-useEffect(() => {
-  const fetchDashboard = async () => {
-    try {
-      setLoading(true);
-      const res = await apiGetcompanyDashboard();
-      console.log(res)
-      if (!res.status) throw new Error(res.message);
-      setStats(res?.data?.stats);
-      setLatestApplied(res?.data?.lastApplied
-);
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        setLoading(true);
+        const res = await apiGetcompanyDashboard();
+        console.log(res)
+        if (!res.status) throw new Error(res.message);
+        setStats(res?.data?.stats);
+        setLatestApplied(res?.data?.lastApplied
+        );
 
-    } catch (err) {
-      console.error(err);
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+      } catch (err) {
+        console.error(err);
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchDashboard();
-}, []);
+    fetchDashboard();
+  }, []);
 
   // ── Metric card config (maps to API stats keys) ───────────────────────────
   const metricCards = [
-  
-    { key: 'totalFollowers',title: 'Total followers', highlighted: true},
-    { key: 'activeInternships',  title: 'Active Internship' },
-    { key: 'activeFreelances',   title: 'Active Freelance' },
+
+    { key: 'totalFollowers', title: 'Total followers', highlighted: true },
+    { key: 'activeInternships', title: 'Active Internship' },
+    { key: 'activeFreelances', title: 'Active Freelance' },
   ];
 
   // ── Table columns ─────────────────────────────────────────────────────────
   const companyColumns = [
-    { title: '#',               dataIndex: 'index',              key: 'index' },
+    { title: '#', dataIndex: 'index', key: 'index' },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -77,11 +77,11 @@ useEffect(() => {
         </div>
       ),
     },
-    { title: 'Job Type',        dataIndex: 'type',        key: 'type' },
-    { title: 'Job Title',        dataIndex: 'title',        key: 'title' },
-     { title: 'Name ',  dataIndex: 'name',  key:"name" },
-    { title: 'Email ',  dataIndex: 'email',  key:"email" },
-    { title: 'Mobile',        dataIndex: 'phone',               key: 'phone' },
+    { title: 'Job Type', dataIndex: 'type', key: 'type' },
+    { title: 'Job Title', dataIndex: 'title', key: 'title' },
+    { title: 'Name ', dataIndex: 'name', key: "name" },
+    { title: 'Email ', dataIndex: 'email', key: "email" },
+    { title: 'Mobile', dataIndex: 'phone', key: 'phone' },
     {
       title: 'Applied',
       dataIndex: 'createdAt',
@@ -89,16 +89,16 @@ useEffect(() => {
       render: (v) =>
         v
           ? new Date(v).toLocaleDateString('en-IN', {
-              day: '2-digit',
-              month: 'short',
-              year: 'numeric',
-            })
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+          })
           : '—',
     },
   ];
 
   // Add a 1-based index to each row for the "#" column
-  const companyRows =latestApplied.map((c, i) => ({
+  const companyRows = latestApplied.map((c, i) => ({
     ...c,
     index: `0${i + 1}`,
     id: c._id,
@@ -125,25 +125,22 @@ useEffect(() => {
           return (
             <div
               key={card.key}
-              className={`rounded-[24px] border p-5 flex flex-col justify-between ${
-                isHighlighted
-                  ? 'bg-[linear-gradient(180deg,_#0989D4_0%,_#0E8CD6_100%)] border-transparent text-white'
-                  : 'bg-white border-[#EAECF0] text-primary'
-              }`}
+              className={`rounded-[24px] border p-5 flex flex-col justify-between ${isHighlighted
+                ? 'bg-[linear-gradient(180deg,_#171717_0%,_#171717_100%)] border-transparent text-white'
+                : 'bg-white border-[#EAECF0] text-primary'
+                }`}
             >
               {/* Header */}
               <div className="flex items-center justify-between">
                 <h3
-                  className={`text-[20px] font-semibold leading-[100%] ${
-                    isHighlighted ? 'text-white' : 'text-primary'
-                  }`}
+                  className={`text-[20px] font-semibold leading-[100%] ${isHighlighted ? 'text-white' : 'text-primary'
+                    }`}
                 >
                   {card.title}
                 </h3>
                 <span
-                  className={`w-9 h-9 rounded-[12px] inline-flex items-center justify-center ${
-                    isHighlighted ? 'bg-white/20' : 'bg-[#F2F4F7]'
-                  }`}
+                  className={`w-9 h-9 rounded-[12px] inline-flex items-center justify-center ${isHighlighted ? 'bg-white/20' : 'bg-[#F2F4F7]'
+                    }`}
                 >
                   <img
                     src={isHighlighted ? assets.up_i : assets.down_i}
@@ -162,9 +159,8 @@ useEffect(() => {
                 ) : (
                   <>
                     <p
-                      className={`text-[35px] font-bold leading-[1] ${
-                        isHighlighted ? 'text-white' : 'text-[#101828]'
-                      }`}
+                      className={`text-[35px] font-bold leading-[1] ${isHighlighted ? 'text-white' : 'text-[#101828]'
+                        }`}
                     >
                       {data.total}
                     </p>

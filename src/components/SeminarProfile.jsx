@@ -220,23 +220,23 @@ const SeminarProfile = () => {
                     </div>
 
                     <div className="z-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:flex gap-3 md:gap-4 xl:gap-4 items-stretch xl:items-end w-full xl:w-auto">
-                        <div className="bg-[linear-gradient(119.97deg,_#006098_0%,_#00C1FD_100%)] p-3 sm:p-3.5 md:p-4 xl:p-6 rounded-[14px] sm:rounded-[16px] xl:rounded-[24px] min-w-0 xl:min-w-[180px] flex flex-col justify-center shadow-lg w-full xl:w-auto">
+                        <div className="bg-[linear-gradient(119.97deg,_#171717_0%,_#171717_100%)] p-3 sm:p-3.5 md:p-4 xl:p-6 rounded-[14px] sm:rounded-[16px] xl:rounded-[24px] min-w-0 xl:min-w-[180px] flex flex-col justify-center shadow-lg w-full xl:w-auto">
                             <p className="font-source text-[8px] sm:text-[9px] md:text-[10px] xl:text-[10px] font-semibold leading-[13px] sm:leading-[14px] tracking-[0.5px] align-middle uppercase text-[#FFFFFF] mb-1">Total Registration</p>
                             <p className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] xl:text-[30px] font-bold leading-[24px] sm:leading-[26px] md:leading-[28px] lg:leading-[30px] xl:leading-[36px] tracking-[0px] align-middle text-[#ffffff] text-source">{registrations.count} <span className='text-[20px] text-gray-300 ' >/{seminar?.totalSeats}</span></p>
                         </div>
                         <div className="bg-white p-3 sm:p-3.5 md:p-4 xl:p-6 rounded-[14px] sm:rounded-[16px] xl:rounded-[24px] min-w-0 xl:min-w-[180px] flex flex-col justify-center text-gray-900 shadow-xl w-full xl:w-auto">
                             <p className="font-source text-[8px] sm:text-[9px] md:text-[10px] xl:text-[10px] font-semibold leading-[13px] sm:leading-[14px] tracking-[0.5px] align-middle uppercase text-[#64748B] mb-1">Revenue Generated</p>
                             <div className="flex items-center gap-1">
-                                <IndianRupee size={24} className="text-[#006098] font-bold" />
+                                <IndianRupee size={24} className="text-[#171717] font-bold" />
 
-                                <p className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] xl:text-[30px] font-bold leading-[24px] sm:leading-[26px] md:leading-[28px] lg:leading-[30px] xl:leading-[36px] tracking-[0px] align-middle text-[#006098] text-source">
+                                <p className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] xl:text-[30px] font-bold leading-[24px] sm:leading-[26px] md:leading-[28px] lg:leading-[30px] xl:leading-[36px] tracking-[0px] align-middle text-[#171717] text-source">
                                     {registrations?.revenue?.totalAmount || 0}
                                 </p>
                             </div>
                         </div>
                         <div className="bg-white p-3 sm:p-3.5 md:p-4 xl:p-6 rounded-[14px] sm:rounded-[16px] xl:rounded-[24px] min-w-0 xl:min-w-[180px] flex flex-col justify-center items-start shadow-xl w-full xl:w-auto">
                             <p className="font-source text-[8px] sm:text-[9px] md:text-[10px] xl:text-[10px] font-semibold leading-[13px] sm:leading-[14px] tracking-[0.5px] align-middle uppercase text-[#64748B] mb-1">Days Remaining</p>
-                            <p className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] xl:text-[30px] font-bold leading-[24px] sm:leading-[26px] md:leading-[28px] lg:leading-[30px] xl:leading-[36px] tracking-[0px] align-middle text-[#006098] text-source">{getRemainingDays(seminar.eventDate)}</p>
+                            <p className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] xl:text-[30px] font-bold leading-[24px] sm:leading-[26px] md:leading-[28px] lg:leading-[30px] xl:leading-[36px] tracking-[0px] align-middle text-[#171717] text-source">{getRemainingDays(seminar.eventDate)}</p>
                         </div>
                     </div>
                 </div>
@@ -246,7 +246,7 @@ const SeminarProfile = () => {
                     <div className="flex flex-wrap xl:flex-nowrap gap-3">
                         <button
                             onClick={() => setActiveTab('overview')}
-                            className={`px-[16px] py-[10px] rounded-full font-source text-[16px] font-medium leading-none tracking-normal transition-colors ${activeTab === 'overview' ? 'bg-[#0989D4] text-[#ffffff]' : 'text-[#344054] border border-gray-400 bg-white'}`}
+                            className={`px-[16px] py-[10px] rounded-full font-source text-[16px] font-medium leading-none tracking-normal transition-colors ${activeTab === 'overview' ? 'bg-[#171717] text-[#ffffff]' : 'text-[#344054] border border-gray-400 bg-white'}`}
                         >
                             Overview
                         </button>
@@ -254,13 +254,13 @@ const SeminarProfile = () => {
                             <>
                                 <button
                                     onClick={() => setActiveTab('applied')}
-                                    className={`px-[16px] py-[10px] rounded-full font-source text-[16px] font-medium leading-none tracking-normal transition-colors ${activeTab === 'applied' ? 'bg-[#0989D4] text-[#ffffff]' : 'text-[#344054] border border-gray-400 bg-white'}`}
+                                    className={`px-[16px] py-[10px] rounded-full font-source text-[16px] font-medium leading-none tracking-normal transition-colors ${activeTab === 'applied' ? 'bg-[#171717] text-[#ffffff]' : 'text-[#344054] border border-gray-400 bg-white'}`}
                                 >
                                     Applied List
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('attendance')}
-                                    className={`px-[16px] py-[10px] rounded-full font-source text-[16px] font-medium leading-none tracking-normal transition-colors ${activeTab === 'attendance' ? 'bg-[#0989D4] text-[#ffffff]' : 'text-[#344054] border border-gray-400 bg-white'}`}
+                                    className={`px-[16px] py-[10px] rounded-full font-source text-[16px] font-medium leading-none tracking-normal transition-colors ${activeTab === 'attendance' ? 'bg-[#171717] text-[#ffffff]' : 'text-[#344054] border border-gray-400 bg-white'}`}
                                 >
                                     Attendance
                                 </button>
@@ -285,7 +285,7 @@ const SeminarProfile = () => {
                                 />
                                 <button
                                     onClick={() => setIsQRModalOpen(true)}
-                                    className="flex gap-2 items-center bg-[#006098] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-[#004d7a] transition-all shadow-sm"
+                                    className="flex gap-2 items-center bg-[#171717] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-[#171717] transition-all shadow-sm"
                                 >
                                     <QrCode size={18} /> QR Code
                                 </button>
@@ -310,11 +310,11 @@ const SeminarProfile = () => {
                             </>}
 
                         {
-                            user.role === "admin"  && <StatusActionButtons isSubmitting={statusLoading} onConfirm={updateStatus} />
+                            user.role === "admin" && <StatusActionButtons isSubmitting={statusLoading} onConfirm={updateStatus} />
                         }
                     </div>
                 </div>
-{
+                {
                     seminar.status === "rejected" && (
                         <div className="space-y-6">
                             <p className="text-red-600 font-semibold">
@@ -531,7 +531,7 @@ const SeminarProfile = () => {
                                 <button
                                     type="button"
                                     onClick={() => fileInputRef.current?.click()}
-                                    className="text-[#0989D4] font-semibold"
+                                    className="text-[#171717] font-semibold"
                                 >
                                     Click to upload
                                 </button>{' '}
@@ -581,7 +581,7 @@ const SeminarProfile = () => {
                             <button
                                 onClick={handleConfirmAddPosts}
                                 disabled={isSubmitting || selectedFiles.length === 0}
-                                className="h-11 rounded-[10px] bg-[#0989D4] text-white text-[15px] font-semibold hover:bg-[#0770ad] disabled:opacity-50 disabled:bg-[#0989D4]/70"
+                                className="h-11 rounded-[10px] bg-[#171717] text-white text-[15px] font-semibold hover:bg-[#0770ad] disabled:opacity-50 disabled:bg-[#171717]/70"
                             >
                                 {isSubmitting ? "Uploading..." : `Confirm ${selectedFiles.length > 0 ? `(${selectedFiles.length})` : ''}`}
                             </button>

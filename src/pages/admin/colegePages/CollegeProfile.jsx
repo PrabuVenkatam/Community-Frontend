@@ -242,13 +242,13 @@ const CollegeProfile = () => {
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <div className="min-w-[180px] md:min-w-[220px] rounded-[20px] p-6 bg-[linear-gradient(180deg,_#0989D4_0%,_#006098_100%)] text-white shadow-md flex flex-col justify-center">
+              <div className="min-w-[180px] md:min-w-[220px] rounded-[20px] p-6 bg-[linear-gradient(180deg,_#171717_0%,_#171717_100%)] text-white shadow-md flex flex-col justify-center">
                 <p className="text-[10px] font-semibold uppercase tracking-[1.5px] mb-4 opacity-90">Total Departments</p>
                 <p className="text-[30px] font-bold leading-none">{college.totalDepartments || (college.departments?.length) || 0}</p>
               </div>
               <div className="min-w-[180px] md:min-w-[220px] rounded-[20px] p-6 border border-[#EAECF0] bg-white shadow-sm flex flex-col justify-center">
                 <p className="text-[10px] font-semibold uppercase tracking-[1.5px] text-secondary mb-4">Established Year</p>
-                <p className="text-[30px] font-bold leading-none text-[#006098]">
+                <p className="text-[30px] font-bold leading-none text-[#171717]">
                   {college.establishedYear ? (
                     college.establishedYear.match(/\b\d{4}\b/)?.[0] || college.establishedYear
                   ) : 'N/A'}
@@ -264,8 +264,8 @@ const CollegeProfile = () => {
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`px-[21px] py-2.5 rounded-full text-[14px] font-medium transition-all duration-200 shadow-sm ${activeTab === tab
-                        ? 'bg-[#0989D4] text-white'
-                        : 'bg-white border border-[#D0D5DD] text-secondary hover:bg-[#F9FAFB] hover:border-[#98A2B3]'
+                      ? 'bg-[#171717] text-white'
+                      : 'bg-white border border-[#D0D5DD] text-secondary hover:bg-[#F9FAFB] hover:border-[#98A2B3]'
                       }`}
                   >
                     {tab}
@@ -476,7 +476,7 @@ const CollegeProfile = () => {
               <button
                 disabled={isSubmitting}
                 onClick={handleSetPassword}
-                className="h-12 rounded-[10px] bg-[#0989D4] text-white text-[16px] font-semibold hover:bg-[#007fb8] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="h-12 rounded-[10px] bg-[#171717] text-white text-[16px] font-semibold hover:bg-[#171717] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : 'Save'}
               </button>
