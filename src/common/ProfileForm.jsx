@@ -38,6 +38,11 @@ const getInitialFieldValue = (field) => {
     }
     return "No";
   }
+  if (field.type === "radio" || field.type === "select") {
+    if (Array.isArray(field.options) && field.options.length > 0) {
+      return field.options[0];
+    }
+  }
   return "";
 };
 

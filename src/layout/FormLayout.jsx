@@ -1702,7 +1702,7 @@ const getInitialFieldValue = (field) => {
       ? field.options[1]
       : "No";
   }
-  if (field.type === "radio") {
+  if (field.type === "radio" || field.type === "select") {
     return Array.isArray(field.options) && field.options.length > 0
       ? field.options[0]
       : "";
