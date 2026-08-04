@@ -47,7 +47,7 @@ import MobileJobRedirect from "./pages/MobileJobReferel";
 import MobileEventRedirect from "./pages/MobileEventRedirect";
 
 const App = () => {
-   const {fetchCurrentUser,isHomeLoading} =useMain()
+  const {fetchCurrentUser,isHomeLoading} =useMain()
 
   useEffect(() => {
     fetchCurrentUser();
@@ -81,7 +81,7 @@ const App = () => {
           </Route>
             <Route element={<MainLayout />}>
             <Route path="/admin" element={
-     
+    
                 <AdminLayout />
           
               }>

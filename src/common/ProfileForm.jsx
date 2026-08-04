@@ -220,7 +220,7 @@ const FormInput = ({ field, value, onChange, inputName }) => {
   if (field.type === "file") {
     return (
       <div className="flex border border-gray-200 rounded overflow-hidden h-10 w-full font-source transition focus-within:border-blue-400">
-        <label className="bg-[#171717] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:171717 transition">
+        <label className="bg-[#171717] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:bg-[#171717] transition">
           Choose File
           <input
             type="file"
@@ -616,7 +616,7 @@ const ProfileForm = ({ formVariant: formVariantProp }) => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#171717] text-white rounded font-bold shadow-md hover:171717 disabled:opacity-70"
+            className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#171717] text-white rounded font-bold shadow-md hover:bg-[#171717] disabled:opacity-70"
           >
             {isSubmitting ? "Saving..." : "Save"}
           </button>

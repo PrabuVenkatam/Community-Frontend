@@ -1942,7 +1942,7 @@ const FormInput = ({ field, value, onChange, inputName }) => {
     return (
       <div className="space-y-2">
         <div className="flex relative border border-gray-200 rounded overflow-hidden h-10 w-full font-source transition focus-within:border-blue-400">
-          <label className="bg-[#171717] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:171717 transition">
+          <label className="bg-[#171717] text-xs md:text-sm text-white px-3 md:px-5 py-2.5 font-medium cursor-pointer whitespace-nowrap hover:bg-[#171717] transition">
             Choose File
             <input
               type="file"
@@ -2478,7 +2478,7 @@ const FormLayout = ({
           <button type="button" onClick={() => navigate(-1)} className="w-full md:w-auto px-6 md:px-10 py-2 border border-gray-300 rounded text-gray-500 font-bold hover:bg-gray-50">
             Cancel
           </button>
-          <button type="submit" disabled={isSubmitting} className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#171717] text-white rounded font-bold shadow-md hover:171717 disabled:opacity-70">
+          <button type="submit" disabled={isSubmitting} className="w-full md:w-auto px-6 md:px-10 py-2 bg-[#171717] text-white rounded font-bold shadow-md hover:bg-[#171717] disabled:opacity-70">
             {isSubmitting ? "Saving..." : submitLabel || (editData ? "Update" : "Save")}
           </button>
         </div>

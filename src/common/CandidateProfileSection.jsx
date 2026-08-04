@@ -267,13 +267,13 @@ const CandidateProfileSection = ({
           {/* Download Resume Box */}
           <div
             onClick={handleOpenAndDownloadResume}
-            className="w-full sm:w-auto min-w-[280px] bg-white border border-gray-200 rounded-[16px] p-4 flex items-center justify-between gap-4 shadow-xs hover:border-[171717]/40 transition-colors cursor-pointer group"
+            className="w-full sm:w-auto min-w-[280px] bg-white border border-gray-200 rounded-[16px] p-4 flex items-center justify-between gap-4 shadow-xs hover:border-[#171717]/40 transition-colors cursor-pointer group"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[171717] flex items-center justify-center text-white shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-[#171717] flex items-center justify-center text-white shrink-0 group-hover:scale-105 transition-transform">
                 <FileText size={20} />
               </div>
-              <span className="font-semibold text-[15px] text-[#1D2939] group-hover:text-[171717] transition-colors">Resume.Pdf</span>
+              <span className="font-semibold text-[15px] text-[#1D2939] group-hover:text-[#171717] transition-colors">Resume.Pdf</span>
             </div>
             <button
               type="button"

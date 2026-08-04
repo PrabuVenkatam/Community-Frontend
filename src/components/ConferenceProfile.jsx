@@ -582,7 +582,7 @@ const ConferenceProfile = () => {
                             <button
                                 onClick={handleConfirmAddPosts}
                                 disabled={isSubmitting || selectedFiles.length === 0}
-                                className="h-11 rounded-[10px] bg-[#171717] text-white text-[15px] font-semibold hover:bg-[#0770ad] disabled:opacity-50 disabled:bg-[#171717]/70"
+                                className="h-11 rounded-[10px] bg-[#171717] text-white text-[15px] font-semibold hover:bg-[#171717] disabled:opacity-50 disabled:bg-[#171717]/70"
                             >
                                 {isSubmitting ? "Uploading..." : `Confirm ${selectedFiles.length > 0 ? `(${selectedFiles.length})` : ''}`}
                             </button>
