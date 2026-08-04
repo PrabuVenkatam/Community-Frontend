@@ -23,7 +23,7 @@ const Freelance = ({ module = 'admin' }) => {
     const { setTitle } = useTitle();
     const navigate = useNavigate();
     const { user, dynamicPath } = useMain();
-    useEffect(() => { setTitle("Freelances"); }, []);
+    useEffect(() => { setTitle("Projects"); }, []);
 
     useEffect(() => {
         fetchFreelances(activeTab);
@@ -54,7 +54,7 @@ const Freelance = ({ module = 'admin' }) => {
             }));
             setFreelances(mappedData);
         } catch (error) {
-            toast.error(error?.response?.data?.message || 'Failed to fetch freelances');
+            toast.error(error?.response?.data?.message || 'Failed to fetch projects');
             setFreelances([]);
         } finally {
             setIsLoading(false);

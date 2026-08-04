@@ -284,7 +284,7 @@ const CollegeProfile = () => {
                   />
                   <button
                     onClick={() => setIsPasswordModalOpen(true)}
-                    className="px-[16px] py-2.5 rounded-full bg-[#0086C9] text-white text-[15px] font-semibold shadow-sm hover:bg-[#026AA2] transition-colors"
+                    className="px-[16px] py-2.5 rounded-full bg-[#171717] text-white text-[15px] font-semibold shadow-sm hover:bg-[#026AA2] transition-colors"
                   >
                     Set Password
                   </button>
@@ -451,7 +451,7 @@ const CollegeProfile = () => {
                   type="text"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-12 px-4 rounded-[12px] border border-[#D0D5DD] outline-none focus:ring-1 focus:ring-[#0086C9] transition-all"
+                  className="w-full h-12 px-4 rounded-[12px] border border-[#D0D5DD] outline-none focus:ring-1 focus:ring-[#171717] transition-all"
                 />
               </div>
 
@@ -461,7 +461,7 @@ const CollegeProfile = () => {
                   type="text"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full h-12 px-4 rounded-[12px] border border-[#D0D5DD] outline-none focus:ring-1 focus:ring-[#0086C9] transition-all"
+                  className="w-full h-12 px-4 rounded-[12px] border border-[#D0D5DD] outline-none focus:ring-1 focus:ring-[#171717] transition-all"
                 />
               </div>
             </div>

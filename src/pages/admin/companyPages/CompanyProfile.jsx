@@ -309,7 +309,7 @@ const CompanyProfile = ({ module }) => {
                   )}
                 </p>
                 <p className="text-[14px] text-secondary font-medium mt-3">
-                  <span className="text-[#110E7E] font-bold">
+                  <span className="text-[#171717] font-bold">
                     {followers?.count} {followers?.count === 1 ? "Follower" : "Followers"}
                   </span>
                   <span className="mx-4 text-[#D0D5DD]">.</span>
@@ -341,13 +341,13 @@ const CompanyProfile = ({ module }) => {
 
                     <button
                       onClick={() => setIsPasswordModalOpen(true)}
-                      className="px-[20px] py-3 rounded-full bg-[#0086C9] text-white text-[15px] font-bold shadow-md hover:bg-[#026AA2] transition-all active:scale-95"
+                      className="px-[20px] py-3 rounded-full bg-[#171717] text-white text-[15px] font-bold shadow-md hover:bg-[#026AA2] transition-all active:scale-95"
                     >
                       Set Password
                     </button>
                   </>
                 )}
-                {/* bg-[#110E7E] */}
+                {/* bg-[#171717] */}
                 {
                   user?.role !== "admin" &&
                   <button
@@ -378,11 +378,11 @@ const CompanyProfile = ({ module }) => {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`relative px-6 py-4 text-[18px] font-medium transition-colors ${activeTab === tab ? 'text-[#110E7E] font-semibold' : 'text-[#475467] hover:text-[#344054]'
+              className={`relative px-6 py-4 text-[18px] font-medium transition-colors ${activeTab === tab ? 'text-[#171717] font-semibold' : 'text-[#475467] hover:text-[#344054]'
                 }`}
             >
               {tab}
-              {activeTab === tab && <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-[#110E7E] rounded-full" />}
+              {activeTab === tab && <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-[#171717] rounded-full" />}
             </button>
           ))}
         </div>
@@ -603,7 +603,7 @@ const CompanyProfile = ({ module }) => {
                   type="text"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  className="w-full h-12 px-4 rounded-[12px] border border-[#D0D5DD] outline-none focus:ring-1 focus:ring-[#0086C9]"
+                  className="w-full h-12 px-4 rounded-[12px] border border-[#D0D5DD] outline-none focus:ring-1 focus:ring-[#171717]"
                 />
               </div>
 
@@ -613,7 +613,7 @@ const CompanyProfile = ({ module }) => {
                   type="text"
                   value={confirmPassword}
                   onChange={(event) => setConfirmPassword(event.target.value)}
-                  className="w-full h-12 px-4 rounded-[12px] border border-[#D0D5DD] outline-none focus:ring-1 focus:ring-[#0086C9]"
+                  className="w-full h-12 px-4 rounded-[12px] border border-[#D0D5DD] outline-none focus:ring-1 focus:ring-[#171717]"
                 />
               </div>
             </div>
