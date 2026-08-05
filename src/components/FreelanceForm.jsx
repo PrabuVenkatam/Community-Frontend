@@ -31,7 +31,8 @@ const freelanceFormConfig = [
         options: ["No Fixed Duration", "1 Month", "3 Months", "6 Months"],
       },
       { name: "applicationDeadline", label: "Application Deadline", type: "date" },
-      { name: "jobStartDate", label: "Job Start Date", type: "date" },
+      { name: "jobStartDate", label: "Project Start Date", type: "date" },
+      { name: "jobEndDate", label: "Project End Date", type: "date" },
       { name: "salary", label: "Salary", type: "number" },
     ],
   },
@@ -134,7 +135,7 @@ const FreelanceForm = () => {
   const navigate =useNavigate()
   const {setTitle}=useTitle()
   useEffect(()=>{
-setTitle("Freelance Form")
+    setTitle("Projects Form")
   },[])
 
 const handleSubmit = async (_, payload) => {
@@ -162,7 +163,7 @@ const handleSubmit = async (_, payload) => {
       editData={editData}
       onSubmit={handleSubmit}
       staticOverrides={{ companyName: organizerName }}
-      dateFields={["internStartDate", "applicationDeadline"]}
+      dateFields={["jobStartDate", "jobEndDate", "applicationDeadline"]}
     />
   );
 };

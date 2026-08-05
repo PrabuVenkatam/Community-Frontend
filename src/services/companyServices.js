@@ -12,3 +12,17 @@ export const apiGetcompanyDashboard = async () => {
     );
   }
 };
+
+export const apiGetAllCompanies = async () => {
+  try {
+    const res = await API.get("/company/all");
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};

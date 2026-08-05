@@ -122,7 +122,7 @@ const Freelance = ({ module = 'admin' }) => {
                             onClick={() => handleTabChange(tab.value)}
                             className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${activeTab === tab.value
                                     ? 'bg-[#171717] text-white shadow'
-                                    : 'bg-white text-[#64748B] border border-[#E2E8F0] hover:bg-blue-50 hover:text-blue-600'
+                                    : 'bg-white text-[#64748B] border border-[#E2E8F0] hover:bg-blue-50 hover:text-[#171717]'
                                 }`}
                         >
                             {tab.label}
@@ -140,7 +140,7 @@ const Freelance = ({ module = 'admin' }) => {
                 searchPlaceholder="Search ..."
                 onSearch={handleSearch}
                 showAddButton={true}
-                addButtonLabel="Add Freelance"
+                addButtonLabel="Add Projects"
                 addButtonIcon={<Plus size={18} />}
                 onAdd={() => navigate(`/${module}/jobs/freelance-form`)}
                 showPagination={true}

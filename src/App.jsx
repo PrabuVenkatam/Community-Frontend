@@ -45,6 +45,9 @@ import CollegeDashboard from "./pages/admin/colegePages/CollegeDashboard";
 import ScrollToTop from "./common/ScrollTop";
 import MobileJobRedirect from "./pages/MobileJobReferel";
 import MobileEventRedirect from "./pages/MobileEventRedirect";
+import Partners from "./pages/admin/companyPages/Partners";
+import Users from "./pages/admin/userPages/Users";
+import Subscriptions from "./pages/admin/subscriptionPages/Subscriptions";
 
 const App = () => {
   const {fetchCurrentUser,isHomeLoading} =useMain()
@@ -114,6 +117,8 @@ const App = () => {
               <Route path="jobs/freelance" element={<Freelance />} />
               <Route path="jobs/freelance-form" element={<FreelanceForm />} />
               <Route path="jobs/freelance-profile/:id" element={<FreelanceProfile />} />
+              <Route path="users" element={<Users />} />
+              <Route path="subscriptions" element={<Subscriptions />} />
             </Route>
       
 </Route>
@@ -149,6 +154,7 @@ const App = () => {
               <Route path="company-form" element={<CompanyForm module="company" />} />
               <Route path="company-profile/:id" element={<CompanyProfile module="company" />} />
               <Route path="company-profile" element={<CompanyProfile module="company" />} />
+              <Route path="partners" element={<Partners />} />
               <Route path="jobs/internship" element={<Internship module="company" />} />
               <Route path="jobs/internship-form" element={<InternshipForm />} />
               <Route path="jobs/internship-profile/:id" element={<JobsProfile module="company" />} />

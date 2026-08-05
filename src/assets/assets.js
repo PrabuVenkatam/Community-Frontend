@@ -13,6 +13,9 @@ import sem_i from "./images/sem_i.svg"
 import edit from "./images/edit.svg"
 import up_i from "./images/up_i.svg"
 import down_i from "./images/down_i.svg"
+import partners from "./images/partners.png"
+import subscription from "./images/subscription.png"
+import user from "./images/user.png"
 
 
 
@@ -29,5 +32,8 @@ export const assets ={
    jobs_i,
    sem_i,
    edit, up_i, down_i,
-   gradEnvyLogo
+   gradEnvyLogo,
+   partners,
+   subscription,
+   user
 }

@@ -57,7 +57,7 @@ const Dashboard = () => {
     { key: 'events', title: 'Active Events' },
     { key: 'seminars', title: 'Active Seminar' },
     { key: 'internships', title: 'Active Internship' },
-    { key: 'freelances', title: 'Active Freelance' },
+    { key: 'freelances', title: 'Active Projects' },
   ];
 
   // ── Table columns ─────────────────────────────────────────────────────────

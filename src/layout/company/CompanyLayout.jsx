@@ -52,7 +52,8 @@ const CompanyLayout = () => {
    const menuItems = [
      { name: "Dashboard", path: "/company/dashboard", icon: assets.dash_i },
      { name: 'Internship', path: '/company/jobs/internship', icon: assets.jobs_i },
-     { name: 'Freelance', path: '/company/jobs/freelance', icon: assets.jobs_i },
+     { name: 'Projects', path: '/company/jobs/freelance', icon: assets.jobs_i },
+     { name: 'Partners', path: '/company/partners', icon: assets.partners },
      { name: 'Profile', path: '/company/company', icon: assets.comp_i },
    ];
  

@@ -459,3 +459,33 @@ export const generateCertificate = async (payload) => {
     );
   }
 };
+
+// Get all registered users
+export const getAllRegisteredUsers = async () => {
+  try {
+    const res = await API.get("/users/all-registered");
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
+
+// Get active subscriptions
+export const getActiveSubscriptions = async () => {
+  try {
+    const res = await API.get("/subscriptions/active-users");
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
