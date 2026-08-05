@@ -284,7 +284,7 @@ const CollegeProfile = () => {
                   />
                   <button
                     onClick={() => setIsPasswordModalOpen(true)}
-                    className="px-[16px] py-2.5 rounded-full bg-[#171717] text-white text-[15px] font-semibold shadow-sm hover:bg-[#026AA2] transition-colors"
+                    className="px-[16px] py-2.5 rounded-full bg-[#171717] text-white text-[15px] font-semibold shadow-sm hover:bg-[#171717] transition-colors"
                   >
                     Set Password
                   </button>

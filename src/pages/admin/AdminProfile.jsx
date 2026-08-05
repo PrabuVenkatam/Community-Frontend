@@ -341,7 +341,7 @@ const CompanyProfile = ({ module }) => {
 
                     <button
                       onClick={() => setIsPasswordModalOpen(true)}
-                      className="px-[20px] py-3 rounded-full bg-[#171717] text-white text-[15px] font-bold shadow-md hover:bg-[#026AA2] transition-all active:scale-95"
+                      className="px-[20px] py-3 rounded-full bg-[#171717] text-white text-[15px] font-bold shadow-md hover:bg-[#171717] transition-all active:scale-95"
                     >
                       Set Password
                     </button>
