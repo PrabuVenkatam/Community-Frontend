@@ -119,6 +119,7 @@ const AdminLayout = () => {
     { name: "Conference",  path: "/admin/conference",  icon: assets.conf_i },
     { name: "Events",      path: "/admin/events",      icon: assets.event_i },
     { name: "Seminar",     path: "/admin/seminar",     icon: assets.sem_i },
+    { name: "Influencers",   path: "/admin/influencer",    icon: assets.user },
     {
       name: "Jobs",
       icon: assets.jobs_i,

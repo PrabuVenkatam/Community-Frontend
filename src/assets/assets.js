@@ -16,11 +16,17 @@ import down_i from "./images/down_i.svg"
 import partners from "./images/partners.png"
 import subscription from "./images/subscription.png"
 import user from "./images/user.png"
-
-
+import landing_bg from "./images/landing_bg.png"
+import landing_logo from "./images/landing_logo.png"
+import gradEnvyGlobe from "./images/gradEnvyGlobe.png"
+import landingLaptop from "./images/landingLaptop.png"
 
 export const assets ={
    login_bg,
+   landing_bg,
+   landing_logo,
+   gradEnvyGlobe,
+   landingLaptop,
    logo,
    doc,
    book_i,

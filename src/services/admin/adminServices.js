@@ -489,3 +489,83 @@ export const getActiveSubscriptions = async () => {
     );
   }
 };
+
+// Create or Update influencer
+export const createInfluencer = async (payload) => {
+  try {
+    const isFormData = payload instanceof FormData;
+    const res = await API.post("/admin/influencer", payload, {
+      headers: {
+        "Content-Type": isFormData ? "multipart/form-data" : "application/json",
+      },
+    });
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
+
+// Get all influencers
+export const getAllInfluencers = async () => {
+  try {
+    const res = await API.get("/admin/influencers");
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
+
+// Set influencer password
+export const setInfluencerPassword = async (payload) => {
+  try {
+    const res = await API.post("/admin/influencer/set-password", payload);
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
+
+// Get influencer by ID
+export const getInfluencerById = async (id) => {
+  try {
+    const res = await API.get(`/admin/influencer/${id}`);
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};
+
+// Toggle influencer active/inactive status
+export const toggleInfluencerStatus = async (id) => {
+  try {
+    const res = await API.patch(`/admin/influencer/toggle-status/${id}`);
+    return res.data;
+  } catch (error) {
+    throw (
+      error.response?.data || {
+        status: false,
+        message: error.message,
+      }
+    );
+  }
+};

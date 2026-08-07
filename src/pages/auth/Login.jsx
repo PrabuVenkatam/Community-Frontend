@@ -78,10 +78,11 @@ const Login = () => {
       });
       console.log(res)
       if (res?.status) {
-        let role = res?.data.user.role
-        if (role === "admin" || role === "college" || role === "")
-          toast.success(res?.message || "Login successfully")
-        await fetchCurrentUser()
+        let role = res?.data?.user?.role;
+        if (role === "admin" || role === "college" || role === "company" || role === "influencer" || role === "") {
+          toast.success(res?.message || "Login successfully");
+        }
+        await fetchCurrentUser();
       }
       else {
         toast.error(res.message || "Login Failed")

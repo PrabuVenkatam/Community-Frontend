@@ -18,6 +18,10 @@ const ROLE_CONFIG = {
     dashboard: "/company/dashboard",
     routePrefix: "/company",
   },
+  influencer: {
+    dashboard: "/influencer/dashboard",
+    routePrefix: "/influencer",
+  },
 };
 
 const AUTH_ROUTE_PREFIX = "/auth";

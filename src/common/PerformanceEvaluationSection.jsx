@@ -36,9 +36,9 @@ const PerformanceEvaluationSection = ({
     { key: 'communication', title: 'Communication' },
     { key: 'technicalSkills', title: 'Technical Skills' },
     { key: 'problemSolving', title: 'Problem Solving' },
-    { key: 'teamwork', title: 'Teamwork' },
-    { key: 'professionalism', title: 'Professionalism' },
-    { key: 'learningAbility', title: 'Learning Ability' },
+    // { key: 'teamwork', title: 'Teamwork' },
+    // { key: 'professionalism', title: 'Professionalism' },
+    // { key: 'learningAbility', title: 'Learning Ability' },
   ];
 
   const [ratings, setRatings] = useState({

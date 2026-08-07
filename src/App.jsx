@@ -7,6 +7,8 @@ import MainLayout from "./layout/MainLayout";
 import CollegeLayout from "./layout/college/CollegeLayout";
 import CompanyLayout from "./layout/company/CompanyLayout";
 import Login from "./pages/auth/Login";
+import LandingPage from "./landing_page/LandingPage";
+import PrivacyPolicy from "./landing_page/PrivacyPolicy";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ChangePassword from "./pages/auth/CreatePassword";
 import HomeLayout from "./layout/HomeLayout";
@@ -48,6 +50,14 @@ import MobileEventRedirect from "./pages/MobileEventRedirect";
 import Partners from "./pages/admin/companyPages/Partners";
 import Users from "./pages/admin/userPages/Users";
 import Subscriptions from "./pages/admin/subscriptionPages/Subscriptions";
+import InfluencerList from "./pages/admin/influencerPages/InfluencerList";
+import InfluencerForm from "./components/InfluencerForm";
+import InfluencerProfile from "./pages/admin/influencerPages/InfluencerProfile";
+import InfluencerLayout from "./layout/influencer/InfluencerLayout";
+import InfluencerDashboard from "./pages/influencer/InfluencerDashboard";
+import InfluencerReferralList from "./pages/influencer/InfluencerReferralList";
+import InfluencerSubscriptionList from "./pages/influencer/InfluencerSubscriptionList";
+import InfluencerProfileTab from "./pages/influencer/InfluencerProfileTab";
 
 const App = () => {
   const {fetchCurrentUser,isHomeLoading} =useMain()
@@ -69,8 +79,11 @@ const App = () => {
         <ScrollHandler />
         <Routes>
 
-          {/* Root redirect */}
-          <Route path="/" element={<Navigate to="/auth/login" replace />} />
+          {/* Root & Landing routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/job" element={<MobileJobRedirect />} />
           <Route path="/event" element={<MobileEventRedirect />} />
           {/* Auth routes */}
@@ -119,6 +132,9 @@ const App = () => {
               <Route path="jobs/freelance-profile/:id" element={<FreelanceProfile />} />
               <Route path="users" element={<Users />} />
               <Route path="subscriptions" element={<Subscriptions />} />
+              <Route path="influencer" element={<InfluencerList />} />
+              <Route path="influencer-form" element={<InfluencerForm />} />
+              <Route path="influencer-profile/:id" element={<InfluencerProfile />} />
             </Route>
       
 </Route>
@@ -161,6 +177,18 @@ const App = () => {
               <Route path="jobs/freelance" element={<Freelance module="company" />} />
               <Route path="jobs/freelance-form" element={<FreelanceForm />} />
               <Route path="jobs/freelance-profile/:id" element={<FreelanceProfile module="company" />} />
+            </Route>
+          </Route>
+
+          {/* Influencer routes */}
+          <Route element={<MainLayout />}>
+            <Route path="/influencer" element={<InfluencerLayout />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard" element={<InfluencerDashboard />} />
+              <Route path="referral-list" element={<InfluencerReferralList />} />
+              <Route path="subscription-list" element={<InfluencerSubscriptionList />} />
+              <Route path="profile" element={<InfluencerProfileTab />} />
+              <Route path="influencer-form" element={<InfluencerForm />} />
             </Route>
           </Route>
 
