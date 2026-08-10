@@ -5,6 +5,7 @@ import { assets } from "../../assets/assets";
 const Sidebar = () => {
   const menuItems = [
     { name: "Dashboard", path: "/company/dashboard", icon: assets.dash_i },
+    { name: 'Jobs', path: '/company/jobs/job', icon: assets.jobs_i },
     { name: 'Internship', path: '/company/jobs/internship', icon: assets.jobs_i },
     { name: 'Projects', path: '/company/jobs/freelance', icon: assets.jobs_i },
     { name: 'Partners', path: '/company/partners', icon: assets.partners },

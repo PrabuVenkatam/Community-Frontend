@@ -21,6 +21,7 @@ import ProfileForm from "./common/ProfileForm";
 import Profile from "./common/Profile";
 import JobsProfile from "./common/JobsProfile";
 import Internship from "./pages/admin/jobsPages/Internship";
+import Job from "./pages/admin/jobsPages/Job";
 import Freelance from "./pages/admin/jobsPages/Freelance";
 import College from "./pages/admin/colegePages/College";
 import CollegeProfile from "./pages/admin/colegePages/CollegeProfile";
@@ -35,6 +36,7 @@ import SeminarForm from "./components/SeminarForm";
 import ConferenceForm from "./components/ConferenceForm";
 import FreelanceForm from "./components/FreelanceForm";
 import InternshipForm from "./components/InternshipForm";
+import JobForm from "./components/JobForm";
 import CompetitionProfile from "./components/CompetitionProfile";
 import SeminarProfile from "./components/SeminarProfile";
 import ConferenceProfile from "./components/ConferenceProfile";
@@ -126,7 +128,10 @@ const App = () => {
               <Route path="jobs/add-form" element={<ProfileForm />} />
               <Route path="jobs/internship" element={<Internship />} />
               <Route path="jobs/internship-form" element={<InternshipForm />} />
-              <Route path="jobs/internship-profile/:id" element={<JobsProfile />} />
+              <Route path="jobs/internship-profile/:id" element={<JobsProfile jobType="Internship" />} />
+              <Route path="jobs/job" element={<Job />} />
+              <Route path="jobs/job-form" element={<JobForm />} />
+              <Route path="jobs/job-profile/:id" element={<JobsProfile jobType="Job" />} />
               <Route path="jobs/freelance" element={<Freelance />} />
               <Route path="jobs/freelance-form" element={<FreelanceForm />} />
               <Route path="jobs/freelance-profile/:id" element={<FreelanceProfile />} />
@@ -173,7 +178,10 @@ const App = () => {
               <Route path="partners" element={<Partners />} />
               <Route path="jobs/internship" element={<Internship module="company" />} />
               <Route path="jobs/internship-form" element={<InternshipForm />} />
-              <Route path="jobs/internship-profile/:id" element={<JobsProfile module="company" />} />
+              <Route path="jobs/internship-profile/:id" element={<JobsProfile module="company" jobType="Internship" />} />
+              <Route path="jobs/job" element={<Job module="company" />} />
+              <Route path="jobs/job-form" element={<JobForm />} />
+              <Route path="jobs/job-profile/:id" element={<JobsProfile module="company" jobType="Job" />} />
               <Route path="jobs/freelance" element={<Freelance module="company" />} />
               <Route path="jobs/freelance-form" element={<FreelanceForm />} />
               <Route path="jobs/freelance-profile/:id" element={<FreelanceProfile module="company" />} />

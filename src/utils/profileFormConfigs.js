@@ -541,6 +541,46 @@ export const internshipFormConfig = [
   },
 ];
 
+export const jobFormConfig = [
+  {
+    title: 'Basic Details',
+    type: 'static',
+    fields: [
+      { label: 'Job Type', type: 'radio', options: ['Full Time', 'Part Time', 'Contract'] },
+      { label: 'Job Title', type: 'text' },
+      { label: 'Company Name', type: 'select', options: ['Select Option', 'Company A', 'Company B', 'Company C'] },
+      { label: 'Location', type: 'text' },
+      { label: 'Mode', type: 'select', options: ['Online', 'Offline', 'Hybrid'] },
+      { label: 'Total Openings', type: 'number' },
+      { label: 'Duration', type: 'select', options: ['No Fixed Duration', '1 Year', '2 Years', 'Permanent'] },
+      { label: 'Job Start Date', type: 'date' },
+      { label: 'Application Deadline', type: 'date' },
+      { label: 'Salary', type: 'number' },
+    ],
+  },
+  {
+    title: 'Responsibilities',
+    type: 'dynamic',
+    key: 'responsibilities',
+    dynamicStyle: 'grid-6',
+    initialRows: 6,
+    fields: [{ label: 'Responsibility', type: 'text', colSpan: 'md:col-span-11' }],
+  },
+  {
+    title: 'Eligibility Criteria',
+    type: 'dynamic',
+    key: 'eligibility',
+    dynamicStyle: 'grid-6',
+    initialRows: 6,
+    fields: [{ label: 'Eligibility Criteria', type: 'text', colSpan: 'md:col-span-11' }],
+  },
+  {
+    title: 'Project Description',
+    type: 'static',
+    fields: [{ label: 'Description', type: 'textarea', span: 2 }],
+  },
+];
+
 
 
 export const freelanceFormConfig = [
@@ -742,6 +782,12 @@ export const internshipFormVariant = {
   formConfig: internshipFormConfig,
 };
 
+export const jobFormVariant = {
+  title: 'Job Form',
+  descriptionLabel: '',
+  formConfig: jobFormConfig,
+};
+
 export const seminarFormVariant = {
   title: 'Seminar Form',
   descriptionLabel: '',
@@ -777,6 +823,7 @@ export const formVariants = {
   competition: competitionFormVariant,
   seminar: seminarFormVariant,
   internship: internshipFormVariant,
+  job: jobFormVariant,
   freelance: freelanceFormVariant,
   company: companyFormVariant,
   college: collegeFormVariant,

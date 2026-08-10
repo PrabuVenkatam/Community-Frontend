@@ -156,36 +156,37 @@ const AttendanceSection = ({
   // ----------------------------------------------------
   if (mode === 'list') {
     return (
-      <DynamicTable
-        columns={listColumns}
-        dataSource={filteredAttendanceData}
-        rowKey="id"
-        onRowClick={onRowClick}
-        showSearch={true}
-        searchPlaceholder="Search ..."
-        onSearch={(val) => {
-          setSearch(val);
-          setCurrentPage(1);
-        }}
-        showAddButton={true}
-        addButtonLabel="Add Attendance"
-        addButtonIcon={<Plus size={18} />}
-        onAdd={() => onModeChange?.('mark')}
-        showPagination={true}
-        currentPage={currentPage}
-        pageSize={10}
-        onPageChange={setCurrentPage}
-        loading={isLoading}
-        plain={true}
-      />
+      <div className="bg-white rounded-[20px] border border-gray-100">
+        <DynamicTable
+          columns={listColumns}
+          dataSource={filteredAttendanceData}
+          rowKey="id"
+          onRowClick={onRowClick}
+          showSearch={true}
+          searchPlaceholder="Search ..."
+          onSearch={(val) => {
+            setSearch(val);
+            setCurrentPage(1);
+          }}
+          showAddButton={true}
+          addButtonLabel="Add Attendance"
+          addButtonIcon={<Plus size={18} />}
+          onAdd={() => onModeChange?.('mark')}
+          showPagination={true}
+          currentPage={currentPage}
+          pageSize={10}
+          onPageChange={setCurrentPage}
+          loading={isLoading}
+        />
+      </div>
     );
   }
 
   // ----------------------------------------------------
-  // VIEW MODE 2: ADD ATTENDANCE PAGE
+  // VIEW MODE 2: ADD / VIEW ATTENDANCE PAGE
   // ----------------------------------------------------
   return (
-    <div className="space-y-6 pt-2">
+    <div className="bg-white rounded-[20px] border border-gray-100 p-6 space-y-6">
       {/* Title & Non-Editable Date Section */}
       <div className="space-y-4">
         <h2 className="text-[18px] md:text-[20px] font-bold text-primary">
@@ -211,13 +212,12 @@ const AttendanceSection = ({
         )}
       </div>
 
-      {/* Dynamic Candidates Table - NO SEARCH BAR, NO PAGINATION */}
+      {/* Dynamic Candidates Table */}
       <DynamicTable
         columns={detailColumns}
         dataSource={candidateList}
         rowKey="id"
         showPagination={false}
-        plain={true}
       />
 
       {/* Bottom Save Button */}

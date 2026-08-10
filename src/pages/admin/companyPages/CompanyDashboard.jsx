@@ -50,7 +50,7 @@ const CompanyDashboard = () => {
 
     { key: 'totalFollowers', title: 'Total followers', highlighted: true },
     { key: 'activeInternships', title: 'Active Internship' },
-    { key: 'activeFreelances', title: 'Active Freelance' },
+    { key: 'activeFreelances', title: 'Active Projects' },
   ];
 
   // ── Table columns ─────────────────────────────────────────────────────────

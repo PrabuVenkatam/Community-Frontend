@@ -20,6 +20,8 @@ import landing_bg from "./images/landing_bg.png"
 import landing_logo from "./images/landing_logo.png"
 import gradEnvyGlobe from "./images/gradEnvyGlobe.png"
 import landingLaptop from "./images/landingLaptop.png"
+import project from "./images/project.png"
+import internship from "./images/internship.png"
 
 export const assets ={
    login_bg,
@@ -41,5 +43,7 @@ export const assets ={
    gradEnvyLogo,
    partners,
    subscription,
-   user
+   user,
+   project, 
+   internship
 }

@@ -258,7 +258,6 @@ export const getAllInternships = async (status = "pending") => {
   return response.data;
 };
 
-
 export const getInternshipById = async (id) => {
   const response = await API.get(`/internship/getById/${id}`);
   return response.data;
@@ -276,6 +275,44 @@ export const getAppliedCandidateProfile = async (applicationId) => {
 
 export const updateCandidateApplicationStatus = async (applicationId, status) => {
   const response = await API.patch(`/internship/application-status/${applicationId}`, { status });
+  return response.data;
+};
+
+// ── JOB SERVICES ──────────────────────────────────────────────────────────
+export const createJob = async (payload) => {
+  const response = await API.post("/job/create", payload);
+  return response.data;
+};
+
+export const updateJob = async (id, data) => {
+  const response = await API.put(`/job/update/${id}`, data);
+  return response.data;
+};
+
+export const getAllJobs = async (status = "pending") => {
+  const response = await API.get("/job/all", {
+    params: { status },
+  });
+  return response.data;
+};
+
+export const getJobById = async (id) => {
+  const response = await API.get(`/job/getById/${id}`);
+  return response.data;
+};
+
+export const toggleJobStatus = async (id) => {
+  const response = await API.patch(`/job/toggle-status/${id}`);
+  return response.data;
+};
+
+export const getAppliedCandidateProfileJob = async (applicationId) => {
+  const response = await API.get(`/job/candidate-profile/${applicationId}`);
+  return response.data;
+};
+
+export const updateCandidateApplicationStatusJob = async (applicationId, status) => {
+  const response = await API.patch(`/job/application-status/${applicationId}`, { status });
   return response.data;
 };
 

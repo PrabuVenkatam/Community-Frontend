@@ -15,14 +15,19 @@ import {
   getSelectedCandidates,
   saveAttendance,
   getAttendanceHistory,
-  getAttendanceDetails
+  getAttendanceDetails,
+  getJobById,
+  toggleJobStatus,
+  getAppliedCandidateProfileJob,
+  updateCandidateApplicationStatusJob,
 } from '../services/admin/adminServices';
 import ConfirmActionButton from './ConfirmActionButton';
 import { useTitle } from '../context/AdminTitle';
 import StatusActionButtons from './AcceptRejectButtons';
 import { useMain } from '../context/MainContext';
 
-const JobsProfile = ({ module = 'admin' }) => {
+const JobsProfile = ({ module = 'admin', jobType = 'Internship' }) => {
+  const isJob = jobType === 'Job' || window.location.pathname.includes('/job-profile');
   const [activeTab, setActiveTab] = useState('overview');
   const [attendanceSubView, setAttendanceSubView] = useState('list'); // 'list' | 'view' | 'mark'
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
@@ -67,9 +72,9 @@ const JobsProfile = ({ module = 'admin' }) => {
         setTitle('Attendance Profile');
       }
     } else {
-      setTitle('Internship Profile');
+      setTitle(isJob ? 'Job Profile' : 'Internship Profile');
     }
-  }, [selectedCandidateProfile, isEvaluatingPerformance, activeTab, isAttendanceProfile, attendanceSubView, setTitle]);
+  }, [selectedCandidateProfile, isEvaluatingPerformance, activeTab, isAttendanceProfile, attendanceSubView, setTitle, isJob]);
 
   // Reset scroll position to top when switching tabs or candidate subviews
   useEffect(() => {
@@ -86,8 +91,8 @@ const JobsProfile = ({ module = 'admin' }) => {
   const updateStatus = async (status, rejected_reason) => {
     try {
       setStatusLoading(true);
-      const response = await updateJobStatus(id, 'internship', status, rejected_reason);
-      if (response.success) {
+      const response = await updateJobStatus(id, isJob ? 'job' : 'internship', status, rejected_reason);
+      if (response.success || response.status) {
         setInternship(response.data);
         toast.success(response.message);
       } else {
@@ -110,13 +115,15 @@ const JobsProfile = ({ module = 'admin' }) => {
 
       try {
         setIsLoading(true);
-        const response = await getInternshipById(id);
-        if (response.success) {
-          setInternship(response.data.internship);
-          setApplications(response.data.applications || { count: 0, list: [] });
+        const fetchFn = isJob ? getJobById : getInternshipById;
+        const response = await fetchFn(id);
+        if (response.success || response.status) {
+          const profileData = response.data?.job || response.data?.internship || response.data;
+          setInternship(profileData);
+          setApplications(response.data?.applications || { count: 0, list: [] });
         }
       } catch (error) {
-        toast.error(error?.response?.data?.message || 'Failed to load internship profile');
+        toast.error(error?.response?.data?.message || `Failed to load ${isJob ? 'job' : 'internship'} profile`);
         setInternship(null);
       } finally {
         setIsLoading(false);
@@ -124,7 +131,7 @@ const JobsProfile = ({ module = 'admin' }) => {
     };
 
     fetchInternship();
-  }, [id]);
+  }, [id, isJob]);
 
   // Fetch Selected Candidates API
   const [selectedCandidatesList, setSelectedCandidatesList] = useState([]);
@@ -246,11 +253,12 @@ const JobsProfile = ({ module = 'admin' }) => {
 
     try {
       setIsTogglingStatus(true);
-      const response = await toggleInternshipStatus(internship._id);
+      const toggleFn = isJob ? toggleJobStatus : toggleInternshipStatus;
+      const response = await toggleFn(internship._id);
       setInternship(response?.data || internship);
-      toast.success(response?.message || 'Internship status updated');
+      toast.success(response?.message || `${isJob ? 'Job' : 'Internship'} status updated`);
     } catch (error) {
-      toast.error(error?.response?.data?.message || 'Failed to update internship status');
+      toast.error(error?.response?.data?.message || `Failed to update ${isJob ? 'job' : 'internship'} status`);
     } finally {
       setIsTogglingStatus(false);
     }
@@ -270,13 +278,13 @@ const JobsProfile = ({ module = 'admin' }) => {
     return (
       <div className="bg-[#f8f9fa] min-h-screen">
         <section className="bg-white rounded-[16px] md:rounded-[24px] border border-gray-200 p-6 shadow-sm space-y-4">
-          <p className="text-secondary">Internship details not found.</p>
+          <p className="text-secondary">{isJob ? 'Job' : 'Internship'} details not found.</p>
           <button
             type="button"
-            onClick={() => navigate(`/${module}/jobs/internship`)}
+            onClick={() => navigate(`/${module}/jobs/${isJob ? 'job' : 'internship'}`)}
             className="bg-[#171717] text-white px-6 py-2 rounded font-bold"
           >
-            Back to Internship List
+            Back to {isJob ? 'Job' : 'Internship'} List
           </button>
         </section>
       </div>
@@ -287,7 +295,8 @@ const JobsProfile = ({ module = 'admin' }) => {
     const appId = candidateRecord?.applicationId || candidateRecord?._id;
     if (appId) {
       try {
-        const response = await getAppliedCandidateProfile(appId);
+        const getCandidateFn = isJob ? getAppliedCandidateProfileJob : getAppliedCandidateProfile;
+        const response = await getCandidateFn(appId);
         if (response.success && response.data) {
           setSelectedCandidateProfile(response.data);
           return;
@@ -334,7 +343,8 @@ const JobsProfile = ({ module = 'admin' }) => {
             const appId = selectedCandidateProfile?.applicationId;
             if (appId) {
               try {
-                await updateCandidateApplicationStatus(appId, newStatus);
+                const updateCandidateFn = isJob ? updateCandidateApplicationStatusJob : updateCandidateApplicationStatus;
+                await updateCandidateFn(appId, newStatus);
               } catch (err) {
                 toast.error(err?.message || "Failed to update candidate status");
               }
@@ -492,12 +502,12 @@ const JobsProfile = ({ module = 'admin' }) => {
                     onConfirm={handleToggleStatus}
                     activateText="Activate"
                     deactivateText="Deactivate"
-                    type="Internship"
+                    type={isJob ? "Job" : "Internship"}
                     apply="apply"
                   />
                   <button
                     type="button"
-                    onClick={() => navigate(`/${module}/jobs/internship-form`, { state: { editData: internship } })}
+                    onClick={() => navigate(`/${module}/jobs/${isJob ? 'job-form' : 'internship-form'}`, { state: { editData: internship } })}
                     className="inline-flex items-center gap-2 bg-white border border-[#D0D5DD] text-[#344054] px-6 py-2.5 rounded-full text-[15px] font-medium hover:bg-gray-50 transition-colors"
                   >
                     <img src={assets.edit} alt="Edit" className="w-5 h-5 object-contain" />
@@ -507,7 +517,7 @@ const JobsProfile = ({ module = 'admin' }) => {
               )}
 
               {user.role === 'admin' && internship.status === 'pending' && (
-                <StatusActionButtons type="Internship" isSubmitting={statusLoading} onConfirm={updateStatus} />
+                <StatusActionButtons type={isJob ? "Job" : "Internship"} isSubmitting={statusLoading} onConfirm={updateStatus} />
               )}
             </div>
           </div>
@@ -604,7 +614,6 @@ const JobsProfile = ({ module = 'admin' }) => {
               setAttendanceSubView('view');
             }}
             attendanceData={attendanceHistoryList}
-            selectedCandidates={selectedCandidatesList}
             candidateStatuses={candidateStatuses}
             onStatusChange={(candId, status) => {
               setCandidateStatuses((prev) => ({
@@ -616,10 +625,10 @@ const JobsProfile = ({ module = 'admin' }) => {
               if (!id) return;
               const currentDateISO = new Date().toISOString().split('T')[0];
               const records = selectedCandidatesList.map((cand) => {
-                const candId = cand.id || cand.userId || cand._id;
+                const candId = cand._id || cand.id || cand.userId;
                 const st = candidateStatuses[candId] || 'Present';
                 return {
-                  userId: candId,
+                  userId: cand.userId || cand._id || cand.id,
                   status: st.toLowerCase(),
                 };
               });

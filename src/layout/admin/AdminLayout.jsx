@@ -125,8 +125,9 @@ const AdminLayout = () => {
       icon: assets.jobs_i,
       // No `path` — just subItems. AppLayout renders the expand/collapse toggle.
       subItems: [
+        { name: "Jobs",        path: "/admin/jobs/job" },
         { name: "Internship", path: "/admin/jobs/internship" },
-        { name: "Projects",  path: "/admin/jobs/freelance" },
+        { name: "Projects",   path: "/admin/jobs/freelance" },
       ],
     },
     { name: "Users",         path: "/admin/users",         icon: assets.user },
