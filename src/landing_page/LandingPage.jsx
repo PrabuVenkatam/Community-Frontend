@@ -40,14 +40,14 @@ const LandingPage = () => {
           1. HERO SECTION WITH BACKDROP IMAGE (landing_bg.png)
       ───────────────────────────────────────────────────────────── */}
       <div
-        className="relative w-full min-h-[750px] lg:min-h-[880px] bg-cover bg-center bg-no-repeat flex flex-col justify-between"
+        className="relative w-full min-h-[640px] sm:min-h-[750px] lg:min-h-[880px] bg-[#03040A] bg-cover bg-center bg-no-repeat flex flex-col justify-between overflow-hidden"
         style={{ backgroundImage: `url(${assets.landing_bg})` }}
       >
-        {/* Dark overlay for top nav readability */}
-        {/* <div className="absolute inset-0 bg-gradient-to-b from-[#03040A]/80 via-transparent to-[#03040A] pointer-events-none" /> */}
+        {/* Adaptive dark gradient overlay: guarantees high contrast & clear text visibility on mobile (<md) while preserving desktop aesthetics */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#03040A]/95 via-[#03040A]/85 to-[#03040A] md:bg-gradient-to-r md:from-[#03040A] md:via-[#03040A]/80 md:to-transparent pointer-events-none z-10" />
 
         {/* ── Top Navigation Bar ── */}
-        <header className="sticky top-0 z-50 w-full bg-[#080808]/50 backdrop-blur-md px-6 md:px-[80px] py-4 flex items-center justify-between transition-all">
+        <header className="sticky top-0 z-50 w-full bg-[#080808]/70 backdrop-blur-md px-6 md:px-[80px] py-4 flex items-center justify-between transition-all border-b border-white/5">
           {/* Brand Logo */}
           <div
             onClick={() => navigate("/")}
@@ -103,26 +103,26 @@ const LandingPage = () => {
         <main className="relative z-20 w-full px-6 md:px-[80px] pt-12 pb-24 my-auto">
           <div className="max-w-xl space-y-6">
             {/* Pill Badge */}
-            <div className="inline-block">
-              <span className="px-3.5 py-1.5 rounded-full text-[11px] font-outfit font-bold tracking-widest uppercase bg-[#0C1527]/80 text-[#00A3FF] backdrop-blur-md">
+            <div className="inline-block max-w-full">
+              <span className="inline-flex items-center whitespace-nowrap px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[9px] sm:text-[10px] md:text-[11px] font-outfit font-bold tracking-wider sm:tracking-widest uppercase bg-[#0C1527]/90 text-[#00A3FF] border border-[#00A3FF]/30 backdrop-blur-md">
                 CONNECTED PROFESSIONAL ECOSYSTEM
               </span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold text-white tracking-tight leading-[1.1]">
+            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold text-white tracking-tight leading-[1.1] drop-shadow-md">
               Every skill. <br />
               Every connection. <br />
               Every opportunity.
             </h1>
 
             {/* Paragraph Sub-text */}
-            <p className="text-gray-300 text-sm sm:text-base leading-relaxed font-normal opacity-90 max-w-lg">
+            <p className="text-gray-200 text-sm sm:text-base leading-relaxed font-normal opacity-95 max-w-lg drop-shadow-sm">
               Grad Envy brings freelancing, recruitment, events, and career intelligence into one platform — so every project you ship and every person you meet builds toward a single, growing professional identity.
             </p>
 
             {/* CTA Action Buttons */}
-            <div className="flex items-center gap-4 pt-3">
+            <div className="flex flex-wrap items-center gap-4 pt-3">
               <button
                 onClick={() => navigate("/auth/login")}
                 className="px-7 py-3 rounded-full text-sm font-semibold bg-[#0095FF] hover:bg-[#0084E2] text-white shadow-xl shadow-[#0095FF]/30 transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
