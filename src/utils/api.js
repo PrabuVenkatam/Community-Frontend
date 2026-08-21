@@ -13,11 +13,8 @@ const resolveBaseUrl = () => {
     return "http://localhost:5000";
   }
 
-  if (typeof window !== "undefined") {
-    return window.location.origin;
-  }
-
-  return "";
+  // Fallback to Azure production backend
+  return "https://community-backend-bwgcfcbvhfefexan.centralus-01.azurewebsites.net";
 };
 
 const BASE_URL = resolveBaseUrl();
